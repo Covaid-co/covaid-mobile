@@ -1,4 +1,6 @@
 # Covaid Volunteer Mobile App
+[![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![docs](https://img.shields.io/badge/docs-yes-brightgreen)](docs/README.md) <br />
 Checkout [Covaid.co](Covaid.co) for web application. 
 
 ## Getting Started
