@@ -7,13 +7,22 @@ import useCachedResources from './hooks/useCachedResources';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 
+import LoginScreen from './screens/LoginScreen/LoginScreen.js';
+
 const Stack = createStackNavigator();
 
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
+  const [auth, setAuth] = React.useState(false);
 
   if (!isLoadingComplete) {
     return null;
+  } else if (!auth) {
+    return (
+      <View style = {styles.container}>
+        <LoginScreen/>
+      </View>
+    )
   } else {
     return (
       <View style={styles.container}>
