@@ -19,10 +19,10 @@ export default function App(props) {
     return null;
   } else if (!auth) {
     return (
-      <View style = {styles.container}>
-        <LoginScreen/>
+      <View style={styles.container}>
+        <LoginScreen />
       </View>
-    )
+    );
   } else {
     return (
       <View style={styles.container}>
