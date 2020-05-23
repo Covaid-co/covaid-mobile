@@ -10,19 +10,53 @@ import {
   Alert,
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
+import { homeURL } from '../../constants';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [userID, setUserID] = useState(); 
 
   function handleLogin() {
-    console.log(username);
-    console.log(password);
+    setUsername('bangaru2@illinois.edu')
+    setPassword('pwd123'); 
+
+    // TODO: validate credentials (backend)
+    // make sure something is entered for both
+    // make sure valid email ?
+
+    let form = {
+      'user': { // TODO: retrieve from text fields (frontend)
+          'email': 'shrestab19@gmail.com',
+          'password': 'pwd123'
+      }
+    };
+
+    fetch(homeURL + '/api/users/login/', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(form)
+    }).then((response) => {
+        if (response.ok) { 
+            response.json().then(data => {
+                setUserID(data["user"]._id);  
+            });            
+        } else {
+            if (response.status === 403) {
+                alert("Check your email for a verification link prior to logging in.")
+            } else if (response.status === 401) {
+                alert("Incorrect password"); 
+            }
+        }
+    }).catch(e => {
+        alert(e)
+    });
   }
 
   function handlePasswordReset() {
     console.log("send email");
   }
+
   return (
     <View>
       <View style={styles.container}>
@@ -30,6 +64,7 @@ export default function LoginScreen() {
           style={styles.logo}
           source={require("../../assets/images/C-LOGO.png")}
         />
+        <Text style={texts.button_label_blue}>UserID: {userID}</Text>
         <Text style={texts.header}>Volunteer App for COVID-19</Text>
         <TextInput
           style={styles.input}
