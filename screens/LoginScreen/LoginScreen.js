@@ -11,11 +11,30 @@ import {
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL } from '../../constants';
+import { generateURL } from '../../Helpers';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [userID, setUserID] = useState(); 
+  const [user, setUser] = useState(); 
+
+  const fetch_user_obj = async (id) => {
+    let params = {'id': id};
+    var url = generateURL(homeURL +  "/api/users/user?", params); 
+    
+		fetch(url).then((response) => { 
+      if (response.ok) {
+          response.json().then(data => {
+            setUser(data[0])
+          });
+      } else {
+          alert("Error obtaining user object")
+      }
+      }).catch((e) => {
+          alert(e)
+      });
+  }
 
   function handleLogin() {
     setUsername('bangaru2@illinois.edu')
@@ -40,6 +59,7 @@ export default function LoginScreen() {
         if (response.ok) { 
             response.json().then(data => {
                 setUserID(data["user"]._id);  
+                fetch_user_obj(userID); 
             });            
         } else {
             if (response.status === 403) {
