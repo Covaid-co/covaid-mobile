@@ -10,51 +10,59 @@ import {
   Alert,
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
-import { homeURL } from '../../constants';
+import { homeURL } from "../../constants";
+import ResetPassword from "../../components/ResetPassword/ResetPassword";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  const [userID, setUserID] = useState(); 
+  const [userID, setUserID] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   function handleLogin() {
-    setUsername('bangaru2@illinois.edu')
-    setPassword('pwd123'); 
+    setUsername("bangaru2@illinois.edu");
+    setPassword("pwd123");
 
     // TODO: validate credentials (backend)
     // make sure something is entered for both
     // make sure valid email ?
 
     let form = {
-      'user': { // TODO: retrieve from text fields (frontend)
-          'email': 'shrestab19@gmail.com',
-          'password': 'pwd123'
-      }
+      user: {
+        // TODO: retrieve from text fields (frontend)
+        email: "shrestab19@gmail.com",
+        password: "pwd123",
+      },
     };
 
-    fetch(homeURL + '/api/users/login/', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(form)
-    }).then((response) => {
-        if (response.ok) { 
-            response.json().then(data => {
-                setUserID(data["user"]._id);  
-            });            
+    fetch(homeURL + "/api/users/login/", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    })
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setUserID(data["user"]._id);
+          });
         } else {
-            if (response.status === 403) {
-                alert("Check your email for a verification link prior to logging in.")
-            } else if (response.status === 401) {
-                alert("Incorrect password"); 
-            }
+          if (response.status === 403) {
+            alert(
+              "Check your email for a verification link prior to logging in."
+            );
+          } else if (response.status === 401) {
+            alert("Incorrect password");
+          }
         }
-    }).catch(e => {
-        alert(e)
-    });
+      })
+      .catch((e) => {
+        alert(e);
+      });
   }
 
   function handlePasswordReset() {
     console.log("send email");
+    setModalVisible(true);
   }
 
   return (
@@ -89,6 +97,7 @@ export default function LoginScreen() {
         <TouchableOpacity style={buttons.signup}>
           <Text style={texts.button_label_blue}>SIGN UP</Text>
         </TouchableOpacity>
+        {modalVisible && <ResetPassword modalVisible={setModalVisible} />}
       </View>
     </View>
   );
