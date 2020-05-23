@@ -14,11 +14,18 @@ import { styles, buttons, texts } from "./LoginScreenStyles";
 export default function LoginScreen() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [successLogin, setSuccessLogin] = useState([false]);
 
   function handleLogin() {
     console.log(username);
     console.log(password);
+    incorrectUsernamePassword();
   }
+
+  const incorrectUsernamePassword = () =>
+    Alert.alert("Incorrect username or password", ""[{ text: "OK" }], {
+      cancelable: false,
+    });
 
   function handlePasswordReset() {
     console.log("send email");
