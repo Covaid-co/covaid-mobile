@@ -7,8 +7,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll",
-    "format": "prettier --write '{screens, components, hooks}/**/*.{js,jsx,json,css}'",
-    "format:check": "prettier --list-different '{screens, components, hooks}/**/*.js'"
+    "format": "prettier --write '**/*.{js,jsx,json}'",
+    "format:check": "prettier --list-different '**/*.js'"
   },
   "jest": {
     "preset": "jest-expo"
