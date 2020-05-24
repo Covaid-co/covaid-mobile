@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
   TextInput,
-  StatusBar,
   Alert,
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
@@ -59,11 +58,17 @@ export default function LoginScreen() {
           });
         } else {
           if (response.status === 403) {
-            alert(
-              "Check your email for a verification link prior to logging in."
+            Alert.alert(
+              "Check your email for a verification link prior to logging in.",
+              ""[{ text: "OK" }],
+              {
+                cancelable: false,
+              }
             );
           } else if (response.status === 401) {
-            alert("Incorrect password");
+            Alert.alert("Incorrect username or password", ""[{ text: "OK" }], {
+              cancelable: false,
+            });
           }
         }
       })
