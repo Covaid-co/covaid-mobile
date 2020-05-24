@@ -50,6 +50,16 @@ const buttons = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  disabled: {
+    marginBottom: 10,
+    marginTop: 10,
+    width: 350,
+    height: 60,
+    backgroundColor: Colors.grey,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 const texts = StyleSheet.create({
