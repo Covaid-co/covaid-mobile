@@ -1,37 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
-  Button,
   Image,
   TouchableOpacity,
   TextInput,
-  StatusBar,
   Alert,
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL } from "../../constants";
 import ResetPassword from "../../components/ResetPassword/ResetPassword";
+import { generateURL, validateEmail } from "../../Helpers";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [userID, setUserID] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [user, setUser] = useState();
+  const[modalVisible, setModalVisible] = useState(false);
+
+  const fetch_user_obj = async (id) => {
+    let params = { id: id };
+    var url = generateURL(homeURL + "/api/users/user?", params);
+
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            console.log(data[0]);
+            setUser(data[0]);
+          });
+        } else {
+          alert("Error obtaining user object");
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
 
   function handleLogin() {
-    setUsername("bangaru2@illinois.edu");
-    setPassword("pwd123");
-
-    // TODO: validate credentials (backend)
-    // make sure something is entered for both
-    // make sure valid email ?
-
     let form = {
       user: {
-        // TODO: retrieve from text fields (frontend)
-        email: "shrestab19@gmail.com",
-        password: "pwd123",
+        email: username,
+        password: password,
       },
     };
 
@@ -44,14 +56,21 @@ export default function LoginScreen() {
         if (response.ok) {
           response.json().then((data) => {
             setUserID(data["user"]._id);
+            fetch_user_obj(data["user"]._id);
           });
         } else {
           if (response.status === 403) {
-            alert(
-              "Check your email for a verification link prior to logging in."
+            Alert.alert(
+              "Check your email for a verification link prior to logging in.",
+              ""[{ text: "OK" }],
+              {
+                cancelable: false,
+              }
             );
           } else if (response.status === 401) {
-            alert("Incorrect password");
+            Alert.alert("Incorrect username or password", ""[{ text: "OK" }], {
+              cancelable: false,
+            });
           }
         }
       })
@@ -86,12 +105,21 @@ export default function LoginScreen() {
           placeholder="Password"
           placeholderTextColor="#7F7F7F"
           onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
           defaultValue={password}
         />
         <TouchableOpacity onPress={handlePasswordReset}>
           <Text style={texts.button_label_blue}>Forgot your Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={buttons.login} onPress={handleLogin}>
+        <TouchableOpacity
+          style={
+            !validateEmail(username) || !password
+              ? buttons.disabled
+              : buttons.login
+          }
+          onPress={handleLogin}
+          disabled={!validateEmail(username) || !password}
+        >
           <Text style={texts.button_label}>LOGIN</Text>
         </TouchableOpacity>
         <TouchableOpacity style={buttons.signup}>
