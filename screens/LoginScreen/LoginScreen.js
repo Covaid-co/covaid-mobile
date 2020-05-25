@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL } from "../../constants";
+import ResetPassword from "../../components/ResetPassword/ResetPassword";
 import { generateURL, validateEmail } from "../../Helpers";
 
 export default function LoginScreen() {
@@ -16,6 +17,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState();
   const [userID, setUserID] = useState();
   const [user, setUser] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };
@@ -60,15 +62,21 @@ export default function LoginScreen() {
           if (response.status === 403) {
             Alert.alert(
               "Check your email for a verification link prior to logging in.",
-              ""[{ text: "OK" }],
+              "",
+              [{ text: "OK" }],
               {
                 cancelable: false,
               }
             );
           } else if (response.status === 401) {
-            Alert.alert("Incorrect username or password", ""[{ text: "OK" }], {
-              cancelable: false,
-            });
+            Alert.alert(
+              "Incorrect username or password",
+              "",
+              [{ text: "OK" }],
+              {
+                cancelable: false,
+              }
+            );
           }
         }
       })
@@ -78,7 +86,7 @@ export default function LoginScreen() {
   }
 
   function handlePasswordReset() {
-    console.log("send email");
+    setModalVisible(true);
   }
 
   return (
@@ -88,7 +96,6 @@ export default function LoginScreen() {
           style={styles.logo}
           source={require("../../assets/images/C-LOGO.png")}
         />
-        <Text style={texts.button_label_blue}>UserID: {userID}</Text>
         <Text style={texts.header}>Volunteer App for COVID-19</Text>
         <TextInput
           style={styles.input}
@@ -122,6 +129,7 @@ export default function LoginScreen() {
         <TouchableOpacity style={buttons.signup}>
           <Text style={texts.button_label_blue}>SIGN UP</Text>
         </TouchableOpacity>
+        {modalVisible && <ResetPassword modalVisible={setModalVisible} />}
       </View>
     </View>
   );
