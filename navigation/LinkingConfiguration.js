@@ -8,6 +8,9 @@ export default {
       screens: {
         Home: "home",
         Links: "links",
+        Requests: "requests",
+        Notification: "notification",
+        Profile: "profile"
       },
     },
   },
