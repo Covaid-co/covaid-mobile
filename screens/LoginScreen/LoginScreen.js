@@ -96,7 +96,6 @@ export default function LoginScreen() {
           style={styles.logo}
           source={require("../../assets/images/C-LOGO.png")}
         />
-        <Text style={texts.button_label_blue}>UserID: {userID}</Text>
         <Text style={texts.header}>Volunteer App for COVID-19</Text>
         <TextInput
           style={styles.input}
