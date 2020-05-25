@@ -3,7 +3,7 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    marginTop: "50%",
     justifyContent: "center",
     alignItems: "center",
     fontSize: 10,
