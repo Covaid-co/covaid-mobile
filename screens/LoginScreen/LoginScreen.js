@@ -16,6 +16,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState();
   const [userID, setUserID] = useState();
   const [user, setUser] = useState();
+  // userID and loginToken are the only things that need to be saved really 
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };

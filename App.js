@@ -8,6 +8,7 @@ import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
+import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
 
 const Stack = createStackNavigator();
 
@@ -20,7 +21,7 @@ export default function App(props) {
   } else if (!auth) {
     return (
       <View style={styles.container}>
-        <LoginScreen />
+        <RequestsScreen />
       </View>
     );
   } else {
