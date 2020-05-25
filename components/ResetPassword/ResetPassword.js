@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
-  Button,
+  Alert,
   Modal,
   TouchableOpacity,
   TextInput,
@@ -14,8 +14,8 @@ import {
   buttons,
   texts,
 } from "../../screens/LoginScreen/LoginScreenStyles";
-import { useSafeArea } from "react-native-safe-area-context";
-// import { validateEmail } from '../Helpers'
+import { homeURL } from "../../constants";
+import { validateEmail } from "../../Helpers";
 
 /**
  * Reset Password modal
@@ -25,6 +25,35 @@ export default function ResetPassword(props) {
 
   function handleClose() {
     props.modalVisible(false);
+  }
+
+  function handleSubmitForgot() {
+    let form = { email: email };
+
+    fetch(homeURL + "/api/users/emailpasswordresetlink", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    })
+      .then((response) => {
+        if (response.ok) {
+          Alert.alert(
+            "Check your email for password link!",
+            "",
+            [{ text: "OK", onPress: () => handleClose() }],
+            {
+              cancelable: false,
+            }
+          );
+        } else {
+          Alert.alert("Error sending link!", ""[{ text: "OK" }], {
+            cancelable: false,
+          });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   return (
     <View style={styles.centeredView}>
@@ -44,9 +73,12 @@ export default function ResetPassword(props) {
               defaultValue={email}
             />
 
-            <TouchableOpacity disabled={false} style={buttons.login}>
+            <TouchableOpacity
+              onPress={handleSubmitForgot}
+              disabled={!validateEmail(email)}
+              style={!validateEmail(email) ? buttons.disabled : buttons.login}
+            >
               <Text style={texts.button_label}>
-                {" "}
                 Send me a password reset link
               </Text>
             </TouchableOpacity>
@@ -55,37 +87,7 @@ export default function ResetPassword(props) {
             </TouchableOpacity>
           </View>
         </View>
-        {/* <Modal.Header>
-                <Modal.Title>Reset your password</Modal.Title>
-            </Modal.Header> */}
-        {/* <Modal.Body>
-                <Form onSubmit={props.handleSubmitForgot}>
-                    <Row>
-                        <Col xs={12}>
-                            <Form.Group controlId="email" bssize="large">
-                                <Form.Control 
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    value={props.fields.email}
-                                    onChange={props.handleFieldChange}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Button style={{marginTop: 10}} id="large-button" disabled={!validateEmail(props.fields.email)} type="submit">
-                        Send me a password reset link
-                    </Button>
-                    <Button id="large-button-empty" onClick={props.hideModal}>Back to login</Button>
-                </Form>
-            </Modal.Body> */}
       </Modal>
     </View>
   );
 }
-
-// ResetPassword.propTypes = {
-//     showModal: PropTypes.bool,
-//     handleSubmitForgot: PropTypes.func,
-//     handleFieldChange: PropTypes.func,
-//     hideModal: PropTypes.func,
-//     fields: PropTypes.object
-// }

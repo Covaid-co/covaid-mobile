@@ -17,7 +17,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState();
   const [userID, setUserID] = useState();
   const [user, setUser] = useState();
-  const[modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };
@@ -62,15 +62,21 @@ export default function LoginScreen() {
           if (response.status === 403) {
             Alert.alert(
               "Check your email for a verification link prior to logging in.",
-              ""[{ text: "OK" }],
+              "",
+              [{ text: "OK" }],
               {
                 cancelable: false,
               }
             );
           } else if (response.status === 401) {
-            Alert.alert("Incorrect username or password", ""[{ text: "OK" }], {
-              cancelable: false,
-            });
+            Alert.alert(
+              "Incorrect username or password",
+              "",
+              [{ text: "OK" }],
+              {
+                cancelable: false,
+              }
+            );
           }
         }
       })
@@ -80,7 +86,6 @@ export default function LoginScreen() {
   }
 
   function handlePasswordReset() {
-    console.log("send email");
     setModalVisible(true);
   }
 
