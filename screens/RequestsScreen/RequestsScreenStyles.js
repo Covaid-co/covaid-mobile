@@ -3,7 +3,11 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    position: 'absolute',
+    top: 5, 
+    marginTop: 10, // TODO: standardize margin for each page 
+    marginLeft: 10, 
+    marginRight: 10, 
     justifyContent: "center",
     alignItems: "center",
     fontSize: 10,
@@ -34,6 +38,13 @@ const styles = StyleSheet.create({
     marginLeft: 10, 
     marginRight: 10, 
   },
+  requestContainer: {
+    position: 'absolute',
+    top: 300, // change this when finalized 
+    marginTop: 600, 
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });
 
 const buttons = StyleSheet.create({

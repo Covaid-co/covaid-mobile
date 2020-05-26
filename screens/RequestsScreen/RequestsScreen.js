@@ -132,7 +132,7 @@ export default function RequestsScreen() {
         </TouchableOpacity>
 
 
-        <View style={styles.container} marginTop="1%" marginBottom="1%">
+        <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
         <FlatList
           data={requestList}
           renderItem={({item}) => 
