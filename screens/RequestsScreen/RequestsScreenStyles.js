@@ -78,6 +78,13 @@ const texts = StyleSheet.create({
     fontSize: 15,
     color: Colors.blue,
   },
+  request_title: {
+    marginBottom: 10,
+    fontFamily: "Montserrat-Black",
+    fontSize: 20,
+    color: "black",
+    textAlign: "center",
+  },
 });
 
 export { styles, buttons, texts };
