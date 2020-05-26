@@ -6,11 +6,9 @@ export default {
     Root: {
       path: "root",
       screens: {
-        Home: "home",
-        Links: "links",
         Requests: "requests",
         Notification: "notification",
-        Profile: "profile"
+        Profile: "profile",
       },
     },
   },
