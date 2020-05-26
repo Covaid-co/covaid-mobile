@@ -44,8 +44,8 @@ export default function RequestsScreen() {
   function handleLogin() {
     let form = {
       user: {
-        email: 'bangaru2@illinois.edu',
-        password: 'pwd123',
+        email: 'ael49021@gmail.com',
+        password: 'angela',
       },
     };
 
@@ -89,24 +89,27 @@ export default function RequestsScreen() {
 
   function getRequests() {
     handleLogin(); 
-    console.log(userID)
+    console.log("LOGINDONE")
+    // console.log(userID)
 
-    /*let params = {'status': 1};
-    var url = generateURL( "/api/request/volunteerRequests?", params);
-    console.log(loginSession); 
+    let params = {'status': 1}; // TODO: get diff status requests
+    var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
+    // console.log(url); 
+    // console.log(loginSession); 
 		fetch_a(loginSession, 'token', url, {
             method: 'get',
         }).then((response) => {
             if (response.ok) {
                 response.json().then(data => {
-					requestStateChanger(data);
+                  console.log("data:" + JSON.stringify(data))
+					        //requestStateChanger(data);
                 });
             } else {
                 console.log("Error")
             }
         }).catch((e) => {
-            console.log(e)
-        });*/
+          console.log(e)
+        }); 
   }
 
   return (

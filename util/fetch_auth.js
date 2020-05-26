@@ -1,4 +1,4 @@
-import Cookie from "js-cookie";
+// import Cookie from "js-cookie";
 
 async function fetch_a(tempTokenString, token, url, options) {
     const tokenString = `Token ${tempTokenString}` //`Token ${Cookie.get(token)}`;
@@ -15,7 +15,6 @@ async function fetch_a(tempTokenString, token, url, options) {
     } else {
         options.headers.Authorization = tokenString;
     }
-    console.log("fetch a "+url)
     return await fetch(url, options);    
 }
 
