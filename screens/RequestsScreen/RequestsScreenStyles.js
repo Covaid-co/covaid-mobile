@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Image, Text } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
@@ -24,6 +24,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 15,
     color: Colors.blue,
+  },
+  request: {
+    color: 'blue',
+    fontWeight: 'bold',
+    fontSize: 20,
+    backgroundColor: '#D0D0D0', 
+    borderRadius: 15,
+    marginLeft: 10, 
+    marginRight: 10, 
   },
 });
 
@@ -78,12 +87,28 @@ const texts = StyleSheet.create({
     fontSize: 15,
     color: Colors.blue,
   },
-  request_title: {
+  request_header: {
     marginBottom: 10,
     fontFamily: "Montserrat-Black",
     fontSize: 20,
     color: "black",
     textAlign: "center",
+  },
+  request_title: {
+    marginBottom: 10,
+    marginLeft: 15, 
+    marginRight: 15,
+    marginTop: 10, 
+    fontFamily: "Montserrat-Black",
+    fontSize: 20,
+    color: "black",
+    textAlign: "left",
+  },
+  request_text: {
+    marginBottom: 10, 
+    marginLeft: 15, 
+    marginRight: 15, 
+    fontSize: 15,
   },
 });
 

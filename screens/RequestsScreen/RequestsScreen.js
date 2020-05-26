@@ -21,19 +21,7 @@ export default function RequestsScreen() {
   const [userID, setUserID] = useState();
   const [user, setUser] = useState("");
   const [loginSession, setLoginSession] = useState("");
-
-  const list = [
-    {
-      name: 'Amy Farha',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-      subtitle: 'Vice President'
-    },
-    {
-      name: 'Chris Jackson',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Vice Chairman'
-    },
-  ]
+  const [requestList, setRequestList] = useState("");
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };
@@ -43,7 +31,6 @@ export default function RequestsScreen() {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            //console.log(data[0]);
             setUser(data[0]);
           });
         } else {
@@ -97,69 +84,67 @@ export default function RequestsScreen() {
       });
   }
 
-  function handlePasswordReset() {
-    console.log("send email");
+  function generateRequestList(requestData) {
+    let tempList = []; 
+    for (var i = 0; i < requestData.length; i++) { // TODO: forEach
+      var element = { // TODO: add more info upon clicking
+        key: i, 
+        requester_name: requestData[i].personal_info.requester_name, 
+        resources: JSON.stringify(requestData[i].request_info), // TODO: add badges 
+        needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
+      }
+      tempList.push(element); 
+    }
+    setRequestList(tempList); 
   }
 
-  function getRequests() {
-    handleLogin(); 
-    console.log("LOGINDONE")
-    // console.log(userID)
-
+  function getRequests(requestStatus) {
     let params = {'status': volunteer_status.IN_PROGRESS}; // TODO: get diff status requests (pending, in progress, completed)
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
-    // console.log(url); 
-    // console.log(loginSession); 
+
 		fetch_a(loginSession, 'token', url, {
             method: 'get',
         }).then((response) => {
             if (response.ok) {
                 response.json().then(data => {
-                  console.log("data:" + JSON.stringify(data))
-					        //requestStateChanger(data);
+                  //console.log("data:" + JSON.stringify(data))
+					        generateRequestList(data); 
                 });
             } else {
                 console.log("Error")
             }
-        }).catch((e) => {
-          console.log(e)
-        }); 
+    }).catch((e) => {
+      console.log(e)
+    });     
   }
 
   return (
     <View>
       <View style={styles.container}>
       <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
-        <TouchableOpacity style={buttons.signup} onPress={getRequests}>
-          <Text style={texts.button_label_blue}>SEE REQUESTS</Text>
+      <Text style={texts.request_text}>View your requests below.</Text>
+        <TouchableOpacity style={buttons.signup} onPress={handleLogin}>
+          <Text style={texts.button_label_blue}>LOGIN</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={buttons.signup} onPress={getRequests}>
+          <Text style={texts.button_label_blue}>Active</Text>
+        </TouchableOpacity>
+
 
         <View style={styles.container} marginTop="1%" marginBottom="1%">
         <FlatList
-          data={[
-            {key: 'Devin                                 '},
-            {key: 'Dan'},
-            {key: 'Dominic'},
-            {key: 'Jackson'},
-            {key: 'James'},
-            {key: 'Joel'},
-            {key: 'John'},
-            {key: 'Jillian'},
-            {key: 'Jimmy'},
-            {key: 'Julie'},
-          ]}
+          data={requestList}
           renderItem={({item}) => 
-            <><Text style={{borderWidth: 1, borderColor:"red"}}>{item.key}</Text>
-            <Text style={texts.request_title}>{item.key}</Text></>
+            <>
+            <View style={styles.request}>
+              <Text style={texts.request_title}>{item.requester_name}</Text>
+              <Text style={texts.request_text}>Request resources: {item.resources}</Text>
+              <Text style={texts.request_text}>Needed by: {item.needed_by}</Text>
+            </View>
+            <Text></Text>
+            </>
           }
-        />
-
-        <FlatList
-          data={list}
-          renderItem={({item}) => <Text
-                
-                title={item.name}>{item.name}</Text>}
-          keyExtractor={item => item.name}
         />
       </View>
       </View>
