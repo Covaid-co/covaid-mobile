@@ -21,7 +21,7 @@ export default function App(props) {
   } else if (!auth) {
     return (
       <View style={styles.container}>
-        <RequestsScreen />
+        <LoginScreen />
       </View>
     );
   } else {

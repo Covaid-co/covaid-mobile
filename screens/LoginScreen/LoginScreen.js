@@ -10,12 +10,14 @@ import {
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
+import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [userID, setUserID] = useState();
   const [user, setUser] = useState();
+  const [loggedIn, setLoggedIn] = useState(false); // TODO: use user/userID to decide if it's logged in  
   // userID and loginToken are the only things that need to be saved really 
 
   const fetch_user_obj = async (id) => {
@@ -26,7 +28,6 @@ export default function LoginScreen() {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            console.log(data[0]);
             setUser(data[0]);
           });
         } else {
@@ -56,6 +57,7 @@ export default function LoginScreen() {
           response.json().then((data) => {
             setUserID(data["user"]._id);
             fetch_user_obj(data["user"]._id);
+            setLoggedIn(true); 
           });
         } else {
           if (response.status === 403) {
@@ -82,48 +84,58 @@ export default function LoginScreen() {
     console.log("send email");
   }
 
-  return (
-    <View>
-      <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={require("../../assets/images/C-LOGO.png")}
-        />
-        <Text style={texts.button_label_blue}>UserID: {userID}</Text>
-        <Text style={texts.header}>Volunteer App for COVID-19</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#7F7F7F"
-          onChangeText={(text) => setUsername(text)}
-          defaultValue={username}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#7F7F7F"
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry={true}
-          defaultValue={password}
-        />
-        <TouchableOpacity onPress={handlePasswordReset}>
-          <Text style={texts.button_label_blue}>Forgot your Password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={
-            !validateEmail(username) || !password
-              ? buttons.disabled
-              : buttons.login
-          }
-          onPress={handleLogin}
-          disabled={!validateEmail(username) || !password}
-        >
-          <Text style={texts.button_label}>LOGIN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={buttons.signup}>
-          <Text style={texts.button_label_blue}>SIGN UP</Text>
-        </TouchableOpacity>
+  var b = true; 
+  if (!loggedIn) {
+    return (
+      <View>
+        <View style={styles.container}>
+          <Image
+            style={styles.logo}
+            source={require("../../assets/images/C-LOGO.png")}
+          />
+          <Text style={texts.button_label_blue}>UserID: {userID}</Text>
+          <Text style={texts.header}>Volunteer App for COVID-19</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#7F7F7F"
+            onChangeText={(text) => setUsername(text)}
+            defaultValue={username}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#7F7F7F"
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry={true}
+            defaultValue={password}
+          />
+          <TouchableOpacity onPress={handlePasswordReset}>
+            <Text style={texts.button_label_blue}>Forgot your Password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={
+              !validateEmail(username) || !password
+                ? buttons.disabled
+                : buttons.login
+            }
+            onPress={handleLogin}
+            disabled={!validateEmail(username) || !password}
+          >
+            <Text style={texts.button_label}>LOGIN</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={buttons.signup}>
+            <Text style={texts.button_label_blue}>SIGN UP</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  } else {
+    return (
+        <View>
+          <RequestsScreen />
+        </View>
+    );
+  }
+  
 }
