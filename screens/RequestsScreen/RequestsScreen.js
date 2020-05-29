@@ -97,7 +97,7 @@ export default function RequestsScreen() {
         resources: JSON.stringify(requestData[i].request_info), // TODO: add badges 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
         location: requestData[i].location_info.coordinates, 
-        requester_contact: requestData[i].requester_email || requesterData[i].requester_phone, 
+        requester_contact: requestData[i].requester_email || requestData[i].requester_phone, 
         details: requestData[i].request_info.details, 
       }
       tempList.push(element); 
@@ -105,8 +105,8 @@ export default function RequestsScreen() {
     setRequestList(tempList); 
   }
 
-  function getRequests(requestStatus) {
-    let params = {'status': volunteer_status.IN_PROGRESS}; // TODO: get diff status requests (pending, in progress, completed)
+  function getRequests(reqStatus) {
+    let params = {'status': reqStatus}; // TODO: get diff status requests (pending, in progress, completed)
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
     
 		fetch_a(loginSession, 'token', url, {
@@ -154,8 +154,14 @@ export default function RequestsScreen() {
           <Text style={texts.button_label_blue}>LOGIN</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={buttons.signup} onPress={getRequests}>
+        <TouchableOpacity onPress={() => getRequests(volunteer_status.PENDING)}>
+          <Text style={texts.button_label_blue}>Pending</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => getRequests(volunteer_status.IN_PROGRESS)}>
           <Text style={texts.button_label_blue}>Active</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => getRequests(volunteer_status.COMPLETE)}>
+          <Text style={texts.button_label_blue}>Complete</Text>
         </TouchableOpacity>
 
 
