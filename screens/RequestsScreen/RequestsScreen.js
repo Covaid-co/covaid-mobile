@@ -8,6 +8,7 @@ import {
   Alert,
   FlatList, StyleSheet, ListItem,
   Button, 
+  AsyncStorage
 } from "react-native";
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
@@ -18,14 +19,22 @@ import fetch_a from '../../util/fetch_auth'
 
 export default function RequestsScreen() {
   // from LoginScreen, we get loginToken and userID -> preferably loginSession or something 
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  //const [username, setUsername] = useState();
+  //const [password, setPassword] = useState();
   const [userID, setUserID] = useState();
   const [user, setUser] = useState("");
   const [loginSession, setLoginSession] = useState("");
   const [requestList, setRequestList] = useState("");
   const [requestType, setRequestType] = useState(volunteer_status.PENDING); 
   const [isModalVisible, setIsModalVisible] = useState(false); 
+
+  if (!userID && !loginSession) {
+    AsyncStorage.getItem("userID").then((userID)=>setUserID(userID));
+    AsyncStorage.getItem("sessionToken").then((sessionToken)=>setLoginSession(sessionToken));
+  }
+
+  console.log(userID + " the USER ID")
+  console.log(loginSession + " the login SESSION")
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };
@@ -46,7 +55,11 @@ export default function RequestsScreen() {
       });
   };
 
-  function handleLogin() {
+  if (!user) {
+    fetch_user_obj(userID);
+  }
+
+  /*async function handleLogin() {
     let form = {
       user: {
         email: 'bangaru2@illinois.edu',
@@ -86,7 +99,7 @@ export default function RequestsScreen() {
       .catch((e) => {
         alert(e);
       });
-  }
+  }*/
 
   function generateRequestList(requestData) { 
     let tempList = []; 
@@ -107,7 +120,8 @@ export default function RequestsScreen() {
   }
 
   function getRequests(reqStatus) {
-    setRequestType(-10) // random 
+    AsyncStorage.getItem("sessionToken").then((sessionToken)=>setLoginSession(sessionToken));
+    console.log(loginSession)
     let params = {'status': reqStatus}; // TODO: get diff status requests (pending, in progress, completed)
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
     
@@ -153,17 +167,14 @@ export default function RequestsScreen() {
       <View style={styles.container}>
       <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
       <Text style={texts.request_text}>View your requests below.</Text>
-        <TouchableOpacity style={buttons.signup} onPress={handleLogin}>
-          <Text style={texts.button_label_blue}>LOGIN</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => getRequests(volunteer_status.PENDING)}>
+        <TouchableOpacity style={buttons.signup} onPress={() => getRequests(volunteer_status.PENDING)}>
           <Text style={texts.button_label_blue}>Pending</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => getRequests(volunteer_status.IN_PROGRESS)}>
+        <TouchableOpacity style={buttons.signup} onPress={() => getRequests(volunteer_status.IN_PROGRESS)}>
           <Text style={texts.button_label_blue}>Active</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => getRequests(volunteer_status.COMPLETE)}>
+        <TouchableOpacity style={buttons.signup} onPress={() => getRequests(volunteer_status.COMPLETE)}>
           <Text style={texts.button_label_blue}>Complete</Text>
         </TouchableOpacity>
 

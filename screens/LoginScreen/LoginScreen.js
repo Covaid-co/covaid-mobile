@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  AsyncStorage,
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL } from "../../constants";
@@ -16,30 +17,10 @@ export default function LoginScreen() {
   const [username, setUsername] = useState('bangaru2@illinois.edu');
   const [password, setPassword] = useState('pwd123');
   const [userID, setUserID] = useState();
-  const [user, setUser] = useState();
-  const [loggedIn, setLoggedIn] = useState(false); // TODO: use user/userID to decide if it's logged in  
+  const [loginSession, setLoginSession] = useState();
   // userID and loginToken are the only things that need to be saved really 
 
-  const fetch_user_obj = async (id) => {
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-          });
-        } else {
-          alert("Error obtaining user object");
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  };
-
-  function handleLogin() {
+  async function handleLogin() {
     let form = {
       user: {
         email: username,
@@ -55,9 +36,27 @@ export default function LoginScreen() {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
+            //console.log(data["user"]._id)
             setUserID(data["user"]._id);
-            fetch_user_obj(data["user"]._id);
-            setLoggedIn(true); 
+            setLoginSession(data["user"].token); 
+
+            const storeUserInfo = async () => {
+              try {
+                await AsyncStorage.setItem('@userID', JSON.stringify(data["user"]._id))
+                //await AsyncStorage.setItem('@sessionToken', JSON.stringify(data["user"].token))
+              } catch (e) {
+                console.log(e); 
+              }
+            }
+
+            const storeSmthElse = async () => {
+              try {
+                //await AsyncStorage.setItem('@userID', JSON.stringify(data["user"]._id))
+                await AsyncStorage.setItem('@sessionToken', JSON.stringify(data["user"].token))
+              } catch (e) {
+                console.log(e); 
+              }
+            }
           });
         } else {
           if (response.status === 403) {
@@ -84,8 +83,10 @@ export default function LoginScreen() {
     console.log("send email");
   }
 
-  var b = true; 
-  if (!loggedIn) {
+  //AsyncStorage.getItem("userID").then((userID)=>setUserID(userID));
+  //AsyncStorage.getItem("sessionToken").then((sessionToken)=>setLoginSession(sessionToken));
+
+  if (!(userID && loginSession)) {
     return (
       <View>
         <View style={styles.container}>
