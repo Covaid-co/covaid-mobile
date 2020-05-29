@@ -89,7 +89,6 @@ export default function RequestsScreen() {
   }
 
   function generateRequestList(requestData) { 
-    console.log(requestData); 
     let tempList = []; 
     for (var i = 0; i < requestData.length; i++) { // TODO: forEach
       var element = { // TODO: add more info upon clicking
@@ -108,7 +107,7 @@ export default function RequestsScreen() {
   }
 
   function getRequests(reqStatus) {
-    setRequestType(reqStatus); 
+    setRequestType(-10) // random 
     let params = {'status': reqStatus}; // TODO: get diff status requests (pending, in progress, completed)
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
     
@@ -125,6 +124,7 @@ export default function RequestsScreen() {
     }).catch((e) => {
       console.log(e)
     });     
+    setRequestType(reqStatus); 
   }
 
   function toggleModal() { // TODO render proper modal with correct details based on if its a pending/active request
@@ -211,7 +211,7 @@ export default function RequestsScreen() {
       )
     }
     return (
-      <Text style={texts.header}>Could not obtain request data</Text>
+      <Text style={texts.header}>Obtaining details...</Text>
     )
   };
 
@@ -265,7 +265,7 @@ export default function RequestsScreen() {
       )
     }
     return (
-      <Text style={texts.header}>Could not obtain request data</Text>
+      <Text style={texts.header}>Obtaining request data...</Text>
     )
   };
 }
