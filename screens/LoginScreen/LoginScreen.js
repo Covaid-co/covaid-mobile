@@ -13,8 +13,8 @@ import { generateURL, validateEmail } from "../../Helpers";
 import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState('bangaru2@illinois.edu');
+  const [password, setPassword] = useState('pwd123');
   const [userID, setUserID] = useState();
   const [user, setUser] = useState();
   const [loggedIn, setLoggedIn] = useState(false); // TODO: use user/userID to decide if it's logged in  

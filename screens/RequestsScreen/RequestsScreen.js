@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  FlatList, StyleSheet, ListItem
+  FlatList, StyleSheet, ListItem,
+  Button, 
 } from "react-native";
+import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
@@ -22,6 +24,7 @@ export default function RequestsScreen() {
   const [user, setUser] = useState("");
   const [loginSession, setLoginSession] = useState("");
   const [requestList, setRequestList] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false); 
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };
@@ -85,6 +88,7 @@ export default function RequestsScreen() {
   }
 
   function generateRequestList(requestData) {
+    console.log(requestData); 
     let tempList = []; 
     for (var i = 0; i < requestData.length; i++) { // TODO: forEach
       var element = { // TODO: add more info upon clicking
@@ -92,6 +96,9 @@ export default function RequestsScreen() {
         requester_name: requestData[i].personal_info.requester_name, 
         resources: JSON.stringify(requestData[i].request_info), // TODO: add badges 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
+        location: requestData[i].location_info.coordinates, 
+        requester_contact: requestData[i].requester_email || requesterData[i].requester_phone, 
+        details: requestData[i].request_info.details, 
       }
       tempList.push(element); 
     }
@@ -101,13 +108,12 @@ export default function RequestsScreen() {
   function getRequests(requestStatus) {
     let params = {'status': volunteer_status.IN_PROGRESS}; // TODO: get diff status requests (pending, in progress, completed)
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
-
+    
 		fetch_a(loginSession, 'token', url, {
             method: 'get',
         }).then((response) => {
             if (response.ok) {
                 response.json().then(data => {
-                  //console.log("data:" + JSON.stringify(data))
 					        generateRequestList(data); 
                 });
             } else {
@@ -117,6 +123,27 @@ export default function RequestsScreen() {
       console.log(e)
     });     
   }
+
+  function toggleModal() { // TODO render proper modal with correct details based on if its a pending/active request
+    setIsModalVisible(!isModalVisible);
+  };
+
+  function completeRequest(reqKey) {
+    setIsModalVisible("Complete request.");
+  };
+
+  function acceptRequest(reqKey) {
+    setIsModalVisible("Accept request.");
+  };
+
+  function cancelRequest(reqKey) {
+    console.log("Cancel request.")
+  };
+
+  function rejectRequest(reqKey) {
+    console.log("Reject request.")
+  };
+
 
   return (
     <View>
@@ -137,11 +164,32 @@ export default function RequestsScreen() {
           data={requestList}
           renderItem={({item}) => 
             <>
-            <View style={styles.request}>
+
+            <View style={{flex: 1}}>
+              <Modal isVisible={isModalVisible}>
+                <View style={{flex: 1, backdropColor: 'green'}}>
+                  <Text>Test</Text>
+                  <Button title="Close" onPress={toggleModal} />
+                  <Button title="Complete" onPress={() => completeRequest(item.key)} />
+                  <Button title="Cancel" onPress={() => cancelRequest(item.key)} />
+                  <Text>Request is in-progress</Text>
+                  <Text>Thanks for accepting this request for support! Please reach out to the requester by using the contact information below.</Text>
+                  <Text>Who: {item.requester_name}</Text>
+                  <Text>Contact: {item.requester_contact}</Text>
+                  <Text>Details: {item.details}</Text>
+                  <Text>Requesting support with: {item.resources}</Text>
+                  <Text>Needed by: {item.needed_by}</Text>
+                  <Text>Location: {item.location}</Text>
+                </View>
+              </Modal>
+            </View>
+
+
+            <TouchableOpacity style={styles.request} onPress={toggleModal}>
               <Text style={texts.request_title}>{item.requester_name}</Text>
               <Text style={texts.request_text}>Request resources: {item.resources}</Text>
               <Text style={texts.request_text}>Needed by: {item.needed_by}</Text>
-            </View>
+            </TouchableOpacity>
             <Text></Text>
             </>
           }
