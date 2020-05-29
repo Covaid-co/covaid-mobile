@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 10, 
     marginRight: 10, 
+    width: 300
   },
   requestContainer: {
     position: 'absolute',
