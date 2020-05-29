@@ -12,11 +12,15 @@ const styles = StyleSheet.create({
     borderColor: Colors.grey,
     margin: "1%",
   },
+  info: {
+    flexDirection: "row",
+    marginTop: 20,
+  }
 });
 
 const buttons = StyleSheet.create({
   edit: {
-    marginTop: 10,
+    marginTop: 15,
     width: 350,
     height: 60,
     backgroundColor: Colors.blue,
@@ -49,6 +53,12 @@ const texts = StyleSheet.create({
     fontSize: 15,
     color: "white",
   },
+  green_text: {
+      color: "green"
+  },
+  red_text: {
+    color: "red"
+}
 });
 
 export { styles, buttons, texts };
