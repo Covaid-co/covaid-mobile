@@ -12,23 +12,24 @@ import {
 } from "react-native";
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
-import { homeURL, volunteer_status } from "../../constants";
+import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
 //import Cookie from 'js-cookie'
 
 export default function RequestsScreen() {
   // from LoginScreen, we get loginToken and userID -> preferably loginSession or something 
-  const [userID, setUserID] = useState();
+  //const [userID, setUserID] = useState();
   const [user, setUser] = useState("");
-  const [loginToken, setLoginToken] = useState("");
+  //const [loginToken, setLoginToken] = useState("");
   const [currentRequestList, setCurrentRequestList] = useState();
+  const [currentRequestType, setCurrentRequestType] = useState(volunteer_status.PENDING);
   const [isModalVisible, setIsModalVisible] = useState(false); 
   const [pendingRequests, setPendingRequests] = useState(); 
   const [activeRequests, setActiveRequests] = useState(); 
   const [completedRequests, setCompletedRequests] = useState(); 
 
-  const fetchUser = async (id) => {
+  const fetchUser = async (id) => { // TODO: use authenticated version of this 
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
@@ -46,10 +47,6 @@ export default function RequestsScreen() {
         alert(e);
       });
   };
-
-  if (!user) {
-    fetch_user_obj(userID);
-  }
 
   /*async function handleLogin() {
     let form = {
@@ -109,11 +106,11 @@ export default function RequestsScreen() {
     requestStateChanger(tempList); 
   }
 
-  function fetchRequests(reqStatus, requestStateChanger) {
+  function fetchRequests(reqStatus, requestStateChanger, token) {
     let params = {'status': reqStatus}; // TODO: get diff status requests (pending, in progress, completed)
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
     
-		fetch_a(loginToken, 'token', url, {
+		fetch_a(token, 'token', url, {
             method: 'get',
         }).then((response) => {
             if (response.ok) {
@@ -149,11 +146,46 @@ export default function RequestsScreen() {
   };
 
   useEffect(() => {
-    handleLogin();   
-    fetchUser(userID); 
-    fetchRequests(volunteer_status.PENDING, setPendingRequests);
-    fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests);
-    fetchRequests(volunteer_status.COMPLETE, setCompletedRequests);
+    AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+      console.log("GETTING USER ID " + data)
+      fetchUser(data); 
+    });
+
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+      console.log("GETTING TOKEN " + data)
+      //setLoginToken(data);
+      //console.log(data); 
+      fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
+      fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
+      fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+    });
+
+    /*const readData = async () => {
+      try {
+        const something = await AsyncStorage.getItem(SAVE_ID_KEY)
+    
+        alert(something); 
+      } catch (e) {
+        alert('Failed to fetch the data from storage')
+      }
+    }
+    readData(); */
+
+
+    /*AsyncStorage.getItem(saveID).then((data) => {
+      console.log("GETTING USER ID " + data)
+      setUserID(data); 
+      fetchUser(data); 
+    });*/
+    /*AsyncStorage.getItem("userID").then((data) => {
+      console.log("GETTING TOKEN " + data)
+      setLoginToken(data);
+      console.log(loginToken); 
+      fetchRequests(volunteer_status.PENDING, setPendingRequests);
+      fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests);
+      fetchRequests(volunteer_status.COMPLETE, setCompletedRequests);
+    }); */
+    
   }, []);
 
 
@@ -163,13 +195,16 @@ export default function RequestsScreen() {
       <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
       <Text style={texts.request_text}>View your requests below.</Text>
 
-        <TouchableOpacity onPress={() => setCurrentRequestList(pendingRequests)}>
+        <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
+            setCurrentRequestType(volunteer_status.PENDING);}}>
           <Text style={texts.button_label_blue}>Pending</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setCurrentRequestList(activeRequests)}>
+        <TouchableOpacity onPress={() => {setCurrentRequestList(activeRequests);
+            setCurrentRequestType(volunteer_status.IN_PROGRESS);}}>
           <Text style={texts.button_label_blue}>Active</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setCurrentRequestList(completedRequests)}>
+        <TouchableOpacity onPress={() => {setCurrentRequestList(completedRequests); 
+            setCurrentRequestType(volunteer_status.COMPLETE)}}>
           <Text style={texts.button_label_blue}>Complete</Text>
         </TouchableOpacity>
 
@@ -182,13 +217,13 @@ export default function RequestsScreen() {
             <View style={{flex: 1}}>
               <Modal isVisible={isModalVisible}>
                 <View style={{flex: 1}}>
-                  {displayRequestModal(requestType, item)}
+                  {displayRequestModal(currentRequestType, item)}
                 </View>
               </Modal>
             </View>
 
             <TouchableOpacity style={styles.request} onPress={toggleModal}>
-              {displayRequestInfo(requestType, item)}
+              {displayRequestInfo(currentRequestType, item)}
             </TouchableOpacity>
             <Text></Text>
             </>

@@ -9,7 +9,7 @@ import {
   AsyncStorage,
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
-import { homeURL } from "../../constants";
+import { homeURL, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
 
@@ -40,23 +40,45 @@ export default function LoginScreen() {
             setUserID(data["user"]._id);
             setLoginSession(data["user"].token); 
 
-            const storeUserInfo = async () => {
+            const saveData1 = async () => {
               try {
-                await AsyncStorage.setItem('@userID', JSON.stringify(data["user"]._id))
-                //await AsyncStorage.setItem('@sessionToken', JSON.stringify(data["user"].token))
+                await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data["user"]._id)
+                //await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data["user"].token)
+                alert('Data successfully saved')
+              } catch (e) {
+                alert(e)
+              }
+            }
+            saveData1(); 
+
+            const saveData2 = async () => { // TODO: combine this and above into 1 method 
+              try {
+                //await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data["user"]._id)
+                await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data["user"].token)
+                alert('Data successfully saved')
+              } catch (e) {
+                alert(e)
+              }
+            }
+            saveData2();
+
+            /*const storeUserInfo = async () => {
+              try {
+                console.log("STORING USER INFO ")
+                await AsyncStorage.setItem(SAVE_ID_KEY, "abcd")
               } catch (e) {
                 console.log(e); 
               }
-            }
+            }*/
 
-            const storeSmthElse = async () => {
+            /*const storeToken = async () => {
               try {
-                //await AsyncStorage.setItem('@userID', JSON.stringify(data["user"]._id))
+                console.log("STORING TOKEN")
                 await AsyncStorage.setItem('@sessionToken', JSON.stringify(data["user"].token))
               } catch (e) {
                 console.log(e); 
               }
-            }
+            }*/
           });
         } else {
           if (response.status === 403) {
@@ -86,7 +108,7 @@ export default function LoginScreen() {
   //AsyncStorage.getItem("userID").then((userID)=>setUserID(userID));
   //AsyncStorage.getItem("sessionToken").then((sessionToken)=>setLoginSession(sessionToken));
 
-  if (!(userID && loginSession)) {
+  if (!(userID && loginSession)) { // add useEffect
     return (
       <View>
         <View style={styles.container}>
