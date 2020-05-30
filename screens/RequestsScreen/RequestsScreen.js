@@ -8,6 +8,7 @@ import {
   Alert,
   FlatList, StyleSheet, ListItem,
   Button, 
+  AsyncStorage
 } from "react-native";
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
@@ -46,7 +47,11 @@ export default function RequestsScreen() {
       });
   };
 
-  function handleLogin() {
+  if (!user) {
+    fetch_user_obj(userID);
+  }
+
+  /*async function handleLogin() {
     let form = {
       user: {
         email: 'bangaru2@illinois.edu',
@@ -84,7 +89,7 @@ export default function RequestsScreen() {
       .catch((e) => {
         alert(e);
       });
-  }
+  }*/
 
   function generateRequestList(requestData, requestStateChanger) { 
     let tempList = []; 
@@ -157,9 +162,6 @@ export default function RequestsScreen() {
       <View style={styles.container}>
       <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
       <Text style={texts.request_text}>View your requests below.</Text>
-        <TouchableOpacity style={buttons.signup} onPress={handleLogin}>
-          <Text style={texts.button_label_blue}>LOGIN</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity onPress={() => setCurrentRequestList(pendingRequests)}>
           <Text style={texts.button_label_blue}>Pending</Text>
