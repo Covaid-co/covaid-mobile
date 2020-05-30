@@ -39,6 +39,7 @@ export default function App(props) {
             <Stack.Screen
               name="Covaid"
               component={BottomTabNavigator}
+              initialParams={{ userID: "5eb780ce6e90930017d11480" }}
               options={{
                 headerRight: () => (
                   <TouchableOpacity

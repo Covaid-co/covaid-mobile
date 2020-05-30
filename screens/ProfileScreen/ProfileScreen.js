@@ -3,15 +3,38 @@ import { Text, TouchableOpacity, View, ScrollView, Switch } from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./ProfileScreenStyles";
+import { homeURL } from "../../constants";
+import { generateURL, validateEmail } from "../../Helpers";
 
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen({ route, navigation }) {
   //set this to props.publish
   const [publish, setPublish] = useState(false);
+  const [user, setUser] = useState();
 
   const toggleSwitch = () => setPublish((publish) => !publish);
-  /**
-   * Use a user object once that becomes available
-   */
+  useEffect(() => {
+    fetch_user_obj(route.params.userID)    
+}, [user]);
+  const fetch_user_obj = async (id) => {
+    console.log(id)
+    let params = { id: id };
+    var url = generateURL(homeURL + "/api/users/user?", params);
+
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            console.log(data[0]);
+            setUser(data[0]);
+          });
+        } else {
+          alert("Error obtaining user object");
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
   return (
     <ScrollView style={styles.container}>
       <Text style={texts.header}> Your Profile </Text>

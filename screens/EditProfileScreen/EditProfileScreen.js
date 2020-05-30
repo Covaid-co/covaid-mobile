@@ -71,6 +71,7 @@ export default function LoginScreen({ route, navigation }) {
       </View>
     );
   }
+  console.log(route.params)
   return (
     <View>
       <View style={styles.container}>
