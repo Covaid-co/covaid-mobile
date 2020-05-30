@@ -14,6 +14,7 @@ import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
+import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js";
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,7 @@ export default function App(props) {
                 ),
               }}
             />
+            <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
