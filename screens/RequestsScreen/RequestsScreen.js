@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,16 +18,16 @@ import fetch_a from '../../util/fetch_auth'
 
 export default function RequestsScreen() {
   // from LoginScreen, we get loginToken and userID -> preferably loginSession or something 
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
   const [userID, setUserID] = useState();
   const [user, setUser] = useState("");
-  const [loginSession, setLoginSession] = useState("");
-  const [requestList, setRequestList] = useState("");
-  const [requestType, setRequestType] = useState(volunteer_status.PENDING); 
+  const [loginToken, setLoginToken] = useState("");
+  const [currentRequestList, setCurrentRequestList] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [pendingRequests, setPendingRequests] = useState(); 
+  const [activeRequests, setActiveRequests] = useState(); 
+  const [completedRequests, setCompletedRequests] = useState(); 
 
-  const fetch_user_obj = async (id) => {
+  const fetchUser = async (id) => {
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
@@ -63,9 +63,7 @@ export default function RequestsScreen() {
         if (response.ok) {
           response.json().then((data) => {
             setUserID(data["user"]._id);
-            fetch_user_obj(data["user"]._id);
-            setLoginSession(data["user"].token)
-            //Cookie.set("token", data.user.token);
+            setLoginToken(data["user"].token)
           });
         } else {
           if (response.status === 403) {
@@ -88,10 +86,10 @@ export default function RequestsScreen() {
       });
   }
 
-  function generateRequestList(requestData) { 
+  function generateRequestList(requestData, requestStateChanger) { 
     let tempList = []; 
     for (var i = 0; i < requestData.length; i++) { // TODO: forEach
-      var element = { // TODO: add more info upon clicking
+      var element = { 
         key: i, 
         requester_name: requestData[i].personal_info.requester_name, 
         resources: JSON.stringify(requestData[i].request_info), // TODO: add badges 
@@ -100,23 +98,22 @@ export default function RequestsScreen() {
         requester_contact: requestData[i].requester_email || requestData[i].requester_phone, 
         details: requestData[i].request_info.details, 
         completed_date: requestData[i].status.completed_date || "", 
-      }
+      } // add any relevant information 
       tempList.push(element); 
     }
-    setRequestList(tempList); 
+    requestStateChanger(tempList); 
   }
 
-  function getRequests(reqStatus) {
-    setRequestType(-10) // random 
+  function fetchRequests(reqStatus, requestStateChanger) {
     let params = {'status': reqStatus}; // TODO: get diff status requests (pending, in progress, completed)
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
     
-		fetch_a(loginSession, 'token', url, {
+		fetch_a(loginToken, 'token', url, {
             method: 'get',
         }).then((response) => {
             if (response.ok) {
                 response.json().then(data => {
-					        generateRequestList(data); 
+					        generateRequestList(data, requestStateChanger); 
                 });
             } else {
                 console.log("Error")
@@ -124,7 +121,6 @@ export default function RequestsScreen() {
     }).catch((e) => {
       console.log(e)
     });     
-    setRequestType(reqStatus); 
   }
 
   function toggleModal() { // TODO render proper modal with correct details based on if its a pending/active request
@@ -147,6 +143,14 @@ export default function RequestsScreen() {
     console.log("Reject request.")
   };
 
+  useEffect(() => {
+    handleLogin();   
+    fetchUser(userID); 
+    fetchRequests(volunteer_status.PENDING, setPendingRequests);
+    fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests);
+    fetchRequests(volunteer_status.COMPLETE, setCompletedRequests);
+  }, []);
+
 
   return (
     <View>
@@ -157,19 +161,19 @@ export default function RequestsScreen() {
           <Text style={texts.button_label_blue}>LOGIN</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => getRequests(volunteer_status.PENDING)}>
+        <TouchableOpacity onPress={() => setCurrentRequestList(pendingRequests)}>
           <Text style={texts.button_label_blue}>Pending</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => getRequests(volunteer_status.IN_PROGRESS)}>
+        <TouchableOpacity onPress={() => setCurrentRequestList(activeRequests)}>
           <Text style={texts.button_label_blue}>Active</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => getRequests(volunteer_status.COMPLETE)}>
+        <TouchableOpacity onPress={() => setCurrentRequestList(completedRequests)}>
           <Text style={texts.button_label_blue}>Complete</Text>
         </TouchableOpacity>
 
         <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
         <FlatList
-          data={requestList}
+          data={currentRequestList}
           renderItem={({item}) => 
             <>
 
