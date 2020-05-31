@@ -21,18 +21,19 @@ export default function App(props) {
   } else if (!auth) {
     return (
       <View style={styles.container}>
-        <LoginScreen />
+        <LoginScreen setAppAuth = {setAuth}/>
       </View>
     );
   } else {
     return (
       <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
+        <RequestsScreen/>
+        {/* {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
         <NavigationContainer linking={LinkingConfiguration}>
           <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} />
           </Stack.Navigator>
-        </NavigationContainer>
+    </NavigationContainer> */}
       </View>
     );
   }

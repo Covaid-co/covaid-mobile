@@ -48,46 +48,6 @@ export default function RequestsScreen() {
       });
   };
 
-  /*async function handleLogin() {
-    let form = {
-      user: {
-        email: 'bangaru2@illinois.edu',
-        password: 'pwd123',
-      },
-    };
-
-    fetch(homeURL + "/api/users/login/", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUserID(data["user"]._id);
-            setLoginToken(data["user"].token)
-          });
-        } else {
-          if (response.status === 403) {
-            Alert.alert(
-              "Check your email for a verification link prior to logging in.",
-              ""[{ text: "OK" }],
-              {
-                cancelable: false,
-              }
-            );
-          } else if (response.status === 401) {
-            Alert.alert("Incorrect username or password", ""[{ text: "OK" }], {
-              cancelable: false,
-            });
-          }
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  }*/
-
   function generateRequestList(requestData, requestStateChanger) { 
     let tempList = []; 
     for (var i = 0; i < requestData.length; i++) { // TODO: forEach
@@ -125,7 +85,7 @@ export default function RequestsScreen() {
     });     
   }
 
-  function toggleModal() { // TODO render proper modal with correct details based on if its a pending/active request
+  function toggleModal() { 
     setIsModalVisible(!isModalVisible);
   };
 
@@ -153,39 +113,10 @@ export default function RequestsScreen() {
 
     AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
       console.log("GETTING TOKEN " + data)
-      //setLoginToken(data);
-      //console.log(data); 
       fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
       fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
       fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
-    });
-
-    /*const readData = async () => {
-      try {
-        const something = await AsyncStorage.getItem(SAVE_ID_KEY)
-    
-        alert(something); 
-      } catch (e) {
-        alert('Failed to fetch the data from storage')
-      }
-    }
-    readData(); */
-
-
-    /*AsyncStorage.getItem(saveID).then((data) => {
-      console.log("GETTING USER ID " + data)
-      setUserID(data); 
-      fetchUser(data); 
-    });*/
-    /*AsyncStorage.getItem("userID").then((data) => {
-      console.log("GETTING TOKEN " + data)
-      setLoginToken(data);
-      console.log(loginToken); 
-      fetchRequests(volunteer_status.PENDING, setPendingRequests);
-      fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests);
-      fetchRequests(volunteer_status.COMPLETE, setCompletedRequests);
-    }); */
-    
+    });    
   }, []);
 
 
