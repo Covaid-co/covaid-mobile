@@ -14,8 +14,8 @@ import { generateURL, validateEmail } from "../../Helpers";
 import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
 
 export default function LoginScreen(props) {
-  const [username, setUsername] = useState('bangaru2@illinois.edu');
-  const [password, setPassword] = useState('pwd123');
+  const [username, setUsername] = useState("bangaru2@illinois.edu");
+  const [password, setPassword] = useState("pwd123");
 
   async function handleLogin() {
     let form = {
@@ -35,37 +35,50 @@ export default function LoginScreen(props) {
           response.json().then((data) => {
             const saveData1 = async () => {
               try {
-                await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data["user"]._id)
+                await AsyncStorage.setItem(
+                  storage_keys.SAVE_ID_KEY,
+                  data["user"]._id
+                );
               } catch (e) {
-                alert(e)
+                alert(e);
               }
-            }
-            saveData1(); 
+            };
+            saveData1();
 
-            const saveData2 = async () => { // TODO: combine this and above into 1 method 
+            const saveData2 = async () => {
+              // TODO: combine this and above into 1 method
               try {
-                await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data["user"].token)
+                await AsyncStorage.setItem(
+                  storage_keys.SAVE_TOKEN_KEY,
+                  data["user"].token
+                );
               } catch (e) {
-                alert(e)
+                alert(e);
               }
-            }
+            };
             saveData2();
 
-            props.setAppAuth(true); 
+            props.setAppAuth(true);
           });
         } else {
           if (response.status === 403) {
             Alert.alert(
               "Check your email for a verification link prior to logging in.",
-              ""[{ text: "OK" }],
+              "",
+              [{ text: "OK" }],
               {
                 cancelable: false,
               }
             );
           } else if (response.status === 401) {
-            Alert.alert("Incorrect username or password", ""[{ text: "OK" }], {
-              cancelable: false,
-            });
+            Alert.alert(
+              "Incorrect username or password",
+              "",
+              [{ text: "OK" }],
+              {
+                cancelable: false,
+              }
+            );
           }
         }
       })
@@ -78,12 +91,20 @@ export default function LoginScreen(props) {
     console.log("send email");
   }
 
-  useEffect(() => { 
-    var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => { return data; });
-    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });    
+  useEffect(() => {
+    var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
+    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
 
     if (idHolder && tokenHolder) {
-      props.setAppAuth(true); 
+      props.setAppAuth(true);
     }
   }, []);
 
@@ -129,5 +150,5 @@ export default function LoginScreen(props) {
         </TouchableOpacity>
       </View>
     </View>
-  );  
+  );
 }
