@@ -33,14 +33,6 @@ export default function PendingRequestScreen(props) {
       <View>
         <Text style={texts.header}>Pending Request</Text>
 
-        <Text>Request is pending</Text>
-        <Text>Who: {props.item.requester_name}</Text>
-        <Text>Contact: {props.item.requester_contact}</Text>
-        <Text>Details: {props.item.details}</Text>
-        <Text>Requesting support with: {props.item.resources}</Text>
-        <Text>Needed by: {props.item.needed_by}</Text>
-        <Text>Location: {props.item.location}</Text>
-        
         <TouchableOpacity style={buttons.accept}>
           <Text style={texts.button_label}>Accept Request</Text>
         </TouchableOpacity>
@@ -50,6 +42,15 @@ export default function PendingRequestScreen(props) {
         <TouchableOpacity style={buttons.go_back} onPress={() => props.setDisplayIndividualReq(false)}>
           <Text style={texts.button_label_blue}>Go back</Text>
         </TouchableOpacity>
+
+        <Text>Request is pending</Text>
+        <Text>Who: {props.item.requester_name}</Text>
+        <Text>Contact: {props.item.requester_contact}</Text>
+        <Text>Details: {props.item.details}</Text>
+        <Text>Requesting support with: {props.item.resources}</Text>
+        <Text>Needed by: {props.item.needed_by}</Text>
+        <Text>Location: {props.item.location}</Text>
+        
       </View>
     </View>
   );  

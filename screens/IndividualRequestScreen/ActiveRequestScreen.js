@@ -31,6 +31,17 @@ export default function ActiveRequestScreen(props) {
       <View>
         <Text style={texts.header}>Active Request</Text>
 
+        <TouchableOpacity style={buttons.accept}>
+          <Text style={texts.button_label}>Complete Request</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={buttons.reject}>
+          <Text style={texts.button_label}>Cancel Request</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={buttons.go_back} onPress={() => props.setDisplayIndividualReq(false)}>
+          <Text style={texts.button_label_blue}>Go back</Text>
+        </TouchableOpacity>
+
         <Text>Request is in-progress</Text>
           <Text>
             Thanks for accepting this request for support! Please reach out to
@@ -42,17 +53,6 @@ export default function ActiveRequestScreen(props) {
           <Text>Requesting support with: {props.item.resources}</Text>
           <Text>Needed by: {props.item.needed_by}</Text>
           <Text>Location: {props.item.location}</Text>
-
-        <TouchableOpacity style={buttons.accept}>
-          <Text style={texts.button_label}>Complete Request</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={buttons.reject}>
-          <Text style={texts.button_label}>Cancel Request</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={buttons.go_back} onPress={() => props.setDisplayIndividualReq(false)}>
-          <Text style={texts.button_label_blue}>Go back</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );  

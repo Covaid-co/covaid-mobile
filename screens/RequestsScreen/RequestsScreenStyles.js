@@ -37,12 +37,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 10,
     marginRight: 10,
-    width: 332,
+    width: 300,
     justifyContent: "center",
   },
   requestContainer: {
     position: "absolute",
-    top: 300, // change this when finalized
+    top: 200, // change this when finalized
     marginTop: 600,
     justifyContent: "center",
     alignItems: "center",

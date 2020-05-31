@@ -23,14 +23,15 @@ export default function CompletedRequestScreen(props) {
       <View>
         <Text style={texts.header}>Completed Request</Text>
 
+        <TouchableOpacity style={buttons.go_back} onPress={() => props.setDisplayIndividualReq(false)}>
+          <Text style={texts.button_label_blue}>Go back</Text>
+        </TouchableOpacity>
+
         <Text>Who: {props.item.requester_name}</Text>
         <Text>Contact: {props.item.requester_contact}</Text>
         <Text>Details: {props.item.details}</Text>
         <Text>Completed: {props.item.completed_date}</Text>
         
-        <TouchableOpacity style={buttons.go_back} onPress={() => props.setDisplayIndividualReq(false)}>
-          <Text style={texts.button_label_blue}>Go back</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );  
