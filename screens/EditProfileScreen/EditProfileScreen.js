@@ -71,12 +71,11 @@ export default function LoginScreen({ route, navigation }) {
       </View>
     );
   }
-  console.log(route.params);
   return (
     <View>
       <View style={styles.container}>
         <Text style={texts.header}>Edit your profile</Text>
-        <Text style={texts.header}>{route.params.name}</Text>
+        <Text style={texts.header}>{route.params.userID}</Text>
         <TextInput></TextInput>
       </View>
     </View>

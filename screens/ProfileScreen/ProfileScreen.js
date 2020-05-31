@@ -8,44 +8,34 @@ import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 
 export default function ProfileScreen({ route, navigation }) {
-  /**
-   * TODO:
-   * functionality for publish/unpublish
-   * edit profile page
-   */
   const [publish, setPublish] = useState(false);
   const [isPublish, setIsPublish] = useState(false);
   const [user, setUser] = useState();
 
   const toggleSwitch = () => {
-    setPublish((publish) => !publish);
     handleUpdate(!publish);
+    setPublish(!publish);
   };
 
   useEffect(() => {
     fetch_user_obj(route.params.userID);
   }, [route.params.userID]);
-  console.log(route.params);
 
-  // PUT offer changes to backend, update state
-  // publish -> T/F (whether to publish or unpublish offer)
-  // setter -> State setting function that allows for loading effect
-  const handleUpdate = (publish) => {
-    console.log(publish);
-    let form = {
+  const handleUpdate = async (publish) => {
+    let params = {
       availability: publish,
     };
-
-    fetch_a(route.params.token, "token", "/api/users/update", {
+    var url = generateURL(homeURL + "/api/users/update?", params);
+    fetch_a(route.params.token, "token", url, {
       method: "put",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify(params),
     })
       .then((response) => {
         if (response.ok) {
-          // Change the state to refect offer update
+          //Change the state to refect offer update
           setTimeout(function () {
-            setPublish(publish);
+            fetch_user_obj(route.params.userI);
           }, 750);
         } else {
           console.log("Update not successful");
@@ -64,7 +54,6 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            console.log(data[0]);
             setUser(data[0]);
             setPublish(data[0].availability);
           });
@@ -143,7 +132,7 @@ export default function ProfileScreen({ route, navigation }) {
 
         <TouchableOpacity
           style={buttons.edit}
-          onPress={() => navigation.navigate("Edit Profile", { name: "Jane" })}
+          onPress={() => navigation.navigate("Edit Profile", route.params)}
         >
           <Text style={texts.button_label}>Edit Profile</Text>
         </TouchableOpacity>
