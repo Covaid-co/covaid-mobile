@@ -25,24 +25,20 @@ export default function App(props) {
   const isLoadingComplete = useCachedResources();
   const [auth, setAuth] = useState(false);
   const [userID, setUserID] = useState();
+  const [token, setToken] = useState();
 
   /**
    * Only runs if auth changes
    * Currently the token is commented out but will be needed in the RequestsScreen
    */
   useEffect(() => {
-    console.log("ran");
     AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-      console.log("GETTING USER ID " + data);
       setUserID(data);
     });
 
-    // AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-    //   console.log("GETTING TOKEN " + data)
-    //   fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
-    //   fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-    //   fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
-    // });
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+      setToken(data);
+    });
   }, [auth]);
 
   if (!isLoadingComplete) {
@@ -62,7 +58,10 @@ export default function App(props) {
             <Stack.Screen
               name="Covaid"
               component={BottomTabNavigator}
-              initialParams={{ userID: userID }}
+              initialParams={{ 
+                userID: userID ,
+                token: token,
+              }}
               options={{
                 headerRight: () => (
                   <TouchableOpacity

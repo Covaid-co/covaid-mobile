@@ -14,8 +14,8 @@ import { generateURL, validateEmail } from "../../Helpers";
 import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
 
 export default function LoginScreen(props) {
-  const [username, setUsername] = useState("bangaru2@illinois.edu");
-  const [password, setPassword] = useState("pwd123");
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
 
   async function handleLogin() {
     let form = {
