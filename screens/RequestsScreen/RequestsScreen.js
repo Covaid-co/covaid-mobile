@@ -15,6 +15,9 @@ import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
+import PendingRequestScreen from "../IndividualRequestScreen/PendingRequestScreen";
+import CompletedRequestScreen from "../IndividualRequestScreen/CompletedRequestScreen";
+import ActiveRequestScreen from "../IndividualRequestScreen/ActiveRequestScreen";
 //import Cookie from 'js-cookie'
 
 export default function RequestsScreen() {
@@ -24,10 +27,12 @@ export default function RequestsScreen() {
   //const [loginToken, setLoginToken] = useState("");
   const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState(volunteer_status.PENDING);
-  const [isModalVisible, setIsModalVisible] = useState(false); 
+  // const [isModalVisible, setIsModalVisible] = useState(false); 
   const [pendingRequests, setPendingRequests] = useState(); 
   const [activeRequests, setActiveRequests] = useState(); 
   const [completedRequests, setCompletedRequests] = useState(); 
+  const [displayIndividualReq, setDisplayIndividualReq] = useState(false);
+  const [currentItem, setCurrentItem] = useState();  
 
   const fetchUser = async (id) => { // TODO: use authenticated version of this 
     let params = { id: id };
@@ -57,7 +62,7 @@ export default function RequestsScreen() {
         resources: JSON.stringify(requestData[i].request_info), // TODO: add badges 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
         location: requestData[i].location_info.coordinates, 
-        requester_contact: requestData[i].requester_email || requestData[i].requester_phone, 
+        requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
         details: requestData[i].request_info.details, 
         completed_date: requestData[i].status.completed_date || "", 
       } // add any relevant information 
@@ -75,7 +80,7 @@ export default function RequestsScreen() {
         }).then((response) => {
             if (response.ok) {
                 response.json().then(data => {
-					        generateRequestList(data, requestStateChanger); 
+                  generateRequestList(data, requestStateChanger); 
                 });
             } else {
                 console.log("Error")
@@ -84,26 +89,6 @@ export default function RequestsScreen() {
       console.log(e)
     });     
   }
-
-  function toggleModal() { 
-    setIsModalVisible(!isModalVisible);
-  };
-
-  function completeRequest(reqKey) {
-    setIsModalVisible("Complete request.");
-  };
-
-  function acceptRequest(reqKey) {
-    setIsModalVisible("Accept request.");
-  };
-
-  function cancelRequest(reqKey) {
-    console.log("Cancel request.")
-  };
-
-  function rejectRequest(reqKey) {
-    console.log("Reject request.")
-  };
 
   useEffect(() => {
     AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
@@ -120,50 +105,64 @@ export default function RequestsScreen() {
   }, []);
 
 
-  return (
-    <View>
+  if (displayIndividualReq && currentRequestType == volunteer_status.PENDING) {
+    return (
       <View style={styles.container}>
-      <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
-      <Text style={texts.request_text}>View your requests below.</Text>
-
-        <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
-            setCurrentRequestType(volunteer_status.PENDING);}}>
-          <Text style={texts.button_label_blue}>Pending</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setCurrentRequestList(activeRequests);
-            setCurrentRequestType(volunteer_status.IN_PROGRESS);}}>
-          <Text style={texts.button_label_blue}>Active</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setCurrentRequestList(completedRequests); 
-            setCurrentRequestType(volunteer_status.COMPLETE)}}>
-          <Text style={texts.button_label_blue}>Complete</Text>
-        </TouchableOpacity>
-
-        <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
-        <FlatList
-          data={currentRequestList}
-          renderItem={({item}) => 
-            <>
-
-            <View style={{flex: 1}}>
-              <Modal isVisible={isModalVisible}>
-                <View style={{flex: 1}}>
-                  {displayRequestModal(currentRequestType, item)}
-                </View>
-              </Modal>
-            </View>
-
-            <TouchableOpacity style={styles.request} onPress={toggleModal}>
-              {displayRequestInfo(currentRequestType, item)}
-            </TouchableOpacity>
-            <Text></Text>
-            </>
-          }
-        />
+        <PendingRequestScreen item={currentItem} setDisplayIndividualReq={setDisplayIndividualReq}/>
       </View>
+    )
+  } else if (displayIndividualReq && currentRequestType == volunteer_status.IN_PROGRESS) {
+    return (
+      <View style={styles.container}>
+        <ActiveRequestScreen item={currentItem} setDisplayIndividualReq={setDisplayIndividualReq}/>
       </View>
-    </View>
-  );
+    )
+  } else if (displayIndividualReq && currentRequestType == volunteer_status.COMPLETE) {
+    return (
+      <View style={styles.container}>
+        <CompletedRequestScreen item={currentItem} setDisplayIndividualReq={setDisplayIndividualReq}/>
+      </View>
+    )
+  } else {
+    return (
+      <View>
+        <View style={styles.container}>
+        <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
+        <Text style={texts.request_text}>View your requests below.</Text>
+  
+          <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
+              setCurrentRequestType(volunteer_status.PENDING);}}>
+            <Text style={texts.button_label_blue}>Pending</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setCurrentRequestList(activeRequests);
+              setCurrentRequestType(volunteer_status.IN_PROGRESS);}}>
+            <Text style={texts.button_label_blue}>Active</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setCurrentRequestList(completedRequests); 
+              setCurrentRequestType(volunteer_status.COMPLETE)}}>
+            <Text style={texts.button_label_blue}>Complete</Text>
+          </TouchableOpacity>
+  
+          <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
+          <FlatList
+            data={currentRequestList}
+            renderItem={({item}) => 
+              <>  
+              <TouchableOpacity style={styles.request} onPress={() => {
+                setDisplayIndividualReq(true); 
+                setCurrentItem(item); 
+              }}>
+                {displayRequestInfo(currentRequestType, item)}
+              </TouchableOpacity>
+              <Text></Text>
+              </>
+            }
+          />
+        </View>
+        </View>
+      </View>  
+    );
+  }
 
   function displayRequestInfo(reqType, item) {
     if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
@@ -184,60 +183,6 @@ export default function RequestsScreen() {
     }
     return (
       <Text style={texts.header}>Obtaining details...</Text>
-    )
-  };
-
-
-  function displayRequestModal(reqType, item) {
-    if (reqType == volunteer_status.PENDING) {
-      return (
-        <>
-        <Text>Test</Text>
-        <Button title="Close" onPress={toggleModal} />
-        <Button title="Accept" onPress={() => acceptRequest(item.key)} />
-        <Button title="Reject" onPress={() => rejectRequest(item.key)} />
-        <Text>Request is pending</Text>
-        <Text>Thanks for accepting this request for support! Please reach out to the requester by using the contact information below.</Text>
-        <Text>Who: {item.requester_name}</Text>
-        <Text>Contact: {item.requester_contact}</Text>
-        <Text>Details: {item.details}</Text>
-        <Text>Requesting support with: {item.resources}</Text>
-        <Text>Needed by: {item.needed_by}</Text>
-        <Text>Location: {item.location}</Text>
-        </>
-      )
-    } else if (reqType == volunteer_status.IN_PROGRESS) {
-      return (
-        <>
-        <Text>Test</Text>
-        <Button title="Close" onPress={toggleModal} />
-        <Button title="Complete" onPress={() => completeRequest(item.key)} />
-        <Button title="Cancel" onPress={() => cancelRequest(item.key)} />
-        <Text>Request is in-progress</Text>
-        <Text>Thanks for accepting this request for support! Please reach out to the requester by using the contact information below.</Text>
-        <Text>Who: {item.requester_name}</Text>
-        <Text>Contact: {item.requester_contact}</Text>
-        <Text>Details: {item.details}</Text>
-        <Text>Requesting support with: {item.resources}</Text>
-        <Text>Needed by: {item.needed_by}</Text>
-        <Text>Location: {item.location}</Text>
-        </>
-      )
-    } else if (reqType == volunteer_status.COMPLETE) { // TODO verify with website if this is the info that has to be shown 
-      return (
-        <>
-        <Text>Test</Text>
-        <Button title="Close" onPress={toggleModal} />
-        <Text>Request is complete</Text>
-        <Text>Who: {item.requester_name}</Text>
-        <Text>Contact: {item.requester_contact}</Text>
-        <Text>Details: {item.details}</Text>
-        <Text>Completed: {item.completed_date}</Text>
-        </>
-      )
-    }
-    return (
-      <Text style={texts.header}>Obtaining request data...</Text>
     )
   };
 }
