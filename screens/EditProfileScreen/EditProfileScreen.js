@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  ScrollView,
   View,
   Text,
   Image,
@@ -8,8 +9,11 @@ import {
   Alert,
 } from "react-native";
 import { styles, buttons, texts } from "./EditProfileScreenStyles";
+import { homeURL, volunteer_status, storage_keys } from "../../constants";
+import { generateURL, validateEmail, extractTrueObj } from "../../Helpers";
 
 export default function LoginScreen({ route, navigation }) {
+  const [user, setUser] = useState();
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -23,7 +27,6 @@ export default function LoginScreen({ route, navigation }) {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const [user, setUser] = useState({});
   const [defaultResources, setDefaultResources] = useState([
     "Food/Groceries",
     "Medication",
@@ -58,26 +61,53 @@ export default function LoginScreen({ route, navigation }) {
     "Cantonese",
     "Other (Specify in details)",
   ];
-  function form(header, placeholder, change, value) {
+
+  useEffect(() => {
+    fetch_user_obj(route.params.userID);
+  }, [route.params.userID]);
+
+  function form(header, change, value) {
     return (
-      <View>
+      <View style = {styles.form}>
+        <Text style = {texts.label}>
+          {header}
+        </Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#7F7F7F"
           onChangeText={(input) => change(input)}
           defaultValue={value}
         />
       </View>
     );
   }
+
+  const fetch_user_obj = async (id) => {
+    let params = { id: id };
+    var url = generateURL(homeURL + "/api/users/user?", params);
+
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setUser(data[0]);
+          });
+        } else {
+          alert("Error obtaining user object");
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
   return (
-    <View>
-      <View style={styles.container}>
-        <Text style={texts.header}>Edit your profile</Text>
-        <Text style={texts.header}>{route.params.userID}</Text>
-        <TextInput></TextInput>
-      </View>
-    </View>
+    <ScrollView style={styles.container}>
+      <View style = {styles.center}>
+        {form("First Name:", setFirstName, firstName)}
+        {form("Last Name:", setLastName, lastName)}
+        {form("Email:", setEmail, email)}
+        {form("Phone:", setPhone, phone)}
+        {form("Zip Code:", setZip, zip)}
+      </View> 
+      </ScrollView>
   );
 }

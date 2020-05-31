@@ -7,15 +7,29 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "white",
   },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   line: {
     borderWidth: 0.8,
     borderColor: Colors.grey,
     margin: "1%",
   },
-  info: {
-    flexDirection: "row",
-    marginTop: 20,
+  form: {
+    // flexDirection: "row",
+    margin: 5,
   },
+  input: {
+    width: 350,
+    height: 50,
+    paddingLeft: 10,
+    fontSize: 17,
+    borderWidth: 2,
+    borderColor: Colors.grey,
+    borderRadius: 8,
+    fontSize: 15,
+  }
 });
 
 const buttons = StyleSheet.create({
@@ -45,9 +59,6 @@ const texts = StyleSheet.create({
   label: {
     fontSize: 17,
     color: "black",
-    flex: 1,
-    flexWrap: "wrap",
-    overflow: "visible",
   },
   button_label: {
     fontSize: 15,
