@@ -65,7 +65,7 @@ const buttons = StyleSheet.create({
 const texts = StyleSheet.create({
   header: {
     marginBottom: 10,
-    fontFamily: "Montserrat-Black",
+    fontFamily: "Montserrat",
     fontSize: 40,
     color: "black",
     textAlign: "center",

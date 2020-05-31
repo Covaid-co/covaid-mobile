@@ -15,6 +15,7 @@ import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js";
+import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
 
 const Stack = createStackNavigator();
 
@@ -27,7 +28,7 @@ export default function App(props) {
   } else if (auth) {
     return (
       <View style={styles.container}>
-        <LoginScreen />
+        <LoginScreen/>
       </View>
     );
   } else {

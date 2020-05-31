@@ -12,6 +12,7 @@ export default function ProfileScreen({ route, navigation }) {
    * functionality for publish/unpublish
    * edit profile page
    */
+  const [publish, setPublish] = useState(false);
   const [isPublish, setIsPublish] = useState(false);
   const [user, setUser] = useState();
 
