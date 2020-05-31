@@ -12,10 +12,12 @@ import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
+import ResetPassword from "../../components/ResetPassword/ResetPassword";
 
 export default function LoginScreen(props) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   async function handleLogin() {
     let form = {
@@ -88,7 +90,7 @@ export default function LoginScreen(props) {
   }
 
   function handlePasswordReset() {
-    console.log("send email");
+    setModalVisible(true);
   }
 
   useEffect(() => {
@@ -148,6 +150,7 @@ export default function LoginScreen(props) {
         <TouchableOpacity style={buttons.signup}>
           <Text style={texts.button_label_blue}>SIGN UP</Text>
         </TouchableOpacity>
+        {modalVisible && <ResetPassword modalVisible={setModalVisible} />}
       </View>
     </View>
   );
