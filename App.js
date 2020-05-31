@@ -27,10 +27,6 @@ export default function App(props) {
   const [userID, setUserID] = useState();
   const [token, setToken] = useState();
 
-  /**
-   * Only runs if auth changes
-   * Currently the token is commented out but will be needed in the RequestsScreen
-   */
   useEffect(() => {
     AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
       setUserID(data);
@@ -39,47 +35,49 @@ export default function App(props) {
     AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
       setToken(data);
     });
-  }, [auth]);
+  }, []);
 
   if (!isLoadingComplete) {
     return null;
-  } else if (auth) {
-    return (
-      <View style={styles.container}>
-        <LoginScreen setAppAuth={setAuth} />
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
-        <NavigationContainer linking={LinkingConfiguration}>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Covaid"
-              component={BottomTabNavigator}
-              initialParams={{ 
-                userID: userID ,
-                token: token,
-              }}
-              options={{
-                headerRight: () => (
-                  <TouchableOpacity
-                    style={{ margin: 10 }}
-                    onPress={() => alert("This is will trigger settings")}
-                  >
-                    <TabBarIcon name="md-settings" />
-                  </TouchableOpacity>
-                ),
-              }}
-            />
-            <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
-    );
   }
+  return (
+    <View style={styles.container}>
+      {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
+      <NavigationContainer linking={LinkingConfiguration}>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Covaid"
+            component={BottomTabNavigator}
+            initialParams={{
+              userID: userID,
+              token: token,
+            }}
+            options={{
+              headerRight: () => (
+                <TouchableOpacity
+                  style={{ margin: 10 }}
+                  onPress={() => alert("This is will trigger settings")}
+                >
+                  <TabBarIcon name="md-settings" />
+                </TouchableOpacity>
+              ),
+              headerLeft: null,
+            }}
+          />
+          <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
+  );
 }
+//}
 
 const styles = StyleSheet.create({
   container: {

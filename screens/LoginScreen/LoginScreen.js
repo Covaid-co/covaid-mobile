@@ -14,10 +14,27 @@ import { generateURL, validateEmail } from "../../Helpers";
 import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
 import ResetPassword from "../../components/ResetPassword/ResetPassword";
 
-export default function LoginScreen(props) {
+export default function LoginScreen({ route, navigation }) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
+    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
+
+    if (idHolder && tokenHolder) {
+      navigation.navigate("Covaid");
+    }
+  }, []);
 
   async function handleLogin() {
     let form = {
@@ -59,8 +76,7 @@ export default function LoginScreen(props) {
               }
             };
             saveData2();
-
-            props.setAppAuth(true);
+            navigation.navigate("Covaid");
           });
         } else {
           if (response.status === 403) {
@@ -92,23 +108,6 @@ export default function LoginScreen(props) {
   function handlePasswordReset() {
     setModalVisible(true);
   }
-
-  useEffect(() => {
-    var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then(
-      (data) => {
-        return data;
-      }
-    );
-    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then(
-      (data) => {
-        return data;
-      }
-    );
-
-    if (idHolder && tokenHolder) {
-      props.setAppAuth(true);
-    }
-  }, []);
 
   return (
     <View>

@@ -16,43 +16,44 @@ export default function ProfileScreen({ route, navigation }) {
   const [publish, setPublish] = useState(false);
   const [isPublish, setIsPublish] = useState(false);
   const [user, setUser] = useState();
-  
+
   const toggleSwitch = () => {
     setPublish((publish) => !publish);
-    handleUpdate(!publish)
-
-  }
+    handleUpdate(!publish);
+  };
 
   useEffect(() => {
     fetch_user_obj(route.params.userID);
   }, [route.params.userID]);
   console.log(route.params);
 
-// PUT offer changes to backend, update state
+  // PUT offer changes to backend, update state
   // publish -> T/F (whether to publish or unpublish offer)
   // setter -> State setting function that allows for loading effect
   const handleUpdate = (publish) => {
-    console.log(publish)
+    console.log(publish);
     let form = {
-        'availability': publish,
+      availability: publish,
     };
 
-    fetch_a(route.params.token, 'token', '/api/users/update', {
-        method: 'put',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(form)
-    }).then((response) => {
+    fetch_a(route.params.token, "token", "/api/users/update", {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    })
+      .then((response) => {
         if (response.ok) {
-            // Change the state to refect offer update
-            setTimeout(function () {
-              setPublish(publish)
+          // Change the state to refect offer update
+          setTimeout(function () {
+            setPublish(publish);
           }, 750);
         } else {
-            console.log("Update not successful");
+          console.log("Update not successful");
         }
-    }).catch((e) => {
+      })
+      .catch((e) => {
         console.log("Error");
-    });
+      });
   };
 
   const fetch_user_obj = async (id) => {
@@ -65,7 +66,7 @@ export default function ProfileScreen({ route, navigation }) {
           response.json().then((data) => {
             console.log(data[0]);
             setUser(data[0]);
-            setPublish(data[0].availability)
+            setPublish(data[0].availability);
           });
         } else {
           alert("Error obtaining user object");
