@@ -3,7 +3,7 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    marginTop: "50%",
     justifyContent: "center",
     alignItems: "center",
     fontSize: 10,
@@ -65,7 +65,7 @@ const buttons = StyleSheet.create({
 const texts = StyleSheet.create({
   header: {
     marginBottom: 10,
-    fontFamily: "Montserrat-Black",
+    fontFamily: "Montserrat",
     fontSize: 40,
     color: "black",
     textAlign: "center",
