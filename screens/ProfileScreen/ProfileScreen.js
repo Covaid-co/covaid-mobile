@@ -7,16 +7,21 @@ import { homeURL } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 
 export default function ProfileScreen({ route, navigation }) {
-  //set this to props.publish
-  const [publish, setPublish] = useState(false);
+  /**
+   * TODO:
+   * functionality for publish/unpublish
+   * edit profile page
+   */
+  const [isPublish, setIsPublish] = useState(false);
   const [user, setUser] = useState();
 
   const toggleSwitch = () => setPublish((publish) => !publish);
+
   useEffect(() => {
     fetch_user_obj(route.params.userID)    
-}, [user]);
+}, [route.params.userID]);
+
   const fetch_user_obj = async (id) => {
-    console.log(id)
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
@@ -35,47 +40,51 @@ export default function ProfileScreen({ route, navigation }) {
         alert(e);
       });
   };
+  if (user) {
   return (
     <ScrollView style={styles.container}>
       <Text style={texts.header}> Your Profile </Text>
       <View style={styles.line} />
       <View style={styles.info}>
         <Text style={texts.label_bold}> Name: </Text>
-        <Text style={texts.label}>Angela Luo</Text>
+        <Text style={texts.label}>{user.first_name + " " + user.last_name}</Text>
       </View>
+      { user.phone &&
       <View style={styles.info}>
         <Text style={texts.label_bold}> Phone: </Text>
-        <Text style={texts.label}>630-392-3663</Text>
+        <Text style={texts.label}>{user.phone}</Text>
       </View>
+      }
       <View style={styles.info}>
         <Text style={texts.label_bold}> Email: </Text>
-        <Text style={texts.label}>ael49021@gmail.com</Text>
+        <Text style={texts.label}>{user.email}</Text>
       </View>
-      <View style={styles.info}>
+      {user.association_name.length > 0 && 
+      <View style={styles.info}> 
         <Text style={texts.label_bold}> Mutual Aid: </Text>
-        <Text style={texts.label}>CCOM COVID-19 Task Force</Text>
+       <Text style={texts.label}>{user.association_name}</Text>
       </View>
+      }
       <View style={styles.info}>
         <Text style={texts.label_bold}> Location: </Text>
-        <Text style={texts.label}>Napervile Park District</Text>
+        <Text style={texts.label}>{user.offer.neighborhoods.join(", ")}</Text>
       </View>
       <View style={styles.info}>
         <Text style={texts.label_bold}> Languages: </Text>
-        <Text style={texts.label}>English</Text>
+        <Text style={texts.label}>{user.languages.join(", ")}</Text>
       </View>
       <View style={styles.info}>
         <Text style={texts.label_bold}> Car: </Text>
-        <Text style={texts.label}>Yes</Text>
+        <Text style={texts.label}>{user.offer.car ? "Yes" : "No"}</Text>
       </View>
       <View style={styles.info}>
         <Text style={texts.label_bold}> Availability: </Text>
-        <Text style={texts.label}>Afternoon, Evening, Weekdays, Weekends</Text>
+        <Text style={texts.label}>{user.offer.timesAvailable.join(", ")}</Text>
       </View>
       <View style={styles.info}>
         <Text style={texts.label_bold}> Details: </Text>
         <Text style={texts.label}>
-          I am a college student who can pick up/drop off supplies (ex. masks,
-          food, etc) in the Naperville area.{" "}
+        {user.offer.details}
         </Text>
       </View>
       <View style={styles.info}>
@@ -102,4 +111,10 @@ export default function ProfileScreen({ route, navigation }) {
       </TouchableOpacity>
     </ScrollView>
   );
+      }
+  else {
+    return (
+      <Text>Loading...</Text>
+    )
+  }
 }
