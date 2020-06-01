@@ -11,6 +11,7 @@ import {
 import { styles, buttons, texts } from "./EditProfileScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail, extractTrueObj } from "../../Helpers";
+import CheckForm from "../../components/CheckForm/CheckForm"
 
 export default function LoginScreen({ route, navigation }) {
   const [user, setUser] = useState();
@@ -81,6 +82,17 @@ export default function LoginScreen({ route, navigation }) {
     );
   }
 
+  const setCurrentUserObject = (userList, fullList, setFunction) => {
+    for (var i = 0; i < fullList.length; i++) {
+        const curr = fullList[i];
+        const include = (userList.includes(curr)) ? true : false;
+        setFunction(prev => ({ 
+            ...prev,
+            [curr]: include,
+        }));
+    }
+}
+
   const fetch_user_obj = async (id) => {
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
@@ -90,6 +102,7 @@ export default function LoginScreen({ route, navigation }) {
         if (response.ok) {
           response.json().then((data) => {
             setUser(data[0]);
+            setCurrentUserObject(data[0].languages, languages, setLanguageChecked)
           });
         } else {
           alert("Error obtaining user object");
@@ -107,6 +120,7 @@ export default function LoginScreen({ route, navigation }) {
         {form("Email:", setEmail, email)}
         {form("Phone:", setPhone, phone)}
         {form("Zip Code:", setZip, zip)}
+        <CheckForm obj={languageChecked} setObj={setLanguageChecked}/>
       </View> 
       </ScrollView>
   );
