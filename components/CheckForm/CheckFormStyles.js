@@ -2,8 +2,7 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
-
-  selected : {
+  selected: {
     margin: 5,
     padding: 5,
     height: 50,
@@ -13,7 +12,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  unselected : {
+  unselected: {
     margin: 5,
     padding: 5,
     height: 50,
@@ -27,11 +26,11 @@ const styles = StyleSheet.create({
   },
   selected_text: {
     fontSize: 17,
-    color: "white"
+    color: "white",
   },
   unselected_text: {
     fontSize: 17,
-    color: Colors.blue
+    color: Colors.blue,
   },
   center: {
     justifyContent: "center",
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.grey,
     borderRadius: 8,
     fontSize: 15,
-  }
+  },
 });
 
-export { styles};
+export { styles };

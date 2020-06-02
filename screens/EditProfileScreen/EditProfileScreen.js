@@ -11,7 +11,7 @@ import {
 import { styles, buttons, texts } from "./EditProfileScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail, extractTrueObj } from "../../Helpers";
-import CheckForm from "../../components/CheckForm/CheckForm"
+import CheckForm from "../../components/CheckForm/CheckForm";
 
 export default function LoginScreen({ route, navigation }) {
   const [user, setUser] = useState();
@@ -69,10 +69,8 @@ export default function LoginScreen({ route, navigation }) {
 
   function form(header, change, value) {
     return (
-      <View style = {styles.form}>
-        <Text style = {texts.label}>
-          {header}
-        </Text>
+      <View style={styles.form}>
+        <Text style={texts.label}>{header}</Text>
         <TextInput
           style={styles.input}
           onChangeText={(input) => change(input)}
@@ -84,14 +82,14 @@ export default function LoginScreen({ route, navigation }) {
 
   const setCurrentUserObject = (userList, fullList, setFunction) => {
     for (var i = 0; i < fullList.length; i++) {
-        const curr = fullList[i];
-        const include = (userList.includes(curr)) ? true : false;
-        setFunction(prev => ({ 
-            ...prev,
-            [curr]: include,
-        }));
+      const curr = fullList[i];
+      const include = userList.includes(curr) ? true : false;
+      setFunction((prev) => ({
+        ...prev,
+        [curr]: include,
+      }));
     }
-}
+  };
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };
@@ -102,7 +100,11 @@ export default function LoginScreen({ route, navigation }) {
         if (response.ok) {
           response.json().then((data) => {
             setUser(data[0]);
-            setCurrentUserObject(data[0].languages, languages, setLanguageChecked)
+            setCurrentUserObject(
+              data[0].languages,
+              languages,
+              setLanguageChecked
+            );
           });
         } else {
           alert("Error obtaining user object");
@@ -114,14 +116,14 @@ export default function LoginScreen({ route, navigation }) {
   };
   return (
     <ScrollView style={styles.container}>
-      <View style = {styles.center}>
+      <View style={styles.center}>
         {form("First Name:", setFirstName, firstName)}
         {form("Last Name:", setLastName, lastName)}
         {form("Email:", setEmail, email)}
         {form("Phone:", setPhone, phone)}
         {form("Zip Code:", setZip, zip)}
-        <CheckForm obj={languageChecked} setObj={setLanguageChecked}/>
-      </View> 
-      </ScrollView>
+        <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
+      </View>
+    </ScrollView>
   );
 }
