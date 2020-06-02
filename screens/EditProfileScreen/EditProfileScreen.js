@@ -14,7 +14,9 @@ import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail, extractTrueObj } from "../../Helpers";
 import CheckForm from "../../components/CheckForm/CheckForm";
 import Colors from "../../public/Colors";
-
+/**
+ * Update location when zipcode changes
+ */
 export default function LoginScreen({ route, navigation }) {
   const [user, setUser] = useState();
   const [firstName, setFirstName] = useState();
@@ -69,6 +71,54 @@ export default function LoginScreen({ route, navigation }) {
     fetch_user_obj(route.params.userID);
   }, [route.params.userID]);
 
+  const fetch_user_obj = async (id) => {
+    let params = { id: id };
+    var url = generateURL(homeURL + "/api/users/user?", params);
+
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setUser(data[0]);
+            setConstants(data[0]);
+          });
+        } else {
+          alert("Error obtaining user object");
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
+
+  const setConstants = (data) => {
+    setCurrentUserObject(data.languages,languages,setLanguageChecked);
+    setCurrentUserObject(data.offer.timesAvailable, timeNames, setTimes);
+    async function getResources() {
+      if (!data.association) {
+          setCurrentUserObject(data.offer.tasks, defaultResources, setResources);
+          return;
+      }
+      let params = {'associationID': data.association}
+      var url = generateURL("/api/association/get_assoc/?", params);
+      const response = await fetch(url);
+      response.json().then((res) => {
+          setCurrentUserObject(pdata.offer.tasks, res.resources, setResources);
+      });
+  }
+  getResources();
+  }
+  const setCurrentUserObject = (userList, fullList, setFunction) => {
+    for (var i = 0; i < fullList.length; i++) {
+      const curr = fullList[i];
+      const include = userList.includes(curr) ? true : false;
+      setFunction((prev) => ({
+        ...prev,
+        [curr]: include,
+      }));
+    }
+  };
+
   function form(header, change, value) {
     return (
       <View style={styles.form}>
@@ -81,41 +131,6 @@ export default function LoginScreen({ route, navigation }) {
       </View>
     );
   }
-
-  const setCurrentUserObject = (userList, fullList, setFunction) => {
-    for (var i = 0; i < fullList.length; i++) {
-      const curr = fullList[i];
-      const include = userList.includes(curr) ? true : false;
-      setFunction((prev) => ({
-        ...prev,
-        [curr]: include,
-      }));
-    }
-  };
-
-  const fetch_user_obj = async (id) => {
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-            setCurrentUserObject(
-              data[0].languages,
-              languages,
-              setLanguageChecked
-            );
-          });
-        } else {
-          alert("Error obtaining user object");
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.center}>
@@ -124,7 +139,12 @@ export default function LoginScreen({ route, navigation }) {
         {form("Email:", setEmail, email)}
         {form("Phone:", setPhone, phone)}
         {form("Zip Code:", setZip, zip)}
+        <Text style={texts.label}> What languages do you speak? </Text>
         <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
+        <Text style={texts.label}> What is your general availability? </Text>
+        <CheckForm obj={times} setObj={setTimes}/>
+        <Text style={texts.label}> What can you help with?</Text>
+        <CheckForm obj={resources} setObj={setResources}/>
       </View>
       <View style={styles.row}>
           <Text style={texts.label}> Car: </Text>
@@ -140,7 +160,7 @@ export default function LoginScreen({ route, navigation }) {
         )) || (
           <Text style={texts.red_text}> No Car Available</Text>
         )}
-        </View>
+      </View>
     </ScrollView>
   );
 }

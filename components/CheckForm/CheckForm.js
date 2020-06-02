@@ -1,6 +1,7 @@
 import React from "react";
 import {
   ScrollView,
+  View,
   Text,
   TouchableOpacity,
 } from "react-native";
@@ -19,13 +20,7 @@ export default function CheckForm(props) {
 
   return (
     <>
-      <ScrollView
-        contentContainerStyle={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-        }}
-      >
+      <View style = {styles.center}>
         {sortedObj.map((key) => {
           const isTranslated = props.translations ? true : false;
           const taskString =
@@ -49,7 +44,7 @@ export default function CheckForm(props) {
             </TouchableOpacity>
           );
         })}
-      </ScrollView>
+      </View>
     </>
   );
 }

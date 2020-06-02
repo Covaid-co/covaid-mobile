@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     height: 50,
     minWidth: 100,
     borderRadius: 8,
+    borderWidth: 3,
     backgroundColor: Colors.blue,
     justifyContent: "center",
     alignItems: "center",
@@ -32,10 +33,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: Colors.blue,
   },
-  center: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
   line: {
     borderWidth: 0.8,
     borderColor: Colors.grey,
@@ -55,6 +52,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 15,
   },
+  center: {
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+
+  }
 });
 
 export { styles };
