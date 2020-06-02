@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./CheckFormStyles";
 
 export default function CheckForm(props) {
@@ -20,7 +15,7 @@ export default function CheckForm(props) {
 
   return (
     <>
-      <View style = {styles.center}>
+      <View style={styles.center}>
         {sortedObj.map((key) => {
           const isTranslated = props.translations ? true : false;
           const taskString =
