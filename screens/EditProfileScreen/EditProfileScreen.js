@@ -7,11 +7,13 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Switch 
 } from "react-native";
 import { styles, buttons, texts } from "./EditProfileScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail, extractTrueObj } from "../../Helpers";
 import CheckForm from "../../components/CheckForm/CheckForm";
+import Colors from "../../public/Colors";
 
 export default function LoginScreen({ route, navigation }) {
   const [user, setUser] = useState();
@@ -124,6 +126,21 @@ export default function LoginScreen({ route, navigation }) {
         {form("Zip Code:", setZip, zip)}
         <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
       </View>
+      <View style={styles.row}>
+          <Text style={texts.label}> Car: </Text>
+          <Switch
+            trackColor={{ false: "#767577", true: Colors.grey }}
+            thumbColor={hasCar ? Colors.blue : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={() => setHasCar(!hasCar)}
+            value={hasCar}
+          />
+          {(hasCar && (
+          <Text style={texts.green_text}> Car Available</Text>
+        )) || (
+          <Text style={texts.red_text}> No Car Available</Text>
+        )}
+        </View>
     </ScrollView>
   );
 }

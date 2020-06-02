@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     margin: "1%",
   },
   form: {
-    // flexDirection: "row",
     margin: 5,
   },
   input: {
@@ -29,6 +28,12 @@ const styles = StyleSheet.create({
     borderColor: Colors.grey,
     borderRadius: 8,
     fontSize: 15,
+  },
+  row: {
+    margin: 10,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
@@ -65,9 +70,11 @@ const texts = StyleSheet.create({
     color: "white",
   },
   green_text: {
+    fontSize: 17,
     color: "green",
   },
   red_text: {
+    fontSize: 17,
     color: "red",
   },
 });
