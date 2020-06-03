@@ -18,11 +18,11 @@ export default function ActiveRequestScreen(props) {
     var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });    
   }, []);
 
-  function completeRequest(reqKey) {
+  function completeRequest() {
     setIsModalVisible("Complete request.");
   };
 
-  function cancelRequest(reqKey) {
+  function cancelRequest() {
     console.log("Cancel request.")
   };
 

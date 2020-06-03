@@ -54,6 +54,7 @@ export default function RequestsScreen() {
   };
 
   function generateRequestList(requestData, requestStateChanger) { 
+    //console.log(requestData)
     let tempList = []; 
     for (var i = 0; i < requestData.length; i++) { // TODO: forEach
       var element = { 
@@ -64,7 +65,8 @@ export default function RequestsScreen() {
         location: requestData[i].location_info.coordinates, 
         requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
         details: requestData[i].request_info.details, 
-        completed_date: requestData[i].status.completed_date || "", 
+        completed_date: requestData[i].status.completed_date || "",
+        request_id: requestData[i]._id,  
       } // add any relevant information 
       tempList.push(element); 
     }
