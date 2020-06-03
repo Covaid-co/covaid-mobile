@@ -3,12 +3,6 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-<<<<<<< HEAD
-    height: "100%",
-    padding: 20,
-    backgroundColor: "white",
-  },
-=======
     padding: 20,
     backgroundColor: "white",
   },
@@ -16,17 +10,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
->>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
   line: {
     borderWidth: 0.8,
     borderColor: Colors.grey,
     margin: "1%",
   },
-<<<<<<< HEAD
-  info: {
-    flexDirection: "row",
-    marginTop: 20,
-=======
   form: {
     margin: 5,
   },
@@ -45,7 +33,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
->>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
   },
 });
 
@@ -76,29 +63,17 @@ const texts = StyleSheet.create({
   label: {
     fontSize: 17,
     color: "black",
-<<<<<<< HEAD
-    flex: 1,
-    flexWrap: "wrap",
-    overflow: "visible",
-=======
->>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
   },
   button_label: {
     fontSize: 15,
     color: "white",
   },
   green_text: {
-<<<<<<< HEAD
-    color: "green",
-  },
-  red_text: {
-=======
     fontSize: 17,
     color: "green",
   },
   red_text: {
     fontSize: 17,
->>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
     color: "red",
   },
 });

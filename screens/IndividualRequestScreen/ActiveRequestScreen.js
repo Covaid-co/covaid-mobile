@@ -50,7 +50,7 @@ export default function ActiveRequestScreen(props) {
           <Text>Who: {props.item.requester_name}</Text>
           <Text>Contact: {props.item.requester_contact}</Text>
           <Text>Details: {props.item.details}</Text>
-          <Text>Requesting support with: {props.item.resources}</Text>
+          <Text>Requesting support with: {props.item.resources.resource_request.join(", ")}</Text>
           <Text>Needed by: {props.item.needed_by}</Text>
           <Text>Location: {props.item.location}</Text>
       </View>

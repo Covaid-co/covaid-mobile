@@ -60,7 +60,7 @@ export default function RequestsScreen() {
       var element = { 
         key: i, 
         requester_name: requestData[i].personal_info.requester_name, 
-        resources: JSON.stringify(requestData[i].request_info), // TODO: add badges 
+        resources: requestData[i].request_info, // TODO: add badges 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
         location: requestData[i].location_info.coordinates, 
         requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
@@ -127,41 +127,47 @@ export default function RequestsScreen() {
     )
   } else {
     return (
-      <View>
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <View style = {styles.center}>
         <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
         <Text style={texts.request_text}>View your requests below.</Text>
-  
-          <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
+        
+        <View style={styles.row}>
+          <TouchableOpacity 
+          style = {buttons.tabs}
+          onPress={() => {setCurrentRequestList(pendingRequests); 
               setCurrentRequestType(volunteer_status.PENDING);}}>
-            <Text style={texts.button_label_blue}>Pending</Text>
+            <Text style={texts.button_label}>Pending</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setCurrentRequestList(activeRequests);
+          <TouchableOpacity 
+          style = {buttons.tabs}
+          onPress={() => {setCurrentRequestList(activeRequests);
               setCurrentRequestType(volunteer_status.IN_PROGRESS);}}>
-            <Text style={texts.button_label_blue}>Active</Text>
+            <Text style={texts.button_label}>Active</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setCurrentRequestList(completedRequests); 
+          <TouchableOpacity 
+          style = {buttons.tabs}
+          onPress={() => {setCurrentRequestList(completedRequests); 
               setCurrentRequestType(volunteer_status.COMPLETE)}}>
-            <Text style={texts.button_label_blue}>Complete</Text>
+            <Text style={texts.button_label}>Complete</Text>
           </TouchableOpacity>
-  
-          <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
+          </View>
+          </View>
+        
           <FlatList
             data={currentRequestList}
+            contentContainerStyle={styles.center}
             renderItem={({item}) => 
-              <>  
+            ( 
               <TouchableOpacity style={styles.request} onPress={() => {
                 setDisplayIndividualReq(true); 
                 setCurrentItem(item); 
               }}>
                 {displayRequestInfo(currentRequestType, item)}
               </TouchableOpacity>
-              <Text></Text>
-              </>
+            )
             }
           />
-        </View>
-        </View>
       </View>  
     );
   }
@@ -171,7 +177,7 @@ export default function RequestsScreen() {
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}>Request resources: {item.resources}</Text>
+        <Text style={texts.request_text}>Request resources: {item.resources.resource_request.join(", ")}</Text>
         <Text style={texts.request_text}>Needed by: {item.needed_by}</Text>
         </>
       )

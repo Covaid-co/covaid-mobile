@@ -3,14 +3,13 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    top: 5,
-    marginTop: 10, // TODO: standardize margin for each page
-    marginLeft: 10,
-    marginRight: 10,
+    padding: 20,
+    height: "100%",
+    backgroundColor: "white",
+  },
+  center: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 10,
   },
   logo: {
     height: 150,
@@ -30,34 +29,37 @@ const styles = StyleSheet.create({
     color: Colors.blue,
   },
   request: {
-    color: "blue",
-    fontWeight: "bold",
-    fontSize: 20,
-    backgroundColor: "#D0D0D0",
+    marginTop: 10,
+    padding: 20,
+    backgroundColor: Colors.grey,
     borderRadius: 15,
-    marginLeft: 10,
-    marginRight: 10,
-<<<<<<< HEAD
-    width: 300,
-=======
-    width: 332,
->>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
-    justifyContent: "center",
+    width: 350,
+    // justifyContent: "center",
   },
   requestContainer: {
     position: "absolute",
-<<<<<<< HEAD
-    top: 200, // change this when finalized
-=======
-    top: 300, // change this when finalized
->>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
-    marginTop: 600,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  row: {
+    margin: 10,
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
   },
 });
 
 const buttons = StyleSheet.create({
+  tabs: {
+    margin: 5,
+    width: 80,
+    height: 30,
+    borderRadius: 8,
+    backgroundColor: Colors.blue,
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
   login: {
     marginBottom: 10,
     marginTop: 10,
@@ -94,8 +96,7 @@ const buttons = StyleSheet.create({
 
 const texts = StyleSheet.create({
   header: {
-    marginBottom: 10,
-    fontFamily: "Montserrat",
+    // marginBottom: 10,
     fontSize: 40,
     color: "black",
     textAlign: "center",
@@ -110,25 +111,16 @@ const texts = StyleSheet.create({
   },
   request_header: {
     marginBottom: 10,
-    fontFamily: "Montserrat",
     fontSize: 20,
     color: "black",
     textAlign: "center",
   },
   request_title: {
-    marginBottom: 10,
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 10,
-    fontFamily: "Montserrat",
     fontSize: 20,
     color: "black",
     textAlign: "left",
   },
   request_text: {
-    marginBottom: 10,
-    marginLeft: 15,
-    marginRight: 15,
     fontSize: 15,
   },
 });
