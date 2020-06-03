@@ -8,8 +8,9 @@ import {
   Alert,
   FlatList, StyleSheet, ListItem,
   Button, 
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
+import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
@@ -24,10 +25,11 @@ export default function RequestsScreen({ route, navigation }) {
   const [user, setUser] = useState("");
   const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState(volunteer_status.PENDING);
-  const [pendingRequests, setPendingRequests] = useState(); 
-  const [activeRequests, setActiveRequests] = useState(); 
-  const [completedRequests, setCompletedRequests] = useState(); 
+  const [pendingRequests, setPendingRequests] = useState([]); 
+  const [activeRequests, setActiveRequests] = useState([]); 
+  const [completedRequests, setCompletedRequests] = useState([]); 
   const [currentItem, setCurrentItem] = useState();  
+  const [buttonStyles, setButtonStyles] = useState([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]);
 
   const fetchUser = async (id) => { // TODO: use authenticated version of this 
     let params = { id: id };
@@ -49,13 +51,12 @@ export default function RequestsScreen({ route, navigation }) {
   };
 
   function generateRequestList(requestData, requestStateChanger) { 
-    //console.log(requestData)
     let tempList = []; 
     for (var i = 0; i < requestData.length; i++) { // TODO: forEach
       var element = { 
         key: i, 
         requester_name: requestData[i].personal_info.requester_name, 
-        resources: JSON.stringify(requestData[i].request_info), // TODO: add badges 
+        resources: requestData[i].request_info, // TODO: add badges 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
         location: requestData[i].location_info.coordinates, 
         requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
@@ -87,6 +88,16 @@ export default function RequestsScreen({ route, navigation }) {
     });     
   }
 
+  function toggleButtonStyles(reqType){
+    if (reqType === volunteer_status.PENDING) {
+      setButtonStyles([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]); 
+    } else if (reqType === volunteer_status.IN_PROGRESS) {
+      setButtonStyles([buttons.tabs, buttons.pressed_tab, buttons.tabs, texts.button_label_blue, texts.button_label, texts.button_label_blue]); 
+    } else {
+      setButtonStyles([buttons.tabs, buttons.tabs, buttons.pressed_tab, texts.button_label_blue, texts.button_label_blue, texts.button_label]); 
+    }
+  }  
+
   useEffect(() => {
     AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
       console.log("GETTING USER ID " + data)
@@ -100,68 +111,86 @@ export default function RequestsScreen({ route, navigation }) {
       fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
     });    
 
-    setCurrentRequestList(pendingRequests);
+    setCurrentRequestList(pendingRequests); // TODO: Get them to show up when request screen opens 
+    setCurrentRequestType(volunteer_status.PENDING);
+    toggleButtonStyles(volunteer_status.PENDING); 
   }, []);
 
 
 
-  return (
-    <View>
-      <View style={styles.container}>
-      <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
-      <Text style={texts.request_text}>View your requests below.</Text>
-
-
-        <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
-            setCurrentRequestType(volunteer_status.PENDING);}}>
-          <Text style={texts.button_label_blue}>Pending</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setCurrentRequestList(activeRequests);
-            setCurrentRequestType(volunteer_status.IN_PROGRESS);}}>
-          <Text style={texts.button_label_blue}>Active</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {setCurrentRequestList(completedRequests); 
-            setCurrentRequestType(volunteer_status.COMPLETE)}}>
-          <Text style={texts.button_label_blue}>Complete</Text>
-        </TouchableOpacity>
-
-        <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
-        <FlatList
-          data={currentRequestList}
-          renderItem={({item}) => 
-            <>  
-            <TouchableOpacity style={styles.request} onPress={() => { 
-              if (currentRequestType == volunteer_status.PENDING) {
-                navigation.navigate("Pending Request", {navigation: route.params, item: item}); 
-              } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
-                navigation.navigate("Active Request", {navigation: route.params, item: item});
-              } else if (currentRequestType == volunteer_status.COMPLETE) {
-                navigation.navigate("Completed Request", {navigation: route.params, item: item});
-              }
-              setCurrentItem(item); 
-            }}>
-              {displayRequestInfo(currentRequestType, item)}
-            </TouchableOpacity>
-            <Text></Text>
-            </>
-          }
-        />
-      </View>
-      </View>
-    </View>  
-  );
-
+    return (
+        <View style={styles.container}>
+        <View style = {styles.center}>
+        <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
+        <Text></Text>
+        <Text style={texts.request_text}>View your requests below.</Text>
+        
+        <View style={styles.row}>
+          <TouchableOpacity 
+          style = {buttonStyles[0]}
+          onPress={() => {setCurrentRequestList(pendingRequests); 
+              setCurrentRequestType(volunteer_status.PENDING);
+              toggleButtonStyles(volunteer_status.PENDING); 
+              }}>
+            <Text style={buttonStyles[3]}>Pending({pendingRequests.length})</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+          style = {buttonStyles[1]}
+          onPress={() => {setCurrentRequestList(activeRequests);
+              setCurrentRequestType(volunteer_status.IN_PROGRESS);
+              toggleButtonStyles(volunteer_status.IN_PROGRESS); 
+              }}>
+            <Text style={buttonStyles[4]}>Active({activeRequests.length})</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+          style = {buttonStyles[2]}
+          onPress={() => {setCurrentRequestList(completedRequests); 
+              setCurrentRequestType(volunteer_status.COMPLETE);
+              toggleButtonStyles(volunteer_status.COMPLETE); 
+              }}>
+            <Text style={buttonStyles[5]}>Complete({completedRequests.length})</Text>
+          </TouchableOpacity>
+          </View>
+          </View>
+        
+          <FlatList
+            data={currentRequestList}
+            contentContainerStyle={styles.center}
+            renderItem={({item}) => 
+              <TouchableOpacity style={styles.request} onPress={() => { 
+                if (currentRequestType == volunteer_status.PENDING) {
+                  navigation.navigate("Pending Request", {navigation: route.params, item: item}); 
+                } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
+                  navigation.navigate("Active Request", {navigation: route.params, item: item});
+                } else if (currentRequestType == volunteer_status.COMPLETE) {
+                  navigation.navigate("Completed Request", {navigation: route.params, item: item});
+                }
+                setCurrentItem(item); 
+              }}>
+                {displayRequestInfo(currentRequestType, item)}
+              </TouchableOpacity>
+            }
+            /> 
+      </View>  
+    );
 
   function displayRequestInfo(reqType, item) {
+    // TODO: display location properly instead of coordinates
     if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
+      var resourceBadges = []; 
+      item.resources.resource_request.forEach(req => {console.log(req); // TODO: badges not actually displaying text, change the badge color 
+        resourceBadges.push(<><Badge value={<><Text>"hi"</Text></>} status='primary' /></>)
+      }); 
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}>Request resources: {item.resources}</Text>
+        <Text style={texts.request_text}>Request resources: {item.resources.resource_request.join(", ")}</Text>
+        <Text style={texts.request_text}>Request resources: {resourceBadges}</Text>
+        <Badge value={<Text>example</Text>} status='primary' />
         <Text style={texts.request_text}>Needed by: {item.needed_by}</Text>
         </>
       )
-    } else if (reqType == volunteer_status.COMPLETE) { // TODO verify with website if this is the info that has to be shown 
+    } else if (reqType == volunteer_status.COMPLETE) {  
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>

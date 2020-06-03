@@ -8,6 +8,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontSize: 10,
   },
+  container2: {
+    marginTop: "5%",
+    fontSize: 10,
+    marginLeft: 20
+  },
   logo: {
     height: 150,
     width: 150,
@@ -25,26 +30,35 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.blue,
   },
+  row: {
+    margin: 10,
+    display: "flex",
+    flexDirection: "row", 
+    alignItems: "center",
+  },
 });
 
 const buttons = StyleSheet.create({
   accept: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
+    margin: 10,
+    width: 150,
     height: 60,
-    backgroundColor: "green",
+    backgroundColor: "white",
+    borderWidth: 3,
+    borderColor: "green",
     borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
     justifyContent: "center",
     alignItems: "center",
   },
   reject: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
+    margin: 10,
+    width: 150,
     height: 60,
-    backgroundColor: "red",
-    borderWidth: 0,
+    backgroundColor: "white",
+    borderWidth: 3,
+    borderColor: "red",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -58,19 +72,7 @@ const buttons = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-  },
-  go_back: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: "white",
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  }
 });
 
 const texts = StyleSheet.create({
@@ -81,6 +83,17 @@ const texts = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
+  label: {
+    margin: "10%",
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "black",
+  },
+  desc: {
+    margin: "1%",
+    fontSize: 18,
+    color: "black",
+  },
   button_label: {
     fontSize: 15,
     color: "white",
@@ -88,6 +101,14 @@ const texts = StyleSheet.create({
   button_label_blue: {
     fontSize: 15,
     color: Colors.blue,
+  },
+  button_label_green: {
+    fontSize: 15,
+    color: "green",
+  },
+  button_label_red: {
+    fontSize: 15,
+    color: "red",
   },
 });
 

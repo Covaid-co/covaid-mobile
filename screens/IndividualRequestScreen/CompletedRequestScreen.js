@@ -23,11 +23,12 @@ export default function CompletedRequestScreen({ route, navigation }) {
       <View>
         <Text style={texts.header}>Completed Request</Text>
 
-        <Text>Who: {route.params.item.requester_name}</Text>
-        <Text>Contact: {route.params.item.requester_contact}</Text>
-        <Text>Details: {route.params.item.details}</Text>
-        <Text>Completed: {route.params.item.completed_date}</Text>
-        
+        <View style={styles.container2}>
+          <Text style={texts.desc}><Text style={texts.label}>Who: </Text>{route.params.item.requester_name}</Text>
+          <Text style={texts.desc}><Text style={texts.label}>Contact: </Text>{route.params.item.requester_contact}</Text>
+          <Text style={texts.desc}><Text style={texts.label}>Details: </Text>{route.params.item.details}</Text>
+          <Text style={texts.desc}><Text style={texts.label}>Completed: </Text>{route.params.item.completed_date}</Text>
+        </View>
       </View>
     </View>
   );  

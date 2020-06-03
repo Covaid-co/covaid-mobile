@@ -31,24 +31,28 @@ export default function ActiveRequestScreen({ route, navigation }) {
       <View>
         <Text style={texts.header}>Active Request</Text>
 
-        <TouchableOpacity style={buttons.accept}>
-          <Text style={texts.button_label}>Complete Request</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={buttons.reject}>
-          <Text style={texts.button_label}>Cancel Request</Text>
-        </TouchableOpacity>
+        <View style={styles.row}>
+          <TouchableOpacity style={buttons.accept}>
+            <Text style={texts.button_label_green}>Complete Request</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={buttons.reject}>
+            <Text style={texts.button_label_red}>Cancel Request</Text>
+          </TouchableOpacity>
+        </View>
 
-        <Text>Request is in-progress</Text>
-          <Text>
-            Thanks for accepting this request for support! Please reach out to
-            the requester by using the contact information below.
-          </Text>
-          <Text>Who: {route.params.item.requester_name}</Text>
-          <Text>Contact: {route.params.item.requester_contact}</Text>
-          <Text>Details: {route.params.item.details}</Text>
-          <Text>Requesting support with: {route.params.item.resources}</Text>
-          <Text>Needed by: {route.params.item.needed_by}</Text>
-          <Text>Location: {route.params.item.location}</Text>
+        <View style={styles.container2}>
+          <Text style={texts.desc}>Request is in-progress</Text>
+            <Text style={texts.desc}>
+              Thanks for accepting this request for support! Please reach out to
+              the requester by using the contact information below.
+            </Text>
+            <Text style={texts.desc}><Text style={texts.label}>Who: </Text> {route.params.item.requester_name}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Contact: </Text>{route.params.item.requester_contact}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>WDetails: </Text>{route.params.item.details}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Requesting support with: </Text>{route.params.item.resources.resource_request.join(", ")}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text>{route.params.item.needed_by}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Location: </Text>{route.params.item.location}</Text>
+          </View>
       </View>
     </View>
   );  
