@@ -52,21 +52,11 @@ export default function PendingRequestScreen({ route, navigation }) {
 
   return (
     <View>
-      <View>
-        <Text style={texts.header}>Pending Request</Text>
-
-
-        <View style={styles.row}>
-          <TouchableOpacity style={buttons.accept} onPress={() => acceptRequest()}>
-            <Text style={texts.button_label_green}>Accept Request</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={buttons.reject}>
-            <Text style={texts.button_label_red}>Reject Request</Text>
-          </TouchableOpacity>
-        </View>
-
-        
-        <View style={styles.container2}>
+       
+        <View style={styles.container3}>
+          <Text style={texts.desc}>
+            This request is pending! 
+          </Text>
           <Text style={texts.desc}><Text style={texts.label}>Who: </Text> {route.params.item.requester_name}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Contact:</Text>  {route.params.item.requester_contact}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Details: </Text> {route.params.item.details}</Text>
@@ -75,9 +65,16 @@ export default function PendingRequestScreen({ route, navigation }) {
           <Text style={texts.desc}><Text style={texts.label}>Location: </Text> {route.params.item.location}</Text>
         </View>
         
-
-        
-      </View>
+        <View style={styles.container2}>
+          <View style={styles.row}>
+            <TouchableOpacity style={buttons.accept} onPress={() => acceptRequest()}>
+              <Text style={texts.button_label_green}>Accept Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={buttons.reject}>
+              <Text style={texts.button_label_red}>Reject Request</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
     </View>
   );  
 }

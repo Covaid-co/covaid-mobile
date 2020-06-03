@@ -10,8 +10,14 @@ const styles = StyleSheet.create({
   },
   container2: {
     marginTop: "5%",
+    justifyContent: "center",
+    alignItems: "center",
     fontSize: 10,
-    marginLeft: 20
+  },
+  container3: {
+    marginTop: "5%",
+    fontSize: 10,
+    margin: "5%"
   },
   logo: {
     height: 150,
@@ -43,7 +49,7 @@ const buttons = StyleSheet.create({
     margin: 10,
     width: 150,
     height: 60,
-    backgroundColor: "white",
+    backgroundColor: "green",
     borderWidth: 3,
     borderColor: "green",
     borderRadius: 8,
@@ -56,7 +62,7 @@ const buttons = StyleSheet.create({
     margin: 10,
     width: 150,
     height: 60,
-    backgroundColor: "white",
+    backgroundColor: "red",
     borderWidth: 3,
     borderColor: "red",
     borderRadius: 8,
@@ -104,11 +110,11 @@ const texts = StyleSheet.create({
   },
   button_label_green: {
     fontSize: 15,
-    color: "green",
+    color: "white",
   },
   button_label_red: {
     fontSize: 15,
-    color: "red",
+    color: "white",
   },
 });
 

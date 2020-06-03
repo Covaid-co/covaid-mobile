@@ -58,7 +58,7 @@ export default function RequestsScreen({ route, navigation }) {
         requester_name: requestData[i].personal_info.requester_name, 
         resources: requestData[i].request_info, // TODO: add badges 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
-        location: requestData[i].location_info.coordinates, 
+        location: requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1], 
         requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
         details: requestData[i].request_info.details, 
         completed_date: requestData[i].status.completed_date || "",
@@ -123,7 +123,7 @@ export default function RequestsScreen({ route, navigation }) {
         <View style = {styles.center}>
         <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
         <Text></Text>
-        <Text style={texts.request_text}>View your requests below.</Text>
+
         
         <View style={styles.row}>
           <TouchableOpacity 
@@ -132,7 +132,8 @@ export default function RequestsScreen({ route, navigation }) {
               setCurrentRequestType(volunteer_status.PENDING);
               toggleButtonStyles(volunteer_status.PENDING); 
               }}>
-            <Text style={buttonStyles[3]}>Pending({pendingRequests.length})</Text>
+            <Text style={buttonStyles[3]}>Pending</Text>
+            <Badge containerStyle={{ position: 'absolute', top: -7, right: 6 }} value={<><Text>{pendingRequests.length}</Text></>} status='warning' />
           </TouchableOpacity>
           <TouchableOpacity 
           style = {buttonStyles[1]}
@@ -140,7 +141,8 @@ export default function RequestsScreen({ route, navigation }) {
               setCurrentRequestType(volunteer_status.IN_PROGRESS);
               toggleButtonStyles(volunteer_status.IN_PROGRESS); 
               }}>
-            <Text style={buttonStyles[4]}>Active({activeRequests.length})</Text>
+            <Text style={buttonStyles[4]}>Active</Text>
+            <Badge containerStyle={{ position: 'absolute', top: -7, right: 11 }} value={<><Text>{activeRequests.length}</Text></>} status='warning' />
           </TouchableOpacity>
           <TouchableOpacity 
           style = {buttonStyles[2]}
@@ -148,7 +150,7 @@ export default function RequestsScreen({ route, navigation }) {
               setCurrentRequestType(volunteer_status.COMPLETE);
               toggleButtonStyles(volunteer_status.COMPLETE); 
               }}>
-            <Text style={buttonStyles[5]}>Complete({completedRequests.length})</Text>
+            <Text style={buttonStyles[5]}>Complete</Text>
           </TouchableOpacity>
           </View>
           </View>
@@ -179,22 +181,21 @@ export default function RequestsScreen({ route, navigation }) {
     if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
       var resourceBadges = []; 
       item.resources.resource_request.forEach(req => {console.log(req); // TODO: badges not actually displaying text, change the badge color 
-        resourceBadges.push(<><Badge value={<><Text>"hi"</Text></>} status='primary' /></>)
+        resourceBadges.push(<><Badge value={<><Text>{req}</Text></>} status='primary' /></>)
       }); 
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}>Request resources: {item.resources.resource_request.join(", ")}</Text>
-        <Text style={texts.request_text}>Request resources: {resourceBadges}</Text>
-        <Badge value={<Text>example</Text>} status='primary' />
-        <Text style={texts.request_text}>Needed by: {item.needed_by}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{item.resources.resource_request.join(", ")}</Text>
+        {/* <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{resourceBadges}</Text> */} 
+        <Text style={texts.request_text}><Text style={texts.request_label}>Needed by: </Text>{item.needed_by}</Text>
         </>
       )
     } else if (reqType == volunteer_status.COMPLETE) {  
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}>Completed: {item.completed_date}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}>Completed: </Text>{item.completed_date}</Text>
         </>
       )
     }

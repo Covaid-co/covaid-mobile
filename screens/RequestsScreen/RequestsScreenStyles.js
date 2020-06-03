@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: Colors.grey,
     borderRadius: 20,
-    width: 320,
+    width: 330,
   },
   requestContainer: {
     position: "absolute",
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 const buttons = StyleSheet.create({
   tabs: {
     margin: 5,
-    width: "30%",
+    width: "32%",
     height: 30,
     borderRadius: 8,
     backgroundColor: Colors.white,
@@ -61,7 +61,7 @@ const buttons = StyleSheet.create({
   },
   pressed_tab: {
     margin: 5,
-    width: "30%",
+    width: "32%",
     height: 30,
     borderRadius: 8,
     backgroundColor: Colors.blue,
@@ -128,9 +128,16 @@ const texts = StyleSheet.create({
     fontSize: 20,
     color: "black",
     textAlign: "left",
+    fontWeight: "bold", 
   },
   request_text: {
     fontSize: 15,
+    margin: "2%"
+  },
+  request_label: {
+    fontSize: 15,
+    fontWeight: "bold",
+    margin: "2%", 
   },
 });
 
