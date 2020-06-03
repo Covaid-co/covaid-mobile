@@ -37,12 +37,20 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 10,
     marginRight: 10,
+<<<<<<< HEAD
     width: 300,
+=======
+    width: 332,
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
     justifyContent: "center",
   },
   requestContainer: {
     position: "absolute",
+<<<<<<< HEAD
     top: 200, // change this when finalized
+=======
+    top: 300, // change this when finalized
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
     marginTop: 600,
     justifyContent: "center",
     alignItems: "center",

@@ -12,11 +12,38 @@ import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
+<<<<<<< HEAD
 
 export default function LoginScreen(props) {
   const [username, setUsername] = useState("bangaru2@illinois.edu");
   const [password, setPassword] = useState("pwd123");
 
+=======
+import ResetPassword from "../../components/ResetPassword/ResetPassword";
+
+export default function LoginScreen({ route, navigation }) {
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
+    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
+
+    if (idHolder && tokenHolder) {
+      navigation.navigate("Covaid");
+    }
+  }, []);
+
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
   async function handleLogin() {
     let form = {
       user: {
@@ -57,8 +84,12 @@ export default function LoginScreen(props) {
               }
             };
             saveData2();
+<<<<<<< HEAD
 
             props.setAppAuth(true);
+=======
+            navigation.navigate("Covaid");
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
           });
         } else {
           if (response.status === 403) {

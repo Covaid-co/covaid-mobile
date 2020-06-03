@@ -5,6 +5,7 @@ import Colors from "../../public/Colors";
 import { styles, buttons, texts } from "./ProfileScreenStyles";
 import { homeURL } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
+<<<<<<< HEAD
 
 export default function ProfileScreen({ route, navigation }) {
   /**
@@ -12,16 +13,56 @@ export default function ProfileScreen({ route, navigation }) {
    * functionality for publish/unpublish
    * edit profile page
    */
+=======
+import fetch_a from "../../util/fetch_auth";
+
+export default function ProfileScreen({ route, navigation }) {
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
   const [publish, setPublish] = useState(false);
   const [isPublish, setIsPublish] = useState(false);
   const [user, setUser] = useState();
 
+<<<<<<< HEAD
   const toggleSwitch = () => setPublish((publish) => !publish);
+=======
+  const toggleSwitch = () => {
+    handleUpdate(!publish);
+    setPublish(!publish);
+  };
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
 
   useEffect(() => {
     fetch_user_obj(route.params.userID);
   }, [route.params.userID]);
+<<<<<<< HEAD
   console.log(route.params);
+=======
+
+  const handleUpdate = async (publish) => {
+    let params = {
+      availability: publish,
+    };
+    var url = generateURL(homeURL + "/api/users/update?", params);
+    fetch_a(route.params.token, "token", url, {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    })
+      .then((response) => {
+        if (response.ok) {
+          //Change the state to refect offer update
+          setTimeout(function () {
+            fetch_user_obj(route.params.userI);
+          }, 750);
+        } else {
+          console.log("Update not successful");
+        }
+      })
+      .catch((e) => {
+        console.log("Error");
+      });
+  };
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
 
   const fetch_user_obj = async (id) => {
     let params = { id: id };
@@ -31,8 +72,13 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
+<<<<<<< HEAD
             console.log(data[0]);
             setUser(data[0]);
+=======
+            setUser(data[0]);
+            setPublish(data[0].availability);
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
           });
         } else {
           alert("Error obtaining user object");
@@ -109,7 +155,11 @@ export default function ProfileScreen({ route, navigation }) {
 
         <TouchableOpacity
           style={buttons.edit}
+<<<<<<< HEAD
           onPress={() => navigation.navigate("Edit Profile", { name: "Jane" })}
+=======
+          onPress={() => navigation.navigate("Edit Profile", route.params)}
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
         >
           <Text style={texts.button_label}>Edit Profile</Text>
         </TouchableOpacity>

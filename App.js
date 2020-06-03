@@ -25,6 +25,7 @@ export default function App(props) {
   const isLoadingComplete = useCachedResources();
   const [auth, setAuth] = useState(false);
   const [userID, setUserID] = useState();
+<<<<<<< HEAD
 
   /**
    * Only runs if auth changes
@@ -79,8 +80,61 @@ export default function App(props) {
         </NavigationContainer>
       </View>
     );
+=======
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+      setUserID(data);
+    });
+
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+      setToken(data);
+    });
+  }, []);
+
+  if (!isLoadingComplete) {
+    return null;
+>>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
   }
+  return (
+    <View style={styles.container}>
+      {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
+      <NavigationContainer linking={LinkingConfiguration}>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Covaid"
+            component={BottomTabNavigator}
+            initialParams={{
+              userID: userID,
+              token: token,
+            }}
+            options={{
+              headerRight: () => (
+                <TouchableOpacity
+                  style={{ margin: 10 }}
+                  onPress={() => alert("This is will trigger settings")}
+                >
+                  <TabBarIcon name="md-settings" />
+                </TouchableOpacity>
+              ),
+              headerLeft: null,
+            }}
+          />
+          <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
+  );
 }
+//}
 
 const styles = StyleSheet.create({
   container: {
