@@ -121,14 +121,18 @@ export default function LoginScreen({ route, navigation }) {
           setCurrentUserObject(data.offer.timesAvailable, timeNames, setTimes);
           async function getResources() {
             if (!data.association) {
-              setCurrentUserObject(data.offer.tasks, defaultResources, setResources);
-              return;
+                setCurrentUserObject(data.offer.tasks, defaultResources, setResources);
+                return;
             }
-            let params = { associationID: data.association };
-            var url = generateURL("/api/association/get_assoc/?", params);
+            let params = {
+                'associationID': data.association
+            }
+            var url = generateURL(homeURL + "/api/association/get_assoc/?", params);
+
             const response = await fetch(url);
             response.json().then((res) => {
-              setCurrentUserObject(pdata.offer.tasks, res.resources, setResources);
+                setDefaultResources(res.resources)
+                setCurrentUserObject(data.offer.tasks, res.resources, setResources);
             });
           }
           getResources();
@@ -164,7 +168,7 @@ export default function LoginScreen({ route, navigation }) {
         setAssociation(user.association)
         setAssociationName(user.association_name)
         setLatLong(user.latlong)
-        setShowChangeAssocModal(false)
+        // setShowChangeAssocModal(false)
         setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
     }
 }
@@ -201,7 +205,7 @@ const handleNoAssociations = () => {
   setAssociation('')
   setAssociationName('')
   setResources(temp_resources)
-  setShowChangeAssocModal(true)
+  // setShowChangeAssocModal(true)
 }
 
 const handleNewAssociation = (association) => {
@@ -214,7 +218,7 @@ const handleNewAssociation = (association) => {
   setResources(temp_resources)
   setAssociation(association._id)
   setAssociationName(association.name)
-  setShowChangeAssocModal(true)
+  // setShowChangeAssocModal(true)
 }
 
 async function getLatLng(zip) {
@@ -263,7 +267,7 @@ async function getLatLng(zip) {
           setFoundState(foundState)
           setAssociation(user.association)
           setAssociationName(user.association_name)
-          setShowChangeAssocModal(false)
+          // setShowChangeAssocModal(false)
           setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
       }
       return true
@@ -278,6 +282,16 @@ const handleChangedZip = () => {
   } else {
       return false;
   }
+}
+
+function handleSaveChanges() {
+  // updateLocation();
+  console.log("submitting shit")
+}
+
+function handleZip(input) {
+  setZip(input)
+  updateLocation()
 }
 
   function form(header, change, value) {
@@ -299,7 +313,7 @@ const handleChangedZip = () => {
         {form("Last Name:", setLastName, lastName)}
         {form("Email:", setEmail, email)}
         {form("Phone:", setPhone, phone)}
-        {form("Zip Code:", setZip, zip)}
+        {form("Zip Code:", handleZip, zip)}
         <Details details={details} setDetails={setDetails} />
         <Text style={texts.label}> What languages do you speak? </Text>
         <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
@@ -323,7 +337,8 @@ const handleChangedZip = () => {
       </View>
       <View style={{ marginBottom: 100 }}>
         <View style={styles.center}>
-          <TouchableOpacity style={buttons.edit}>
+          <TouchableOpacity style={buttons.edit}
+          >
             <Text style={texts.button_label}>Save</Text>
           </TouchableOpacity>
         </View>
