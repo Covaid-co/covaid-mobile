@@ -12,7 +12,7 @@ import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 
-export default function CompletedRequestScreen(props) {
+export default function CompletedRequestScreen({ route, navigation }) {
   useEffect(() => { 
     var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => { return data; });
     var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });    
@@ -23,14 +23,10 @@ export default function CompletedRequestScreen(props) {
       <View>
         <Text style={texts.header}>Completed Request</Text>
 
-        <TouchableOpacity style={buttons.go_back} onPress={() => props.setDisplayIndividualReq(false)}>
-          <Text style={texts.button_label_blue}>Go back</Text>
-        </TouchableOpacity>
-
-        <Text>Who: {props.item.requester_name}</Text>
-        <Text>Contact: {props.item.requester_contact}</Text>
-        <Text>Details: {props.item.details}</Text>
-        <Text>Completed: {props.item.completed_date}</Text>
+        <Text>Who: {route.params.item.requester_name}</Text>
+        <Text>Contact: {route.params.item.requester_contact}</Text>
+        <Text>Details: {route.params.item.details}</Text>
+        <Text>Completed: {route.params.item.completed_date}</Text>
         
       </View>
     </View>

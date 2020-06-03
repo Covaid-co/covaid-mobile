@@ -13,7 +13,7 @@ import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
 
-export default function PendingRequestScreen(props) {
+export default function PendingRequestScreen({ route, navigation }) {
   useEffect(() => { 
     var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => { return data; });
     var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });    
@@ -24,7 +24,7 @@ export default function PendingRequestScreen(props) {
   function acceptRequest() {
     console.log("Accept request.");
     let params = {
-      ID: props.item.request_id,
+      ID: route.params.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/acceptRequest?", params);
     
@@ -61,17 +61,15 @@ export default function PendingRequestScreen(props) {
         <TouchableOpacity style={buttons.reject}>
           <Text style={texts.button_label}>Reject Request</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={buttons.go_back} onPress={() => props.setDisplayIndividualReq(false)}>
-          <Text style={texts.button_label_blue}>Go back</Text>
-        </TouchableOpacity>
 
         <Text>Request is pending</Text>
-        <Text>Who: {props.item.requester_name}</Text>
-        <Text>Contact: {props.item.requester_contact}</Text>
-        <Text>Details: {props.item.details}</Text>
-        <Text>Requesting support with: {props.item.resources.resource_request.join(", ")}</Text>
-        <Text>Needed by: {props.item.needed_by}</Text>
-        <Text>Location: {props.item.location}</Text>
+        <Text>Who: {route.params.item.requester_name}</Text>
+        <Text>Contact: {route.params.item.requester_contact}</Text>
+        <Text>Details: {route.params.item.details}</Text>
+        <Text>Requesting support with: {route.params.item.resources.resource_request.join(", ")}</Text>
+        <Text>Needed by: {route.params.item.needed_by}</Text>
+        <Text>Location: {route.params.item.location}</Text>
+
         
       </View>
     </View>

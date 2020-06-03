@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.grey,
     borderRadius: 15,
     width: 350,
-    // justifyContent: "center",
   },
   requestContainer: {
     position: "absolute",

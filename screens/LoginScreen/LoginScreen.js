@@ -109,7 +109,6 @@ export default function LoginScreen({ route, navigation }) {
     console.log("send email");
   }
 
-
   return (
     <View>
       <View style={styles.container}>
