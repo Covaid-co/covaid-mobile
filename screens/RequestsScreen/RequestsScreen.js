@@ -20,7 +20,7 @@ import CompletedRequestScreen from "../IndividualRequestScreen/CompletedRequestS
 import ActiveRequestScreen from "../IndividualRequestScreen/ActiveRequestScreen";
 //import Cookie from 'js-cookie'
 
-export default function RequestsScreen() {
+export default function RequestsScreen({ route, navigation }) {
   // from LoginScreen, we get loginToken and userID -> preferably loginSession or something 
   //const [userID, setUserID] = useState();
   const [user, setUser] = useState("");
@@ -131,6 +131,7 @@ export default function RequestsScreen() {
         <View style={styles.container}>
         <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
         <Text style={texts.request_text}>View your requests below.</Text>
+
   
           <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
               setCurrentRequestType(volunteer_status.PENDING);}}>
@@ -150,8 +151,15 @@ export default function RequestsScreen() {
             data={currentRequestList}
             renderItem={({item}) => 
               <>  
-              <TouchableOpacity style={styles.request} onPress={() => {
-                setDisplayIndividualReq(true); 
+              <TouchableOpacity style={styles.request} onPress={() => { 
+                if (currentRequestType == volunteer_status.PENDING) {
+                  navigation.navigate("Pending Request", {navigation: route.params, item: item}); 
+                } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
+                  navigation.navigate("Active Request", {navigation: route.params, item: item});
+                } else if (currentRequestType == volunteer_status.COMPLETE) {
+                  navigation.navigate("Completed Request", {navigation: route.params, item: item});
+                }
+                //setDisplayIndividualReq(true); 
                 setCurrentItem(item); 
               }}>
                 {displayRequestInfo(currentRequestType, item)}
