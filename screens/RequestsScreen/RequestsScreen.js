@@ -21,17 +21,12 @@ import ActiveRequestScreen from "../IndividualRequestScreen/ActiveRequestScreen"
 //import Cookie from 'js-cookie'
 
 export default function RequestsScreen({ route, navigation }) {
-  // from LoginScreen, we get loginToken and userID -> preferably loginSession or something 
-  //const [userID, setUserID] = useState();
   const [user, setUser] = useState("");
-  //const [loginToken, setLoginToken] = useState("");
   const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState(volunteer_status.PENDING);
-  // const [isModalVisible, setIsModalVisible] = useState(false); 
   const [pendingRequests, setPendingRequests] = useState(); 
   const [activeRequests, setActiveRequests] = useState(); 
   const [completedRequests, setCompletedRequests] = useState(); 
-  const [displayIndividualReq, setDisplayIndividualReq] = useState(false);
   const [currentItem, setCurrentItem] = useState();  
 
   const fetchUser = async (id) => { // TODO: use authenticated version of this 
@@ -104,75 +99,58 @@ export default function RequestsScreen({ route, navigation }) {
       fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
       fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
     });    
+
+    setCurrentRequestList(pendingRequests);
   }, []);
 
 
-  if (displayIndividualReq && currentRequestType == volunteer_status.PENDING) {
-    return (
-      <View style={styles.container}>
-        <PendingRequestScreen item={currentItem} setDisplayIndividualReq={setDisplayIndividualReq}/>
-      </View>
-    )
-  } else if (displayIndividualReq && currentRequestType == volunteer_status.IN_PROGRESS) {
-    return (
-      <View style={styles.container}>
-        <ActiveRequestScreen item={currentItem} setDisplayIndividualReq={setDisplayIndividualReq}/>
-      </View>
-    )
-  } else if (displayIndividualReq && currentRequestType == volunteer_status.COMPLETE) {
-    return (
-      <View style={styles.container}>
-        <CompletedRequestScreen item={currentItem} setDisplayIndividualReq={setDisplayIndividualReq}/>
-      </View>
-    )
-  } else {
-    return (
-      <View>
-        <View style={styles.container}>
-        <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
-        <Text style={texts.request_text}>View your requests below.</Text>
 
-  
-          <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
-              setCurrentRequestType(volunteer_status.PENDING);}}>
-            <Text style={texts.button_label_blue}>Pending</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setCurrentRequestList(activeRequests);
-              setCurrentRequestType(volunteer_status.IN_PROGRESS);}}>
-            <Text style={texts.button_label_blue}>Active</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {setCurrentRequestList(completedRequests); 
-              setCurrentRequestType(volunteer_status.COMPLETE)}}>
-            <Text style={texts.button_label_blue}>Complete</Text>
-          </TouchableOpacity>
-  
-          <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
-          <FlatList
-            data={currentRequestList}
-            renderItem={({item}) => 
-              <>  
-              <TouchableOpacity style={styles.request} onPress={() => { 
-                if (currentRequestType == volunteer_status.PENDING) {
-                  navigation.navigate("Pending Request", {navigation: route.params, item: item}); 
-                } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
-                  navigation.navigate("Active Request", {navigation: route.params, item: item});
-                } else if (currentRequestType == volunteer_status.COMPLETE) {
-                  navigation.navigate("Completed Request", {navigation: route.params, item: item});
-                }
-                //setDisplayIndividualReq(true); 
-                setCurrentItem(item); 
-              }}>
-                {displayRequestInfo(currentRequestType, item)}
-              </TouchableOpacity>
-              <Text></Text>
-              </>
-            }
-          />
-        </View>
-        </View>
-      </View>  
-    );
-  }
+  return (
+    <View>
+      <View style={styles.container}>
+      <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
+      <Text style={texts.request_text}>View your requests below.</Text>
+
+
+        <TouchableOpacity onPress={() => {setCurrentRequestList(pendingRequests); 
+            setCurrentRequestType(volunteer_status.PENDING);}}>
+          <Text style={texts.button_label_blue}>Pending</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {setCurrentRequestList(activeRequests);
+            setCurrentRequestType(volunteer_status.IN_PROGRESS);}}>
+          <Text style={texts.button_label_blue}>Active</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {setCurrentRequestList(completedRequests); 
+            setCurrentRequestType(volunteer_status.COMPLETE)}}>
+          <Text style={texts.button_label_blue}>Complete</Text>
+        </TouchableOpacity>
+
+        <View style={styles.requestContainer} marginTop="1%" marginBottom="1%">
+        <FlatList
+          data={currentRequestList}
+          renderItem={({item}) => 
+            <>  
+            <TouchableOpacity style={styles.request} onPress={() => { 
+              if (currentRequestType == volunteer_status.PENDING) {
+                navigation.navigate("Pending Request", {navigation: route.params, item: item}); 
+              } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
+                navigation.navigate("Active Request", {navigation: route.params, item: item});
+              } else if (currentRequestType == volunteer_status.COMPLETE) {
+                navigation.navigate("Completed Request", {navigation: route.params, item: item});
+              }
+              setCurrentItem(item); 
+            }}>
+              {displayRequestInfo(currentRequestType, item)}
+            </TouchableOpacity>
+            <Text></Text>
+            </>
+          }
+        />
+      </View>
+      </View>
+    </View>  
+  );
+
 
   function displayRequestInfo(reqType, item) {
     if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
