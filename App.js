@@ -25,62 +25,6 @@ export default function App(props) {
   const isLoadingComplete = useCachedResources();
   const [auth, setAuth] = useState(false);
   const [userID, setUserID] = useState();
-<<<<<<< HEAD
-
-  /**
-   * Only runs if auth changes
-   * Currently the token is commented out but will be needed in the RequestsScreen
-   */
-  useEffect(() => {
-    console.log("ran");
-    AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-      console.log("GETTING USER ID " + data);
-      setUserID(data);
-    });
-
-    // AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-    //   console.log("GETTING TOKEN " + data)
-    //   fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
-    //   fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-    //   fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
-    // });
-  }, [auth]);
-
-  if (!isLoadingComplete) {
-    return null;
-  } else if (auth) {
-    return (
-      <View style={styles.container}>
-        <LoginScreen setAppAuth={setAuth} />
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
-        <NavigationContainer linking={LinkingConfiguration}>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Covaid"
-              component={BottomTabNavigator}
-              initialParams={{ userID: userID }}
-              options={{
-                headerRight: () => (
-                  <TouchableOpacity
-                    style={{ margin: 10 }}
-                    onPress={() => alert("This is will trigger settings")}
-                  >
-                    <TabBarIcon name="md-settings" />
-                  </TouchableOpacity>
-                ),
-              }}
-            />
-            <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
-    );
-=======
   const [token, setToken] = useState();
 
   useEffect(() => {
@@ -95,7 +39,6 @@ export default function App(props) {
 
   if (!isLoadingComplete) {
     return null;
->>>>>>> dacfdd7ae71d6c6f163ceebc0e9b0890520a752e
   }
   return (
     <View style={styles.container}>
