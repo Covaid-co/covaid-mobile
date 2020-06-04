@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,40 +6,37 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  AsyncStorage,
 } from "react-native";
 import { styles, buttons, texts } from "./LoginScreenStyles";
-import { homeURL } from "../../constants";
-import ResetPassword from "../../components/ResetPassword/ResetPassword";
+import { homeURL, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
+import RequestsScreen from "../RequestsScreen/RequestsScreen.js";
+import ResetPassword from "../../components/ResetPassword/ResetPassword";
 
-export default function LoginScreen() {
+export default function LoginScreen({ route, navigation }) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  const [userID, setUserID] = useState();
-  const [user, setUser] = useState();
   const [modalVisible, setModalVisible] = useState(false);
 
-  const fetch_user_obj = async (id) => {
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
+  useEffect(() => {
+    var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
+    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then(
+      (data) => {
+        return data;
+      }
+    );
 
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            console.log(data[0]);
-            setUser(data[0]);
-          });
-        } else {
-          alert("Error obtaining user object");
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  };
+    if (idHolder && tokenHolder) {
+      navigation.navigate("Covaid");
+    }
+  }, []);
 
-  function handleLogin() {
+  async function handleLogin() {
     let form = {
       user: {
         email: username,
@@ -55,8 +52,31 @@ export default function LoginScreen() {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            setUserID(data["user"]._id);
-            fetch_user_obj(data["user"]._id);
+            const saveData1 = async () => {
+              try {
+                await AsyncStorage.setItem(
+                  storage_keys.SAVE_ID_KEY,
+                  data["user"]._id
+                );
+              } catch (e) {
+                alert(e);
+              }
+            };
+            saveData1();
+
+            const saveData2 = async () => {
+              // TODO: combine this and above into 1 method
+              try {
+                await AsyncStorage.setItem(
+                  storage_keys.SAVE_TOKEN_KEY,
+                  data["user"].token
+                );
+              } catch (e) {
+                alert(e);
+              }
+            };
+            saveData2();
+            navigation.navigate("Covaid");
           });
         } else {
           if (response.status === 403) {

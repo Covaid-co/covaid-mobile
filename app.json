@@ -8,7 +8,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/COVAID.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

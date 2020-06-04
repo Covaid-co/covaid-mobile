@@ -1,12 +1,15 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Image, Text } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    padding: 20,
+    height: "100%",
+    backgroundColor: "white",
+  },
+  center: {
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 10,
   },
   logo: {
     height: 150,
@@ -25,9 +28,47 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.blue,
   },
+  request: {
+    marginTop: 10,
+    padding: 20,
+    backgroundColor: Colors.grey,
+    borderRadius: 20,
+    width: 330,
+  },
+  requestContainer: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  row: {
+    margin: 10,
+    display: "flex",
+    flexDirection: "row", 
+    alignItems: "center",
+  },
 });
 
 const buttons = StyleSheet.create({
+  tabs: {
+    margin: 5,
+    width: "32%",
+    height: 30,
+    borderRadius: 8,
+    backgroundColor: Colors.white,
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
+  pressed_tab: {
+    margin: 5,
+    width: "32%",
+    height: 30,
+    borderRadius: 8,
+    backgroundColor: Colors.blue,
+    borderColor: Colors.blue, 
+    justifyContent: "center",
+    alignItems: "center",
+  },
   login: {
     marginBottom: 10,
     marginTop: 10,
@@ -64,8 +105,7 @@ const buttons = StyleSheet.create({
 
 const texts = StyleSheet.create({
   header: {
-    marginBottom: 10,
-    fontFamily: "Montserrat-Black",
+    // marginBottom: 10,
     fontSize: 40,
     color: "black",
     textAlign: "center",
@@ -77,6 +117,27 @@ const texts = StyleSheet.create({
   button_label_blue: {
     fontSize: 15,
     color: Colors.blue,
+  },
+  request_header: {
+    marginBottom: 10,
+    fontSize: 20,
+    color: "black",
+    textAlign: "center",
+  },
+  request_title: {
+    fontSize: 20,
+    color: "black",
+    textAlign: "left",
+    fontWeight: "bold", 
+  },
+  request_text: {
+    fontSize: 15,
+    margin: "2%"
+  },
+  request_label: {
+    fontSize: 15,
+    fontWeight: "bold",
+    margin: "2%", 
   },
 });
 
