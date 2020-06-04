@@ -31,7 +31,7 @@ export default function RequestsScreen({ route, navigation }) {
   const [currentItem, setCurrentItem] = useState();  
   const [buttonStyles, setButtonStyles] = useState([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]);
 
-  const fetchUser = async (id) => { // TODO: use authenticated version of this 
+  const fetchUser = async (id) => { 
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
@@ -52,11 +52,11 @@ export default function RequestsScreen({ route, navigation }) {
 
   function generateRequestList(requestData, requestStateChanger) { 
     let tempList = []; 
-    for (var i = 0; i < requestData.length; i++) { // TODO: forEach
+    for (var i = 0; i < requestData.length; i++) { 
       var element = { 
         key: i, 
         requester_name: requestData[i].personal_info.requester_name, 
-        resources: requestData[i].request_info, // TODO: add badges 
+        resources: requestData[i].request_info, 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
         location: requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1], 
         requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
@@ -70,7 +70,7 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function fetchRequests(reqStatus, requestStateChanger, token) {
-    let params = {'status': reqStatus}; // TODO: get diff status requests (pending, in progress, completed)
+    let params = {'status': reqStatus}; 
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
     
 		fetch_a(token, 'token', url, {
@@ -106,14 +106,13 @@ export default function RequestsScreen({ route, navigation }) {
 
     AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
       console.log("GETTING TOKEN " + data)
-      fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
+      fetchRequests(volunteer_status.PENDING, setPendingRequests, data)
       fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
       fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
-    });    
-
-    setCurrentRequestList(pendingRequests); // TODO: Get them to show up when request screen opens 
-    setCurrentRequestType(volunteer_status.PENDING);
-    toggleButtonStyles(volunteer_status.PENDING); 
+      setCurrentRequestList(pendingRequests);  
+      setCurrentRequestType(volunteer_status.PENDING);
+      toggleButtonStyles(volunteer_status.PENDING); 
+    });        
   }, []);
 
 
@@ -177,17 +176,19 @@ export default function RequestsScreen({ route, navigation }) {
     );
 
   function displayRequestInfo(reqType, item) {
-    // TODO: display location properly instead of coordinates
     if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
-      var resourceBadges = []; 
-      item.resources.resource_request.forEach(req => {console.log(req); // TODO: badges not actually displaying text, change the badge color 
-        resourceBadges.push(<><Badge value={<><Text>{req}</Text></>} status='primary' /></>)
-      }); 
+      var resourceBadges = `` 
+      item.resources.resource_request.forEach(req => {console.log(req); 
+        resourceBadges += `<Badge value={<><Text>${req}</Text></>} status='primary' />`; 
+      });
+      console.log(resourceBadges) 
+      var dom = React.createElement(resourceBadges)
+      //dom.innerHTML = resourceBadges; 
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
         <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{item.resources.resource_request.join(", ")}</Text>
-        {/* <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{resourceBadges}</Text> */} 
+        {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
         <Text style={texts.request_text}><Text style={texts.request_label}>Needed by: </Text>{item.needed_by}</Text>
         </>
       )
