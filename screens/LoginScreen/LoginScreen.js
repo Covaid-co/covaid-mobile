@@ -106,7 +106,7 @@ export default function LoginScreen({ route, navigation }) {
   }
 
   function handlePasswordReset() {
-    console.log("send email");
+    setModalVisible(true);
   }
 
   return (
@@ -149,6 +149,7 @@ export default function LoginScreen({ route, navigation }) {
         <TouchableOpacity style={buttons.signup}>
           <Text style={texts.button_label_blue}>SIGN UP</Text>
         </TouchableOpacity>
+        {modalVisible && <ResetPassword modalVisible={setModalVisible} />}
       </View>
     </View>
   );

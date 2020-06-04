@@ -10,7 +10,7 @@ import {
   Button, 
   AsyncStorage,
 } from "react-native";
-import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
+// import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
@@ -132,7 +132,7 @@ export default function RequestsScreen({ route, navigation }) {
               toggleButtonStyles(volunteer_status.PENDING); 
               }}>
             <Text style={buttonStyles[3]}>Pending</Text>
-            <Badge containerStyle={{ position: 'absolute', top: -7, right: 6 }} value={<><Text>{pendingRequests.length}</Text></>} status='warning' />
+            {/*<Badge containerStyle={{ position: 'absolute', top: -7, right: 6 }} value={<><Text>{pendingRequests.length}</Text></>} status='warning' />*/}
           </TouchableOpacity>
           <TouchableOpacity 
           style = {buttonStyles[1]}
@@ -141,7 +141,7 @@ export default function RequestsScreen({ route, navigation }) {
               toggleButtonStyles(volunteer_status.IN_PROGRESS); 
               }}>
             <Text style={buttonStyles[4]}>Active</Text>
-            <Badge containerStyle={{ position: 'absolute', top: -7, right: 11 }} value={<><Text>{activeRequests.length}</Text></>} status='warning' />
+            {/*<Badge containerStyle={{ position: 'absolute', top: -7, right: 11 }} value={<><Text>{activeRequests.length}</Text></>} status='warning' />*/}
           </TouchableOpacity>
           <TouchableOpacity 
           style = {buttonStyles[2]}
@@ -178,11 +178,11 @@ export default function RequestsScreen({ route, navigation }) {
   function displayRequestInfo(reqType, item) {
     if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
       var resourceBadges = `` 
-      item.resources.resource_request.forEach(req => {console.log(req); 
+      /*item.resources.resource_request.forEach(req => {console.log(req); 
         resourceBadges += `<Badge value={<><Text>${req}</Text></>} status='primary' />`; 
       });
       console.log(resourceBadges) 
-      var dom = React.createElement(resourceBadges)
+      var dom = React.createElement(resourceBadges)*/
       //dom.innerHTML = resourceBadges; 
       return (
         <>

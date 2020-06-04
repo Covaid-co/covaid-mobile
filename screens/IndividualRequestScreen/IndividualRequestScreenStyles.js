@@ -49,7 +49,7 @@ const buttons = StyleSheet.create({
     margin: 10,
     width: 150,
     height: 60,
-    backgroundColor: "green",
+    backgroundColor: "white",
     borderWidth: 3,
     borderColor: "green",
     borderRadius: 8,
@@ -62,7 +62,7 @@ const buttons = StyleSheet.create({
     margin: 10,
     width: 150,
     height: 60,
-    backgroundColor: "red",
+    backgroundColor: "white",
     borderWidth: 3,
     borderColor: "red",
     borderRadius: 8,
@@ -110,11 +110,11 @@ const texts = StyleSheet.create({
   },
   button_label_green: {
     fontSize: 15,
-    color: "white",
+    color: "green",
   },
   button_label_red: {
     fontSize: 15,
-    color: "white",
+    color: "red",
   },
 });
 
