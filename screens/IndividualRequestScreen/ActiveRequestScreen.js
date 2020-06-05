@@ -11,6 +11,7 @@ import {
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
+import fetch_a from '../../util/fetch_auth'
 
 export default function ActiveRequestScreen({ route, navigation }) {
   useEffect(() => { 
@@ -19,11 +20,70 @@ export default function ActiveRequestScreen({ route, navigation }) {
   }, []);
 
   function completeRequest() {
-    setIsModalVisible("Complete request.");
+    let form = {
+      reason: "fake reason",
+      adminMode: true,
+    };
+    let params = {
+      ID: route.params.item.request_id,
+    };
+
+    var url = generateURL(homeURL + "/api/request/completeRequest?", params);
+
+    // TODO: remove useless token string 
+
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { 
+      fetch_a(data, "token", url, {
+        method: "put",
+      })
+        .then((response) => {
+          if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
+            removeFromArray(route.params.item, route.params.activeList); 
+            route.params.completeList.push(route.params.item); 
+            alert("Marked complete.")
+          } else {
+            alert("Unable to complete, please email us at covaidco@gmail.com.");
+          }
+        })
+        .catch((e) => {
+          console.log(url); 
+          console.log(e);
+        })
+    });
   };
 
+  function removeFromArray(item, array) {
+    const index = array.indexOf(item);
+    if (index > -1) {
+      array.splice(index, 1);
+    }
+  }
+
   function cancelRequest() {
-    console.log("Cancel request.")
+    console.log("Cancelling this ")
+    let params = {
+      ID: route.params.item.request_id,
+    };
+
+    var url = generateURL(homeURL + "/api/request/rejectRequest?", params);
+
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { 
+      fetch_a(data, "token", url, {
+        method: "put",
+      })
+        .then((response) => {
+          if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
+            removeFromArray(route.params.item, route.params.activeList); 
+            alert("Cancelled request.")
+          } else {
+            alert("Unable to cancel, please email us at covaidco@gmail.com.");
+          }
+        })
+        .catch((e) => {
+          console.log(url); 
+          console.log(e);
+        })
+    }); 
   };
 
   return (
@@ -43,10 +103,10 @@ export default function ActiveRequestScreen({ route, navigation }) {
 
         <View style={styles.container2}>
           <View style={styles.row}>
-            <TouchableOpacity style={buttons.accept}>
+            <TouchableOpacity style={buttons.accept} onPress={() => completeRequest()}>
               <Text style={texts.button_label_green}>Complete Request</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={buttons.reject}>
+            <TouchableOpacity style={buttons.reject} onPress={() => cancelRequest()}>
               <Text style={texts.button_label_red}>Cancel Request</Text>
             </TouchableOpacity>
           </View>

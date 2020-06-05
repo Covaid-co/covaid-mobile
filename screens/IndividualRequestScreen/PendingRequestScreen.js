@@ -22,32 +22,63 @@ export default function PendingRequestScreen({ route, navigation }) {
   
 
   function acceptRequest() {
-    console.log("Accept request.");
     let params = {
       ID: route.params.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/acceptRequest?", params);
     
-    
-    // TODO: fetch token 
-    fetch_a("token", url, {
-      method: "put",
-    })
-      .then((response) => {
-        if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
-          alert("Accepted!")
-        } else {
-          console.log("Error");
-        }
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+      console.log("GETTING TOKEN " + data)
+      fetch_a(data, "token", url, {
+        method: "put",
       })
-      .catch((e) => {
-        console.log(url); 
-        console.log(e);
-      });
+        .then((response) => {
+          if (response.ok) { 
+            alert("Accepted request.")
+            removeFromArray(route.params.item, route.params.pendingList); 
+            route.params.activeList.push(route.params.item); 
+
+          } else {
+            alert("Unable to accept, please email us at covaidco@gmail.com.");
+          }
+        })
+        .catch((e) => {
+          console.log(url); 
+          console.log(e);
+        })
+    }); 
   };
 
+  function removeFromArray(item, array) {
+    const index = array.indexOf(item);
+    if (index > -1) {
+      array.splice(index, 1);
+    }
+  }
+
   function rejectRequest() {
-    console.log("Reject request.")
+    let params = {
+      ID: route.params.item.request_id,
+    };
+    var url = generateURL(homeURL + "/api/request/rejectRequest?", params);
+
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { 
+      fetch_a(data, "token", url, {
+        method: "put",
+      })
+        .then((response) => {
+          if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
+            removeFromArray(route.params.item, route.params.pendingList); 
+            alert("Rejected request.")
+          } else {
+            alert("Unable to reject, please email us at covaidco@gmail.com.");
+          }
+        })
+        .catch((e) => {
+          console.log(url); 
+          console.log(e);
+        })
+    }); 
   };
 
   return (
@@ -70,7 +101,7 @@ export default function PendingRequestScreen({ route, navigation }) {
             <TouchableOpacity style={buttons.accept} onPress={() => acceptRequest()}>
               <Text style={texts.button_label_green}>Accept Request</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={buttons.reject}>
+            <TouchableOpacity style={buttons.reject} onPress={() => rejectRequest()}> 
               <Text style={texts.button_label_red}>Reject Request</Text>
             </TouchableOpacity>
           </View>

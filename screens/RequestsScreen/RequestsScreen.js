@@ -99,6 +99,7 @@ export default function RequestsScreen({ route, navigation }) {
   }  
 
   useEffect(() => {
+    console.log("useEffect again lmfao ")
     AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
       console.log("GETTING USER ID " + data)
       fetchUser(data); 
@@ -122,7 +123,6 @@ export default function RequestsScreen({ route, navigation }) {
         <View style = {styles.center}>
         <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
         <Text></Text>
-
         
         <View style={styles.row}>
           <TouchableOpacity 
@@ -145,7 +145,9 @@ export default function RequestsScreen({ route, navigation }) {
           </TouchableOpacity>
           <TouchableOpacity 
           style = {buttonStyles[2]}
-          onPress={() => {setCurrentRequestList(completedRequests); 
+          onPress={() => {
+              // refreshStatuses(); 
+              setCurrentRequestList(completedRequests); 
               setCurrentRequestType(volunteer_status.COMPLETE);
               toggleButtonStyles(volunteer_status.COMPLETE); 
               }}>
@@ -160,9 +162,9 @@ export default function RequestsScreen({ route, navigation }) {
             renderItem={({item}) => 
               <TouchableOpacity style={styles.request} onPress={() => { 
                 if (currentRequestType == volunteer_status.PENDING) {
-                  navigation.navigate("Pending Request", {navigation: route.params, item: item}); 
+                  navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests}); 
                 } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
-                  navigation.navigate("Active Request", {navigation: route.params, item: item});
+                  navigation.navigate("Active Request", {navigation: route.params, item: item, activeList: activeRequests, completeList: completedRequests});
                 } else if (currentRequestType == volunteer_status.COMPLETE) {
                   navigation.navigate("Completed Request", {navigation: route.params, item: item});
                 }
