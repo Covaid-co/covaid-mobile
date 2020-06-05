@@ -114,8 +114,6 @@ export default function LoginScreen({ route, navigation }) {
           getZip(data.latlong);
           setAssociation(data.association);
           setAssociationName(data.association_name);
-          //zip code using a location function
-          //maybe on location change, it will automatically rerender the page and switch the categories
           setDetails(data.offer.details);
           setCurrentUserObject(data.languages, languages, setLanguageChecked);
           setCurrentUserObject(data.offer.timesAvailable, timeNames, setTimes);
@@ -224,7 +222,7 @@ const handleNewAssociation = (association) => {
 async function getLatLng(zip) {
   try {
       if (zip.length !== 5 || !(/^\d+$/.test(zip))) {
-          throw Error('Invalid zip');
+          throw Error('Invalid zipcode');
       }
       var response = await Geocode.fromAddress(zip);
       var new_neighborhoods = []
@@ -250,7 +248,7 @@ async function getLatLng(zip) {
       const { lat, lng } = response.results[0].geometry.location;
       setLatLong([lng, lat])
       let params = {'latitude': lat, 'longitude': lng}
-      const url = generateURL("/api/association/get_assoc/lat_long?", params);
+      const url = generateURL(homeURL + "/api/association/get_assoc/lat_long?", params);
       const response_assoc = await fetch(url);
       const data = await response_assoc.json();
       setZipUpdated(true)
@@ -272,7 +270,8 @@ async function getLatLng(zip) {
       }
       return true
   } catch (err) {
-      alert('Invalid zip')
+      alert('Invaild zipcode')
+      console.log(err)
   }
 }
 
@@ -285,8 +284,7 @@ const handleChangedZip = () => {
 }
 
 function handleSaveChanges() {
-  // updateLocation();
-  console.log("submitting shit")
+  updateLocation();
 }
 
 function handleZip(input) {
@@ -338,6 +336,7 @@ function handleZip(input) {
       <View style={{ marginBottom: 100 }}>
         <View style={styles.center}>
           <TouchableOpacity style={buttons.edit}
+          onPress = {handleSaveChanges}
           >
             <Text style={texts.button_label}>Save</Text>
           </TouchableOpacity>
