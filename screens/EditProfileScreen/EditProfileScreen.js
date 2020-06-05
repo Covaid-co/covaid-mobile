@@ -109,8 +109,9 @@ export default function LoginScreen({ route, navigation }) {
           setLastName(data.last_name);
           setEmail(data.email);
           setPhone(data.phone);
-          console.log(data)
           setLatLong(data.latlong);
+          setNeighborhoods(data.offer.neighborhoods)
+          setFoundState(data.offer.state);
           getZip(data.latlong);
           setAssociation(data.association);
           setAssociationName(data.association_name);
@@ -157,13 +158,13 @@ export default function LoginScreen({ route, navigation }) {
     if (zip.length !== 5 || !(/^\d+$/.test(zip))) {
         setToastMessage('Invalid zip');
         setShowToast(true);
-        return;
+        return false;
     }
     //await handleChangedZip()
     if (initialZip !== zip) {
       setInitialZip(zip)
-      await handleChangedZip()
-       //setZipUpdated( await handleChangedZip());
+      return handleChangedZip()
+      
     } else {
         setNeighborhoods(user.offer.neighborhoods)
         setAssociation(user.association)
@@ -171,6 +172,7 @@ export default function LoginScreen({ route, navigation }) {
         setLatLong(user.latlong)
         // setShowChangeAssocModal(false)
         setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
+        return false
     }
 }
 
@@ -279,9 +281,65 @@ const handleChangedZip = () => {
       return false;
   }
 }
+async function handleSaveChanges() {
+  console.log("HELLLO")
+  console.log(await updateLocation())
+  console.log("HEYEYEIDAK")
+  if (!(await updateLocation())) {
+    console.log("WTFFF")
+    handleSubmit();
+  }
+  //handleSubmit();
+}
 
-function handleSaveChanges() {
-  updateLocation();
+function handleSubmit() {
+  //updateLocation();
+  // if (checkInputs() === false) {
+  //   return;
+  // }
+  var selectedLanguages = extractTrueObj(languageChecked);
+  var selectedTimes = extractTrueObj(times);
+  var resourceList = extractTrueObj(resources);
+  console.log(latlong)
+
+  let params = {
+    first_name: firstName,
+    last_name: lastName,
+    email: email,
+    phone: phone,
+    "offer.timesAvailable": selectedTimes,
+    "offer.car": hasCar,
+    "offer.neighborhoods": neighborhoods,
+    "offer.state": state,
+    association: association,
+    association_name: associationName,
+    "offer.tasks": resourceList,
+    location: {
+      type: "Point",
+      coordinates: latlong,
+    },
+    languages: selectedLanguages,
+  };
+  var url = generateURL(homeURL + "/api/users/update?", params);
+  fetch_a(route.params.token,"token", url, {
+    method: "put",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Offer successfully created");
+        this.forceUpdate()
+        navigation.goBack()
+        // window.location.reload(true);
+      } else {
+        console.log("Offer not successful");
+      }
+    })
+    .catch((e) => {
+      console.log("Error");
+    });
+
 }
 
   function form(header, change, value) {
