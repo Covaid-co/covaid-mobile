@@ -159,17 +159,19 @@ export default function LoginScreen({ route, navigation }) {
         setShowToast(true);
         return;
     }
-    await handleChangedZip()
-    // if (initialZip !== zip) {
-    //    setZipUpdated( await handleChangedZip());
-    // } else {
-    //     setNeighborhoods(user.offer.neighborhoods)
-    //     setAssociation(user.association)
-    //     setAssociationName(user.association_name)
-    //     setLatLong(user.latlong)
-    //     // setShowChangeAssocModal(false)
-    //     setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
-    // }
+    //await handleChangedZip()
+    if (initialZip !== zip) {
+      setInitialZip(zip)
+      await handleChangedZip()
+       //setZipUpdated( await handleChangedZip());
+    } else {
+        setNeighborhoods(user.offer.neighborhoods)
+        setAssociation(user.association)
+        setAssociationName(user.association_name)
+        setLatLong(user.latlong)
+        // setShowChangeAssocModal(false)
+        setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
+    }
 }
 
 function getZip(location) {
@@ -204,20 +206,13 @@ const handleNoAssociations = () => {
   setAssociation('')
   setAssociationName('')
   setResources(temp_resources)
-  // setShowChangeAssocModal(true)
 }
 
 const handleNewAssociation = (association) => {
   setDefaultResources(association.resources)
-  setCurrentUserObject([], association.resources, setResources);
-  var temp_resources = {}
-  for (var i = 0; i < association.resources.length; i++) {
-      temp_resources[association.resources[i]] = false
-  }
-  setResources(temp_resources)
+  setCurrentUserObject(user.offer.tasks, association.resources, setResources);
   setAssociation(association._id)
   setAssociationName(association.name)
-  // setShowChangeAssocModal(true)
 }
 
 async function getLatLng(zip) {
@@ -287,11 +282,6 @@ const handleChangedZip = () => {
 
 function handleSaveChanges() {
   updateLocation();
-}
-
-function handleZip(input) {
-  setZip(input)
-  updateLocation()
 }
 
   function form(header, change, value) {
