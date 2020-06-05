@@ -159,16 +159,17 @@ export default function LoginScreen({ route, navigation }) {
         setShowToast(true);
         return;
     }
-    if (initialZip !== zip) {
-        await handleChangedZip();
-    } else {
-        setNeighborhoods(user.offer.neighborhoods)
-        setAssociation(user.association)
-        setAssociationName(user.association_name)
-        setLatLong(user.latlong)
-        // setShowChangeAssocModal(false)
-        setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
-    }
+    await handleChangedZip()
+    // if (initialZip !== zip) {
+    //    setZipUpdated( await handleChangedZip());
+    // } else {
+    //     setNeighborhoods(user.offer.neighborhoods)
+    //     setAssociation(user.association)
+    //     setAssociationName(user.association_name)
+    //     setLatLong(user.latlong)
+    //     // setShowChangeAssocModal(false)
+    //     setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
+    // }
 }
 
 function getZip(location) {
@@ -256,18 +257,19 @@ async function getLatLng(zip) {
           setNeighborhoods(new_neighborhoods)
           setFoundState(foundState)
           handleNoAssociations()
-      } else if (data.length > 0 && user.association !== data[0]['_id']) {
-          setNeighborhoods(new_neighborhoods)
-          setFoundState(foundState)
-          handleNewAssociation(data[0])
       } else {
           setNeighborhoods(new_neighborhoods)
           setFoundState(foundState)
-          setAssociation(user.association)
-          setAssociationName(user.association_name)
-          // setShowChangeAssocModal(false)
-          setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
+          handleNewAssociation(data[0])
       }
+      Alert.alert(
+        "You have edited locations, please update your categories to help!",
+        "",
+        [{ text: "OK" }],
+        {
+          cancelable: false,
+        }
+      );
       return true
   } catch (err) {
       alert('Invaild zipcode')
@@ -311,7 +313,7 @@ function handleZip(input) {
         {form("Last Name:", setLastName, lastName)}
         {form("Email:", setEmail, email)}
         {form("Phone:", setPhone, phone)}
-        {form("Zip Code:", handleZip, zip)}
+        {form("Zip Code:", setZip, zip)}
         <Details details={details} setDetails={setDetails} />
         <Text style={texts.label}> What languages do you speak? </Text>
         <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
