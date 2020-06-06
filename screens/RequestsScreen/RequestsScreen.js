@@ -173,17 +173,17 @@ export default function RequestsScreen({ route, navigation }) {
     )
   }
   function displayAllRequests(reqList) {
-    // if (reqList.length == 0) {
-    //   return (
-    //     <>
-    //       <View style={styles.container}>
-    //         <View style = {styles.center}>
-    //           <Text style={texts.no_request}>No requests here.</Text>
-    //         </View>
-    //       </View>
-    //     </>
-    //   );
-    // } else {
+    if (reqList && reqList.length == 0) {
+      return (
+        <>
+          <View style={styles.container}>
+            <View style = {styles.center}>
+              <Text style={texts.no_request}>No requests here.</Text>
+            </View>
+          </View>
+        </>
+      );
+    } else {
       return (
         <FlatList
             data={currentRequestList || pendingRequests}
@@ -204,7 +204,7 @@ export default function RequestsScreen({ route, navigation }) {
             }
             /> 
       );
-    // }
+    }
   }
 
   function displayRequestInfo(reqType, item) {
