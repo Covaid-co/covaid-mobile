@@ -3,7 +3,6 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
     padding: 20,
     backgroundColor: "white",
   },
@@ -21,6 +20,7 @@ const styles = StyleSheet.create({
 const buttons = StyleSheet.create({
   edit: {
     marginTop: 15,
+    marginBottom: 100,
     width: 350,
     height: 60,
     backgroundColor: Colors.blue,
