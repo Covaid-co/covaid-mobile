@@ -19,8 +19,9 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   input: {
-    width: 350,
-    height: 50,
+    marginTop: 20,
+    minHeight: 100,
+    width: 375,
     paddingLeft: 10,
     fontSize: 17,
     borderWidth: 2,
@@ -33,6 +34,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  label: {
+    fontSize: 17,
+    color: Colors.dark_grey,
   },
 });
 

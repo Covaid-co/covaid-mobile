@@ -14,4 +14,5 @@ export default {
 
   blue: "#2670FF",
   grey: "#CECECE",
+  dark_grey: "#7B7B7B",
 };

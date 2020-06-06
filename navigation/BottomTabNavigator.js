@@ -1,15 +1,17 @@
+import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import * as React from "react";
 
 import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
+import {volunteer_status} from "../constants";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Requests";
 
 export default function BottomTabNavigator({ navigation, route }) {
+
   navigation.setOptions({
     headerTitle: getHeaderTitle(route),
   });
