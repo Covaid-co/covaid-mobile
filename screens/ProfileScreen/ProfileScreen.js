@@ -142,7 +142,6 @@ export default function ProfileScreen({ route, navigation }) {
         )) || (
           <Text style={texts.red_text}> Your offer is currently inactive</Text>
         )}
-
         <TouchableOpacity
           style={buttons.edit}
           onPress={() => navigation.navigate("Edit Profile", route.params)}
