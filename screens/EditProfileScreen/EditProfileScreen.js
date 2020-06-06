@@ -56,6 +56,8 @@ export default function LoginScreen({ route, navigation }) {
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [state, setFoundState] = useState([]);
 
+  const [alertPresent, setAlertPresent] = useState(false);
+
   const defaultTaskList = [
     "Food/Groceries",
     "Medication",
@@ -154,6 +156,9 @@ export default function LoginScreen({ route, navigation }) {
     }
   };
 
+  // true means location changes
+  // false means location failed to change
+  // 0 means no attempt to change location
   const updateLocation = async e => {
     if (zip.length !== 5 || !(/^\d+$/.test(zip))) {
         setToastMessage('Invalid zip');
@@ -172,7 +177,7 @@ export default function LoginScreen({ route, navigation }) {
         setLatLong(user.latlong)
         // setShowChangeAssocModal(false)
         setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
-        return false
+        return 0
     }
 }
 
@@ -201,22 +206,23 @@ function getZip(location) {
 const handleNoAssociations = () => {
   setDefaultResources(defaultTaskList)
   setCurrentUserObject([], defaultTaskList, setResources);
-  var temp_resources = {}
-  for (var i = 0; i < defaultTaskList.length; i++) {
-      temp_resources[defaultTaskList[i]] = false
-  }
+  // var temp_resources = {}
+  // for (var i = 0; i < defaultTaskList.length; i++) {
+  //     temp_resources[defaultTaskList[i]] = false
+  // }
   setAssociation('')
   setAssociationName('')
-  setResources(temp_resources)
+  // setResources(temp_resources)
 }
 
 const handleNewAssociation = (association) => {
   setDefaultResources(association.resources)
-  setCurrentUserObject(user.offer.tasks, association.resources, setResources);
+  console.log(association.resources)
+  setCurrentUserObject([], association.resources, setResources);
   setAssociation(association._id)
   setAssociationName(association.name)
 }
-
+console.log(resources)
 async function getLatLng(zip) {
   try {
       if (zip.length !== 5 || !(/^\d+$/.test(zip))) {
@@ -250,7 +256,7 @@ async function getLatLng(zip) {
       const response_assoc = await fetch(url);
       const data = await response_assoc.json();
       setZipUpdated(true)
-      if (user.association !== '' && data.length === 0) {
+      if (data.length === 0) {
           setNeighborhoods(new_neighborhoods)
           setFoundState(foundState)
           handleNoAssociations()
@@ -259,6 +265,7 @@ async function getLatLng(zip) {
           setFoundState(foundState)
           handleNewAssociation(data[0])
       }
+      
       Alert.alert(
         "You have edited locations, please update your categories to help!",
         "",
@@ -282,18 +289,12 @@ const handleChangedZip = () => {
   }
 }
 async function handleSaveChanges() {
-  console.log("HELLLO")
-  console.log(await updateLocation())
-  console.log("HEYEYEIDAK")
-  if (!(await updateLocation())) {
-    console.log("WTFFF")
+  if ((await updateLocation()) == 0) {
     handleSubmit();
   }
-  //handleSubmit();
 }
 
 function handleSubmit() {
-  //updateLocation();
   // if (checkInputs() === false) {
   //   return;
   // }
@@ -329,9 +330,7 @@ function handleSubmit() {
     .then((response) => {
       if (response.ok) {
         console.log("Offer successfully created");
-        this.forceUpdate()
-        navigation.goBack()
-        // window.location.reload(true);
+        navigation.goBack();
       } else {
         console.log("Offer not successful");
       }
