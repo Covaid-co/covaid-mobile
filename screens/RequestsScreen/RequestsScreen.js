@@ -10,7 +10,7 @@ import {
   Button, 
   AsyncStorage,
 } from "react-native";
-import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
+//import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
@@ -26,7 +26,7 @@ export default function RequestsScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]); 
   const [activeRequests, setActiveRequests] = useState([]); 
   const [completedRequests, setCompletedRequests] = useState([]);
-  const [currentRequestList, setCurrentRequestList] = useState(pendingRequests);
+  const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState(volunteer_status.PENDING); 
   const [currentItem, setCurrentItem] = useState();  
   const [buttonStyles, setButtonStyles] = useState([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]);
@@ -67,6 +67,8 @@ export default function RequestsScreen({ route, navigation }) {
       } // add any relevant information 
       tempList.push(element); 
     }
+    //initializes the current request list to "pending", it works dont touch it. Otherwise the list of requests dont pop up initially
+    setCurrentRequestList(tempList)
     requestStateChanger(tempList);  
     return tempList; 
   }
@@ -117,7 +119,7 @@ export default function RequestsScreen({ route, navigation }) {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
-
+  if (currentRequestList) {
     return (
         <View style={styles.container}>
         <View style = {styles.center}>
@@ -159,7 +161,11 @@ export default function RequestsScreen({ route, navigation }) {
           {displayAllRequests(currentRequestList)}
       </View>  
     );
-
+  } else {
+    return (
+      <Text>HEY BITCH YOU WANT A PIXIE STICK</Text>
+    )
+  }
   function displayAllRequests(reqList) {
     if (reqList.length == 0) {
       return (
