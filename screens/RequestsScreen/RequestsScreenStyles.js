@@ -130,6 +130,11 @@ const texts = StyleSheet.create({
     textAlign: "left",
     fontWeight: "bold", 
   },
+  no_request: {
+    fontSize: 15,
+    color: "grey",
+    textAlign: "left",
+  },
   request_text: {
     fontSize: 15,
     margin: "2%"

@@ -98,7 +98,7 @@ export default function ActiveRequestScreen({ route, navigation }) {
           <Text style={texts.desc}><Text style={texts.label}>Details: </Text>{route.params.item.details}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Requesting support with: </Text>{route.params.item.resources.resource_request.join(", ")}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text>{route.params.item.needed_by}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Location: </Text>{route.params.item.location}</Text>
+          <Text style={texts.desc}><Text style={texts.label}>Distance: </Text>{route.params.item.distance}</Text>
         </View>
 
         <View style={styles.container2}>
