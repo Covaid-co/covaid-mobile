@@ -153,7 +153,7 @@ export default function RequestsScreen({ route, navigation }) {
               setCurrentRequestType(volunteer_status.COMPLETE);
               toggleButtonStyles(volunteer_status.COMPLETE); 
               }}>
-            <Text style={buttonStyles[5]}>Complete</Text>
+            <Text style={buttonStyles[5]}>Complete ({completedRequests.length})</Text>
           </TouchableOpacity>
           </View>
           </View>
