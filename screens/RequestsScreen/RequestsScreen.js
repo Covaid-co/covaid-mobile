@@ -26,11 +26,10 @@ export default function RequestsScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]); 
   const [activeRequests, setActiveRequests] = useState([]); 
   const [completedRequests, setCompletedRequests] = useState([]);
-  const [currentRequestList, setCurrentRequestList] = useState(pendingRequests);
-  const [currentRequestType, setCurrentRequestType] = useState(volunteer_status.PENDING); 
+  const [currentRequestList, setCurrentRequestList] = useState();
+  const [currentRequestType, setCurrentRequestType] = useState(); 
   const [currentItem, setCurrentItem] = useState();  
   const [buttonStyles, setButtonStyles] = useState([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]);
-
   const fetchUser = async (id) => { 
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
@@ -50,7 +49,7 @@ export default function RequestsScreen({ route, navigation }) {
       });
   };
 
-  function generateRequestList(requestData, requestStateChanger) { 
+  function generateRequestList(requestData, requestStateChanger, reqStatus) { 
     let tempList = []; 
     console.log(JSON.stringify(requestData))
     for (var i = 0; i < requestData.length; i++) { 
@@ -69,7 +68,10 @@ export default function RequestsScreen({ route, navigation }) {
       } // add any relevant information 
       tempList.push(element); 
     }
-    
+    //initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
+    if (reqStatus == currentRequestType) {
+      setCurrentRequestList(tempList)
+    }
     requestStateChanger(tempList);  
     return tempList; 
   }
@@ -83,7 +85,10 @@ export default function RequestsScreen({ route, navigation }) {
         }).then((response) => {
             if (response.ok) {
                 response.json().then(data => {
-                  generateRequestList(data, requestStateChanger); 
+                  setTimeout(function () {
+                    generateRequestList(data, requestStateChanger, reqStatus); 
+                  }, 750);
+                  // generateRequestList(data, requestStateChanger, reqStatus); 
                 });
             } else {
                 console.log("Error")
@@ -120,7 +125,8 @@ export default function RequestsScreen({ route, navigation }) {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
-
+  if (pendingRequests) {
+    console.log(pendingRequests.key)
     return (
         <View style={styles.container}>
         <View style = {styles.center}>
@@ -154,7 +160,7 @@ export default function RequestsScreen({ route, navigation }) {
               setCurrentRequestType(volunteer_status.COMPLETE);
               toggleButtonStyles(volunteer_status.COMPLETE); 
               }}>
-            <Text style={buttonStyles[5]}>Complete</Text>
+            <Text style={buttonStyles[5]}>Complete ({completedRequests.length})</Text>
           </TouchableOpacity>
           </View>
           </View>
@@ -162,9 +168,14 @@ export default function RequestsScreen({ route, navigation }) {
           {displayAllRequests(currentRequestList)}
       </View>  
     );
-
+   } 
+  else {
+    return (
+      <Text>Loading...</Text>
+    )
+  }
   function displayAllRequests(reqList) {
-    if (reqList.length == 0) {
+    if (reqList && reqList.length == 0) {
       return (
         <>
           <View style={styles.container}>
@@ -177,7 +188,7 @@ export default function RequestsScreen({ route, navigation }) {
     } else {
       return (
         <FlatList
-            data={currentRequestList}
+            data={currentRequestList || pendingRequests}
             contentContainerStyle={styles.center}
             renderItem={({item}) => 
               <TouchableOpacity style={styles.request} onPress={() => { 
@@ -222,9 +233,16 @@ export default function RequestsScreen({ route, navigation }) {
         <Text style={texts.request_text}><Text style={texts.request_label}>Completed: </Text>{item.completed_date}</Text>
         </>
       )
-    }
+    } else {
+      setCurrentRequestType(volunteer_status.PENDING)
     return (
-      <Text style={texts.header}>Obtaining details...</Text>
+      <>
+        <Text style={texts.request_title}>{item.requester_name}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{item.resources.resource_request.join(", ")}</Text>
+        {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
+        <Text style={texts.request_text}><Text style={texts.request_label}>Needed by: </Text>{item.needed_by}</Text>
+        </>
     )
+    }
   };
 }
