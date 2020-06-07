@@ -8,6 +8,7 @@ import {
   Alert,
   AsyncStorage,
 } from "react-native";
+import getDistance from '../../util/distance'
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
@@ -19,7 +20,22 @@ export default function PendingRequestScreen({ route, navigation }) {
     var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });    
   }, []);
 
-  
+  function acceptConfirm() {
+    Alert.alert(
+      "Are you sure you want to accept this request?",
+      "",
+      [  
+        {  
+          text: 'Yes',  
+          onPress: () => acceptRequest(),   
+        },  
+        {   
+          text: 'Cancel', 
+          onPress: () => console.log('Cancelled.')
+        },  
+      ]  
+    ); 
+  }
 
   function acceptRequest() {
     let params = {
@@ -53,6 +69,23 @@ export default function PendingRequestScreen({ route, navigation }) {
     if (index > -1) {
       array.splice(index, 1);
     }
+  }
+
+  function rejectConfirm() {
+    Alert.alert(
+      "Are you sure you want to reject this request?",
+      "",
+      [  
+        {  
+          text: 'Yes',  
+          onPress: () => rejectRequest(),   
+        },  
+        {   
+          text: 'Cancel', 
+          onPress: () => console.log('Cancelled.')
+        },  
+      ]  
+    ); 
   }
 
   function rejectRequest() {
@@ -92,15 +125,15 @@ export default function PendingRequestScreen({ route, navigation }) {
           <Text style={texts.desc}><Text style={texts.label}>Details: </Text> {route.params.item.details}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Requesting support with: </Text> {route.params.item.resources.resource_request.join(", ")}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text> {route.params.item.needed_by}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Distance: </Text> {route.params.item.distance}</Text>
+          <Text style={texts.desc}><Text style={texts.label}>Distance: </Text> {getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} m</Text>
         </View>
         
         <View style={styles.container2}>
           <View style={styles.row}>
-            <TouchableOpacity style={buttons.accept} onPress={() => acceptRequest()}>
+            <TouchableOpacity style={buttons.accept} onPress={() => acceptConfirm()}>
               <Text style={texts.button_label_green}>Accept Request</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={buttons.reject} onPress={() => rejectRequest()}> 
+            <TouchableOpacity style={buttons.reject} onPress={() => rejectConfirm()}> 
               <Text style={texts.button_label_red}>Reject Request</Text>
             </TouchableOpacity>
           </View>

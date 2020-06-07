@@ -10,13 +10,13 @@ import {
   Button, 
   AsyncStorage,
 } from "react-native";
-import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
+//import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
-import getDistance from '../../util/distance'
+//import getDistance from '../../util/distance'
 import PendingRequestScreen from "../IndividualRequestScreen/PendingRequestScreen";
 import CompletedRequestScreen from "../IndividualRequestScreen/CompletedRequestScreen";
 import ActiveRequestScreen from "../IndividualRequestScreen/ActiveRequestScreen";
@@ -52,14 +52,16 @@ export default function RequestsScreen({ route, navigation }) {
 
   function generateRequestList(requestData, requestStateChanger) { 
     let tempList = []; 
-    console.log(JSON.stringify(user))
+    console.log(JSON.stringify(requestData))
     for (var i = 0; i < requestData.length; i++) { 
       var element = { 
         key: i, 
         requester_name: requestData[i].personal_info.requester_name, 
         resources: requestData[i].request_info, 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
-        distance: getDistance(0, 0, requestData[i].location_info.coordinates[0], requestData[i].location_info.coordinates[1]) + " m", //requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1], 
+        //distance: 0, //getDistance(0, 0, requestData[i].location_info.coordinates[0], requestData[i].location_info.coordinates[1]) + " m", //requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1], 
+        lat: parseFloat(requestData[i].location_info.coordinates[0]), 
+        long: parseFloat(requestData[i].location_info.coordinates[1]), 
         requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
         details: requestData[i].request_info.details, 
         completed_date: requestData[i].status.completed_date || "",
@@ -67,6 +69,7 @@ export default function RequestsScreen({ route, navigation }) {
       } // add any relevant information 
       tempList.push(element); 
     }
+    
     requestStateChanger(tempList);  
     return tempList; 
   }
@@ -179,9 +182,9 @@ export default function RequestsScreen({ route, navigation }) {
             renderItem={({item}) => 
               <TouchableOpacity style={styles.request} onPress={() => { 
                 if (currentRequestType == volunteer_status.PENDING) {
-                  navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests}); 
+                  navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests, volunteer: user}); 
                 } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
-                  navigation.navigate("Active Request", {navigation: route.params, item: item, activeList: activeRequests, completeList: completedRequests});
+                  navigation.navigate("Active Request", {navigation: route.params, item: item, activeList: activeRequests, completeList: completedRequests, volunteer: user});
                 } else if (currentRequestType == volunteer_status.COMPLETE) {
                   navigation.navigate("Completed Request", {navigation: route.params, item: item});
                 }
