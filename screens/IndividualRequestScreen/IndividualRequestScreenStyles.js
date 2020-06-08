@@ -70,9 +70,8 @@ const buttons = StyleSheet.create({
     alignItems: "center",
   },
   disabled: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
+    margin: 10, 
+    width: 150,
     height: 60,
     backgroundColor: Colors.grey,
     borderRadius: 8,
@@ -115,6 +114,10 @@ const texts = StyleSheet.create({
   button_label_red: {
     fontSize: 15,
     color: "red",
+  },
+  button_label_gray: {
+    fontSize: 15,
+    color: "gray",
   },
 });
 

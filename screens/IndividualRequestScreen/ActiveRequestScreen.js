@@ -17,6 +17,7 @@ import CompleteConfirm from "../../components/CompleteConfirm/CompleteConfirm.js
 
 export default function ActiveRequestScreen({ route, navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [done, setDone] = useState(false); 
 
   useEffect(() => { 
     var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => { return data; });
@@ -37,7 +38,10 @@ export default function ActiveRequestScreen({ route, navigation }) {
       [  
         {  
           text: 'Yes',  
-          onPress: () => cancelRequest(),   
+          onPress: () => {
+            cancelRequest(); 
+            setDone(true); 
+          },   
         },  
         {   
           text: 'No', 
@@ -88,7 +92,28 @@ export default function ActiveRequestScreen({ route, navigation }) {
           <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text>{route.params.item.needed_by}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Distance: </Text>{getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} m</Text>
         </View>
-
+        {showButtons()}
+       
+    </View>
+  );  
+  
+  function showButtons() {
+    if (done) {
+      return (
+        <View style={styles.container2}>
+          <View style={styles.row}>
+            <TouchableOpacity style={buttons.disabled}>
+              <Text style={texts.button_label_gray}>Complete Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={buttons.disabled}>
+              <Text style={texts.button_label_gray}>Cancel Request</Text>
+            </TouchableOpacity>
+          </View>
+          {modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>}
+        </View>
+      );       
+    } else {
+      return (
         <View style={styles.container2}>
           <View style={styles.row}>
             <TouchableOpacity style={buttons.accept} onPress={() => setModalVisible(true)}>
@@ -98,8 +123,9 @@ export default function ActiveRequestScreen({ route, navigation }) {
               <Text style={texts.button_label_red}>Cancel Request</Text>
             </TouchableOpacity>
           </View>
-          {modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} activeList={route.params.activeList} completeList={route.params.completeList}/>}
+          {modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>}
         </View>
-    </View>
-  );  
+      ); 
+    }
+  }
 }

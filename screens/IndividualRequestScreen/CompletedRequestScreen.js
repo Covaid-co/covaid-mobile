@@ -15,9 +15,8 @@ import { generateURL } from "../../Helpers";
 export default function CompletedRequestScreen({ route, navigation }) {
   useEffect(() => { 
     var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => { return data; });
-    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });    
+    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });   
   }, []);
-
   return (
     <View>
       <View style={styles.container3}>

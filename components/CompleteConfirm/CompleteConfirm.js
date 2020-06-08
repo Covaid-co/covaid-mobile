@@ -29,6 +29,7 @@ export default function CompleteConfirm(props) {
     //alert(message + " fasjflsakjld")
     //console.log(props.item.request_id + "reqid")
     completeRequest(); 
+    props.setDone(true); 
     props.modalVisible(false);
   }
 
@@ -78,7 +79,7 @@ export default function CompleteConfirm(props) {
         <View style={passwordStyles.centeredView}>
           <View style={passwordStyles.modalView}>
             <Text style={passwordStyles.descriptTest}>
-              How did you complete the request? 
+              Confirmation: How did you complete the request? 
             </Text>
 
             <TextInput
