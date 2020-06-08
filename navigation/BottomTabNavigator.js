@@ -5,13 +5,12 @@ import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
-import {volunteer_status} from "../constants";
+import { volunteer_status } from "../constants";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Requests";
 
 export default function BottomTabNavigator({ navigation, route }) {
-
   navigation.setOptions({
     headerTitle: getHeaderTitle(route),
   });
@@ -21,6 +20,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       <BottomTab.Screen
         name="Notification"
         component={NotificationScreen}
+        initialParams={route.params}
         options={{
           title: "Notifications",
           tabBarIcon: ({ focused }) => (
@@ -56,7 +56,6 @@ export default function BottomTabNavigator({ navigation, route }) {
 function getHeaderTitle(route) {
   const routeName =
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
   switch (routeName) {
     case "Requests":
       return "Requests";

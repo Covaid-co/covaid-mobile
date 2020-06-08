@@ -60,6 +60,7 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
+            console.log(data);
             setUser(data[0]);
             setPublish(data[0].availability);
           });
