@@ -63,6 +63,9 @@ export default function App(props) {
               userID: userID,
               token: token,
             }}
+            options = {{
+              gestureEnabled: false
+            }}
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
           <Stack.Screen name="Active Request" component={ActiveRequestScreen} />

@@ -38,14 +38,19 @@ export default function ProfileScreen({ route, navigation }) {
   
     return (
       <View style={styles.container}>
-          <View styles = {styles.center}>
-          <TouchableOpacity
-          style = {buttons.logout}
-          onPress = {alertLogout}
-          >
-              <Text style = {texts.header}>LOGOUT</Text>
-          </TouchableOpacity>  
-          </View>     
+
+        <Text>
+        About: We're a group of college students/recent grads who want to play our part in the fight against COVID-19
+        </Text>
+        <TouchableOpacity
+        style = {buttons.logout}
+        onPress = {alertLogout}
+        >
+            <Text style = {texts.header}>LOGOUT</Text>
+        </TouchableOpacity>  
+        <Text>
+        Covaid.co copyright 2020??
+        </Text>
       </View>
     );
 }
