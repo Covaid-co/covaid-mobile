@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  AsyncStorage,
+} from "react-native";
 
 import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
@@ -13,6 +21,15 @@ const INITIAL_ROUTE_NAME = "Requests";
 export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({
     headerTitle: getHeaderTitle(route),
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ margin: 10 }}
+          onPress={() => navigation.navigate("Settings", route.params)}
+        >
+          <TabBarIcon name="md-settings" />
+        </TouchableOpacity>
+      ),
+      headerLeft: null,
   });
 
   return (

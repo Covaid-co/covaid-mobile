@@ -76,6 +76,8 @@ export default function LoginScreen({ route, navigation }) {
               }
             };
             saveData2();
+            setUsername("");
+            setPassword("");
             navigation.navigate("Covaid");
           });
         } else {
