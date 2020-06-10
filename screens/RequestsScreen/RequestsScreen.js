@@ -24,7 +24,7 @@ import CompletedRequestScreen from "../IndividualRequestScreen/CompletedRequestS
 import ActiveRequestScreen from "../IndividualRequestScreen/ActiveRequestScreen";
 
 export default function RequestsScreen({ route, navigation }) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState("");
   const [pendingRequests, setPendingRequests] = useState([]);
   const [activeRequests, setActiveRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
@@ -60,7 +60,7 @@ export default function RequestsScreen({ route, navigation }) {
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
     let tempList = [];
-    console.log(user);
+    console.log(JSON.stringify(user));
     for (var i = 0; i < requestData.length; i++) {
       var element = {
         key: i,
