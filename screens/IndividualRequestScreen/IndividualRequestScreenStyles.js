@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   container3: {
     marginTop: "5%",
     fontSize: 10,
-    margin: "5%"
+    margin: "5%",
   },
   logo: {
     height: 150,
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   row: {
     margin: 10,
     display: "flex",
-    flexDirection: "row", 
+    flexDirection: "row",
     alignItems: "center",
   },
 });
@@ -78,7 +78,7 @@ const buttons = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-  }
+  },
 });
 
 const texts = StyleSheet.create({
