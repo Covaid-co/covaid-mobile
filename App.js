@@ -21,7 +21,6 @@ import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
 import ActiveRequestScreen from "./screens/IndividualRequestScreen/ActiveRequestScreen.js"
 import PendingRequestScreen from "./screens/IndividualRequestScreen/PendingRequestScreen.js"
 import CompletedRequestScreen from "./screens/IndividualRequestScreen/CompletedRequestScreen.js"
-import SettingsScreen from "./screens/SettingsScreen/SettingsScreen.js"
 
 const Stack = createStackNavigator();
 
@@ -63,12 +62,22 @@ export default function App(props) {
               userID: userID,
               token: token,
             }}
+            options={{
+              headerRight: () => (
+                <TouchableOpacity
+                  style={{ margin: 10 }}
+                  onPress={() => alert("This is will trigger settings")}
+                >
+                  <TabBarIcon name="md-settings" />
+                </TouchableOpacity>
+              ),
+              headerLeft: null,
+            }}
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
           <Stack.Screen name="Active Request" component={ActiveRequestScreen} />
           <Stack.Screen name="Pending Request" component={PendingRequestScreen} />
           <Stack.Screen name="Completed Request" component={CompletedRequestScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
