@@ -5,9 +5,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: "white",
-  },
-  center: {
-    justifyContent: "center",
+    height: "100%",
     alignItems: "center",
   },
   line: {

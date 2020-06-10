@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   row: {
     margin: 10,
     display: "flex",
-    flexDirection: "row", 
+    flexDirection: "row",
     alignItems: "center",
   },
 });
@@ -57,7 +57,6 @@ const buttons = StyleSheet.create({
     backgroundColor: Colors.white,
     justifyContent: "center",
     alignItems: "center",
-
   },
   pressed_tab: {
     margin: 5,
@@ -65,7 +64,7 @@ const buttons = StyleSheet.create({
     height: 30,
     borderRadius: 8,
     backgroundColor: Colors.blue,
-    borderColor: Colors.blue, 
+    borderColor: Colors.blue,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -128,7 +127,7 @@ const texts = StyleSheet.create({
     fontSize: 20,
     color: "black",
     textAlign: "left",
-    fontWeight: "bold", 
+    fontWeight: "bold",
   },
   no_request: {
     fontSize: 15,
@@ -137,12 +136,12 @@ const texts = StyleSheet.create({
   },
   request_text: {
     fontSize: 15,
-    margin: "2%"
+    margin: "2%",
   },
   request_label: {
     fontSize: 15,
     fontWeight: "bold",
-    margin: "2%", 
+    margin: "2%",
   },
 });
 
