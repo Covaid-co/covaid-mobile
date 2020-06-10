@@ -47,7 +47,6 @@ export default function RequestsScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            console.log(data[0]);
             setUser(data[0]);
           });
         } else {

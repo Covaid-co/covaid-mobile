@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, View, ScrollView, Switch} from "react-native";
+import { Text, TouchableOpacity, View, ScrollView, Switch } from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./ProfileScreenStyles";
 import { homeURL } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
-import { NavigationEvents } from 'react-navigation';
+import { NavigationEvents } from "react-navigation";
 
 export default function ProfileScreen({ route, navigation }) {
   const [publish, setPublish] = useState(false);
@@ -19,7 +19,7 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       fetch_user_obj(route.params.userID);
     });
 
@@ -60,7 +60,6 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            console.log(data);
             setUser(data[0]);
             setPublish(data[0].availability);
           });
