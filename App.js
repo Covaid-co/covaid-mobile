@@ -18,9 +18,9 @@ import { homeURL, storage_keys } from "./constants";
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js";
 import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
-import ActiveRequestScreen from "./screens/IndividualRequestScreen/ActiveRequestScreen.js"
-import PendingRequestScreen from "./screens/IndividualRequestScreen/PendingRequestScreen.js"
-import CompletedRequestScreen from "./screens/IndividualRequestScreen/CompletedRequestScreen.js"
+import ActiveRequestScreen from "./screens/IndividualRequestScreen/ActiveRequestScreen.js";
+import PendingRequestScreen from "./screens/IndividualRequestScreen/PendingRequestScreen.js";
+import CompletedRequestScreen from "./screens/IndividualRequestScreen/CompletedRequestScreen.js";
 
 const Stack = createStackNavigator();
 
@@ -76,8 +76,14 @@ export default function App(props) {
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
           <Stack.Screen name="Active Request" component={ActiveRequestScreen} />
-          <Stack.Screen name="Pending Request" component={PendingRequestScreen} />
-          <Stack.Screen name="Completed Request" component={CompletedRequestScreen} />
+          <Stack.Screen
+            name="Pending Request"
+            component={PendingRequestScreen}
+          />
+          <Stack.Screen
+            name="Completed Request"
+            component={CompletedRequestScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
