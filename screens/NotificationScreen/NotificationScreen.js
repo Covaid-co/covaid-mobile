@@ -1,24 +1,20 @@
+import React, { useState, useEffect } from "react";
 import {
-  Image,
-  Platform,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
   FlatList,
-  ScrollView,
-  Switch,
   AsyncStorage,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import {
+  styles,
+  texts,
+} from "../../components/Notifications/NotificationStyles";
 import Colors from "../../public/Colors";
-import PendingRequestScreen from "../IndividualRequestScreen/PendingRequestScreen";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
-import { styles, buttons, texts } from "../ProfileScreen/ProfileScreenStyles";
-import { generateURL, validateEmail } from "../../Helpers";
+import { generateURL } from "../../Helpers";
 import getDistance from "../../util/distance";
 import fetch_a from "../../util/fetch_auth";
-import { NavigationEvents } from "react-navigation";
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -139,16 +135,15 @@ function displayRequestInfo(reqType, item) {
   var resourceBadges = ``;
   return (
     <>
+      <Text style={texts.request_text}>{item.needed_by}</Text>
+      <Text style={texts.request_text}>{item.distance}</Text>
+
       <Text style={texts.request_title}>{item.requester_name}</Text>
       <Text style={texts.request_text}>
         <Text style={texts.request_label}>Request resources: </Text>
         {item.resources.resource_request.join(", ")}
       </Text>
       {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
-      <Text style={texts.request_text}>
-        <Text style={texts.request_label}>Needed by: </Text>
-        {item.needed_by}
-      </Text>
     </>
   );
 }
