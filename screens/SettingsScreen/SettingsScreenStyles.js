@@ -6,6 +6,10 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "white",
   },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   line: {
     borderWidth: 0.8,
     borderColor: Colors.grey,
@@ -18,12 +22,12 @@ const styles = StyleSheet.create({
 });
 
 const buttons = StyleSheet.create({
-  edit: {
+  logout: {
     marginTop: 15,
     marginBottom: 100,
     width: 350,
     height: 60,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.grey,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
