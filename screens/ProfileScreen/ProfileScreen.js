@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, View, ScrollView, Switch } from "react-native";
+import { Text, TouchableOpacity, View, ScrollView, Switch, ActivityIndicator } from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./ProfileScreenStyles";
@@ -20,7 +20,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      fetch_user_obj(route.params.userID);
+        fetch_user_obj(route.params.userID);
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -151,6 +151,10 @@ export default function ProfileScreen({ route, navigation }) {
       </ScrollView>
     );
   } else {
-    return <Text>Loading...</Text>;
+    return (
+      <View style = {styles.loading}>
+        <ActivityIndicator size="large" color = {Colors.blue} />
+      </View>
+    )
   }
 }
