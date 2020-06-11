@@ -40,12 +40,12 @@ export default function ActiveRequestScreen({ route, navigation }) {
           text: 'Yes',  
           onPress: () => {
             cancelRequest(); 
-            setDone(true); 
+            navigation.goBack(null);
           },   
         },  
         {   
           text: 'No', 
-          onPress: () => console.log('No.')
+          onPress: () => console.log('No.'),
         },  
       ]  
     ); 
@@ -78,55 +78,40 @@ export default function ActiveRequestScreen({ route, navigation }) {
     }); 
   };
 
-  return (
-    <View>
-        <View style={styles.container3}>
-          <Text style={texts.desc}>
-            Thanks for accepting this request for support! Please reach out to
-            the requester by using the contact information below.
-          </Text>
-          <Text style={texts.desc}><Text style={texts.label}>Who: </Text> {route.params.item.requester_name}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Contact: </Text>{route.params.item.requester_contact}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Details: </Text>{route.params.item.details}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Requesting support with: </Text>{route.params.item.resources.resource_request.join(", ")}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text>{route.params.item.needed_by}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Distance: </Text>{getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} mi</Text>
-        </View>
-        {showButtons()}
-       
-    </View>
-  );  
+  if (!done) {
+    console.log("not done")
+    return (
+      <View>
+          <View style={styles.container3}>
+            <Text style={texts.desc}>
+              Thanks for accepting this request for support! Please reach out to
+              the requester by using the contact information below.
+            </Text>
+            <Text style={texts.desc}><Text style={texts.label}>Who: </Text> {route.params.item.requester_name}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Contact: </Text>{route.params.item.requester_contact}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Details: </Text>{route.params.item.details}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Requesting support with: </Text>{route.params.item.resources.resource_request.join(", ")}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text>{route.params.item.needed_by}</Text>
+            <Text style={texts.desc}><Text style={texts.label}>Distance: </Text>{getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} mi</Text>
+          </View>
+          <View style={styles.container2}>
+            <View style={styles.row}>
+              <TouchableOpacity style={buttons.accept} onPress={() => setModalVisible(true)}>
+                <Text style={texts.button_label_green}>Complete Request</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={buttons.reject} onPress={() => cancelConfirm()}>
+                <Text style={texts.button_label_red}>Cancel Request</Text>
+              </TouchableOpacity>
+            </View>
+            {/*modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>*/}
+            {modalVisible && navigation.navigate("Complete Confirm", {navigation: route.params, done: setDone, item: route.params.item, modalVisible: modalVisible, activeList: route.params.activeList, completeList: route.params.completeList}, props={value: 1})}
+          </View>
+         
+      </View>
+    ); 
+  } else {
+    console.log("DONE TF???")
+    return (<>{navigation.goBack(null)}</>); 
   
-  function showButtons() {
-    if (done) {
-      return (
-        <View style={styles.container2}>
-          <View style={styles.row}>
-            <TouchableOpacity style={buttons.disabled}>
-              <Text style={texts.button_label_gray}>Complete Request</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={buttons.disabled}>
-              <Text style={texts.button_label_gray}>Cancel Request</Text>
-            </TouchableOpacity>
-          </View>
-          {modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>}
-        </View>
-      );       
-    } else {
-      return (
-        <View style={styles.container2}>
-          <View style={styles.row}>
-            <TouchableOpacity style={buttons.accept} onPress={() => setModalVisible(true)}>
-              <Text style={texts.button_label_green}>Complete Request</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={buttons.reject} onPress={() => cancelConfirm()}>
-              <Text style={texts.button_label_red}>Cancel Request</Text>
-            </TouchableOpacity>
-          </View>
-          {/*modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>*/}
-          {modalVisible && navigation.navigate("Complete Confirm", {navigation: route.params, item: route.params.item, modalVisible: setModalVisible, setDone: setDone, activeList: route.params.activeList, completeList: route.params.completeList})}
-        </View>
-      ); 
-    }
   }
 }

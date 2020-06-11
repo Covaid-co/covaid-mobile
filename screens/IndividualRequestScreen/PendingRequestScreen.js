@@ -15,7 +15,6 @@ import { generateURL } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
 
 export default function PendingRequestScreen({ route, navigation }) {
-  const [done, setDone] = useState(false); 
 
   useEffect(() => { 
     var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => { return data; });
@@ -31,7 +30,7 @@ export default function PendingRequestScreen({ route, navigation }) {
           text: 'Yes',  
           onPress: () => {
             acceptRequest();
-            setDone(true); 
+            navigation.goBack(null)
           },   
         },  
         {   
@@ -85,7 +84,7 @@ export default function PendingRequestScreen({ route, navigation }) {
           text: 'Yes',  
           onPress: () => {
             rejectRequest();
-            setDone(true); 
+            navigation.goBack(null);
           },   
         },  
         {   
@@ -135,27 +134,6 @@ export default function PendingRequestScreen({ route, navigation }) {
           <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text> {route.params.item.needed_by}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Distance: </Text> {getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} mi</Text>
         </View>
-        {showButtons()}
-    
-    </View>
-  );  
-
-  function showButtons() {
-    if (done) {
-      return (
-        <View style={styles.container2}>
-          <View style={styles.row}>
-            <TouchableOpacity style={buttons.disabled}>
-              <Text style={texts.button_label_gray}>Accept Request</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={buttons.disabled}> 
-              <Text style={texts.button_label_gray}>Reject Request</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );       
-    } else {
-      return (
         <View style={styles.container2}>
           <View style={styles.row}>
             <TouchableOpacity style={buttons.accept} onPress={() => acceptConfirm()}>
@@ -166,7 +144,7 @@ export default function PendingRequestScreen({ route, navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-      ); 
-    }
-  }
+    
+    </View>
+  );  
 }

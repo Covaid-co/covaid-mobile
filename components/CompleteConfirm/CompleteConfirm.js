@@ -8,6 +8,7 @@ import {
   TextInput,
   AsyncStorage,
 } from "react-native";
+//import { StackActions, NavigationActions } from 'react-navigation';
 
 import { styles, texts, passwordStyles } from "./CompleteConfirmStyles";
 
@@ -18,15 +19,24 @@ import fetch_a from '../../util/fetch_auth'
 /**
  * Reset Password modal
  */
-export default function CompleteConfirm({ route, navigation }) {
+export default function CompleteConfirm({ route, navigation }, props) {
   const [message, setMessage] = useState("");
 
   function handleConfirm() {
+    console.log("PROPS "+props.value)
     //alert(message + " fasjflsakjld")
     //console.log(props.item.request_id + "reqid")
     completeRequest(); 
-    route.params.setDone(true); 
-    route.params.modalVisible(false);
+    route.params.modalVisible = false;
+    route.params.done(true); 
+    /*const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'Requests Screen' })],
+      key: 'Requests Screen', 
+    });
+    navigation.dispatch(resetAction);*/
+    console.log("LOL")
+    navigation.goBack(null); 
   }
 
   function removeFromArray(item, array) {
@@ -57,7 +67,7 @@ export default function CompleteConfirm({ route, navigation }) {
           if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
             removeFromArray(route.params.item, route.params.activeList); 
             route.params.completeList.push(route.params.item); 
-            alert("Marked complete.")
+            //alert("Marked complete.")
           } else {
             alert("Unable to complete, please email us at covaidco@gmail.com.");
           }

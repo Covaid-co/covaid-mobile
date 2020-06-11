@@ -80,6 +80,7 @@ export default function App(props) {
           <Stack.Screen name="Pending Request" component={PendingRequestScreen} />
           <Stack.Screen name="Completed Request" component={CompletedRequestScreen} />
           <Stack.Screen name="Complete Confirm" component={CompleteConfirm} />
+          <Stack.Screen name="Requests Screen" component={RequestsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
