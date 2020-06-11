@@ -123,7 +123,8 @@ export default function ActiveRequestScreen({ route, navigation }) {
               <Text style={texts.button_label_red}>Cancel Request</Text>
             </TouchableOpacity>
           </View>
-          {modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>}
+          {/*modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>*/}
+          {modalVisible && navigation.navigate("Complete Confirm", {navigation: route.params, item: route.params.item, modalVisible: setModalVisible, setDone: setDone, activeList: route.params.activeList, completeList: route.params.completeList})}
         </View>
       ); 
     }

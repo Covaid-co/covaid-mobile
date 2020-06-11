@@ -9,12 +9,8 @@ import {
   AsyncStorage,
 } from "react-native";
 
-import { passwordStyles } from "./CompleteConfirmStyles";
-import {
-  styles,
-  buttons,
-  texts,
-} from "../../screens/LoginScreen/LoginScreenStyles";
+import { styles, texts, passwordStyles } from "./CompleteConfirmStyles";
+
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
@@ -22,15 +18,15 @@ import fetch_a from '../../util/fetch_auth'
 /**
  * Reset Password modal
  */
-export default function CompleteConfirm(props) {
+export default function CompleteConfirm({ route, navigation }) {
   const [message, setMessage] = useState("");
 
   function handleConfirm() {
     //alert(message + " fasjflsakjld")
     //console.log(props.item.request_id + "reqid")
     completeRequest(); 
-    props.setDone(true); 
-    props.modalVisible(false);
+    route.params.setDone(true); 
+    route.params.modalVisible(false);
   }
 
   function removeFromArray(item, array) {
@@ -46,7 +42,7 @@ export default function CompleteConfirm(props) {
       adminMode: true,
     };
     let params = {
-      ID: props.item.request_id,
+      ID: route.params.item.request_id,
     };
 
     var url = generateURL(homeURL + "/api/request/completeRequest?", params);
@@ -59,8 +55,8 @@ export default function CompleteConfirm(props) {
       })
         .then((response) => {
           if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
-            removeFromArray(props.item, props.activeList); 
-            props.completeList.push(props.item); 
+            removeFromArray(route.params.item, route.params.activeList); 
+            route.params.completeList.push(route.params.item); 
             alert("Marked complete.")
           } else {
             alert("Unable to complete, please email us at covaidco@gmail.com.");
@@ -74,27 +70,24 @@ export default function CompleteConfirm(props) {
   };
 
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType="slide" transparent={false}>
-        <View style={passwordStyles.centeredView}>
-          <View style={passwordStyles.modalView}>
-            <Text style={passwordStyles.descriptTest}>
-              Confirmation: How did you complete the request? 
-            </Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="Message"
-              placeholderTextColor="#7F7F7F"
-              onChangeText={(text) => setMessage(text)}
-              defaultValue={message}
-            />
-            <TouchableOpacity onPress={handleConfirm} style={{display: message || "none"}}>
-              <Text style={texts.button_label_blue}>Confirm {"\n"}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+    <View style={styles.container}>   
+      <Text style={texts.desc}>How did you complete this request?</Text>
+        
+      <TextInput
+        style={styles.input}
+        placeholder="Enter confirmation message"
+        placeholderTextColor="#7F7F7F"
+        onChangeText={(text) => setMessage(text)}
+        defaultValue={message}
+      />
+      <TouchableOpacity onPress={handleConfirm} style={{display: message || "none"}}>
+        <Text style={texts.button_label_blue}>Confirm {"\n"}</Text>
+      </TouchableOpacity>
+       
+        
     </View>
   );
 }
+
+
+
