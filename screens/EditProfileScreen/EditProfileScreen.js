@@ -352,6 +352,9 @@ export default function LoginScreen({ route, navigation }) {
     } else if (email.length === 0 || validateEmail(email) === false) {
       alert("Enter a valid email");
       valid = false;
+    } else if (details.length == 0) {
+      alert("Please describe how you can help");
+      valid = false;
     }
     return valid;
   };
@@ -373,6 +376,7 @@ export default function LoginScreen({ route, navigation }) {
       "offer.car": hasCar,
       "offer.neighborhoods": neighborhoods,
       "offer.state": state,
+      "offer.details": details,
       association: association,
       association_name: associationName,
       "offer.tasks": resourceList,
