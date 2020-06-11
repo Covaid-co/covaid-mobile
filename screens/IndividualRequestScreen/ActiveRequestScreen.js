@@ -90,7 +90,7 @@ export default function ActiveRequestScreen({ route, navigation }) {
           <Text style={texts.desc}><Text style={texts.label}>Details: </Text>{route.params.item.details}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Requesting support with: </Text>{route.params.item.resources.resource_request.join(", ")}</Text>
           <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text>{route.params.item.needed_by}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Distance: </Text>{getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} m</Text>
+          <Text style={texts.desc}><Text style={texts.label}>Distance: </Text>{getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} mi</Text>
         </View>
         {showButtons()}
        

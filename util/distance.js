@@ -11,7 +11,7 @@ function getDistance(latA, longA, latB, longB) {
         Math.sin(dLong / 2) *
         Math.sin(dLong / 2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
+    var d = (R * c) * 0.000621371; // meters to miles 
     return Math.round(100 * d)/100; 
   }
 
