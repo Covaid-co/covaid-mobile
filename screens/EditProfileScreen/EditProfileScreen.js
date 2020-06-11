@@ -331,7 +331,7 @@ export default function LoginScreen({ route, navigation }) {
     var selectedLanguages = extractTrueObj(languageChecked);
     var selectedTimes = extractTrueObj(times);
     var resourceList = extractTrueObj(resources);
-    console.log(latlong);
+    console.log("LatLong: " + latlong);
 
     let params = {
       first_name: firstName,

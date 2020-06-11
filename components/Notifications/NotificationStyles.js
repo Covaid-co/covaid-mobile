@@ -2,8 +2,18 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
+  dot: {
+    marginTop: 7,
+    borderRadius: 2,
+    width: 4,
+    height: 4,
+    backgroundColor: "#7f7f7f",
+  },
   container: {
-    padding: 20,
+    paddingLeft: 32,
+    paddingTop: 20,
+    paddingBottom: 16,
+    paddingRight: 24,
     backgroundColor: "white",
   },
   center: {
@@ -54,12 +64,41 @@ const buttons = StyleSheet.create({
 });
 
 const texts = StyleSheet.create({
+  tasks: {
+    fontSize: 14,
+    color: "#7F7F7F",
+    marginRight: 8,
+  },
+  distance: {
+    fontSize: 14,
+    color: "#7F7F7F",
+    marginLeft: 8,
+  },
+  deadline: {
+    fontSize: 14,
+    color: "#2670FF",
+  },
+  timestamp: {
+    fontSize: 14,
+    color: "#7F7F7F",
+    textAlign: "right",
+    alignSelf: "flex-end",
+  },
   header: {
-    margin: "1%",
-    fontFamily: "Inter",
     fontWeight: "600",
     fontSize: 16,
+    lineHeight: 19,
     color: "#4F4F4F",
+    marginTop: 7,
+  },
+  footer: {
+    fontSize: 14,
+    color: "#7F7F7F",
+  },
+  details: {
+    fontSize: 14,
+    color: "#7F7F7F",
+    marginTop: 7,
   },
   label_bold: {
     fontFamily: "Montserrat-bold",

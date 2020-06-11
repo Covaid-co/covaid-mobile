@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   View,
   FlatList,
   AsyncStorage,
@@ -20,19 +21,16 @@ export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [activeRequests, setActiveRequests] = useState([]);
 
-  const [user, setUser] = useState();
-
+  const [user, setUser] = useState({});
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetch_user_obj(route.params.userID);
-
-      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        console.log("DATA: " + data);
-        fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
-        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-      });
     });
-  }, []);
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
   const fetch_user_obj = async (id) => {
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
@@ -51,8 +49,10 @@ export default function NotificationScreen({ route, navigation }) {
         alert(e);
       });
   };
+
   function generateRequestList(requestData, requestStateChanger) {
     let tempList = [];
+    console.log(user);
     for (var i = 0; i < requestData.length; i++) {
       var element = {
         key: i,
@@ -64,8 +64,8 @@ export default function NotificationScreen({ route, navigation }) {
           requestData[i].request_info.time,
         distance:
           getDistance(
-            0,
-            0,
+            user.latlong[0],
+            user.latlong[1],
             requestData[i].location_info.coordinates[0],
             requestData[i].location_info.coordinates[1]
           ) + " m", //requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1],
@@ -106,44 +106,75 @@ export default function NotificationScreen({ route, navigation }) {
       });
   }
 
-  return (
-    <View>
-      <FlatList
-        data={pendingRequests}
-        contentContainerStyle={styles.center}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.request}
-            onPress={() => {
-              navigation.navigate("Pending Request", {
-                navigation: route.params,
-                item: item,
-                pendingList: pendingRequests,
-                activeList: activeRequests,
-              });
-            }}
-          >
-            {displayRequestInfo(volunteer_status.PENDING, item)}
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
-}
+  const getDate = (date) => {
+    var d = new Date(date);
+    let arr = d.toDateString().split(" ");
+    let s = "";
+    s += arr[1];
+    s += " ";
+    s += arr[2];
+    return s;
+  };
 
-function displayRequestInfo(reqType, item) {
-  var resourceBadges = ``;
-  return (
-    <>
-      <Text style={texts.request_text}>{item.needed_by}</Text>
-      <Text style={texts.request_text}>{item.distance}</Text>
+  function displayRequestInfo(reqType, item) {
+    var resourceBadges = ``;
+    var date = getDate(item.needed_by.split(" ")[0]);
+    return (
+      <>
+        <View style={{ flexDirection: "row" }}>
+          <View>
+            <Text style={texts.deadline}>Due {date}</Text>
+            <Text style={texts.header}>
+              {item.requester_name.split(" ")[0]} needs your help
+            </Text>
+            <View style={{ marginTop: 6, flexDirection: "row" }}>
+              <Text style={texts.tasks}>
+                {item.resources.resource_request.join(", ")}
+              </Text>
+              <View style={styles.dot}></View>
+              <Text style={texts.distance}>{item.distance}</Text>
+            </View>
+          </View>
+          <View style={{ flexGrow: 1 }} />
 
-      <Text style={texts.request_title}>{item.requester_name}</Text>
-      <Text style={texts.request_text}>
-        <Text style={texts.request_label}>Request resources: </Text>
-        {item.resources.resource_request.join(", ")}
-      </Text>
-      {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
-    </>
-  );
+          <View style={{ alignItems: "flex-end" }}>
+            <Text style={texts.timestamp}>1h ago</Text>
+            <View style={{ flexGrow: 1 }} />
+            <Text>></Text>
+          </View>
+        </View>
+
+        {/* <Text style={texts.details}>{item.details}</Text> */}
+        {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
+      </>
+    );
+  }
+  if (user.latlong) {
+    console.log(user.latlong);
+    return (
+      <View>
+        <FlatList
+          data={pendingRequests}
+          renderItem={({ item }) => (
+            <TouchableHighlight
+              underlayColor="#F3F5F9"
+              style={styles.container}
+              onPress={() => {
+                navigation.navigate("Pending Request", {
+                  navigation: route.params,
+                  item: item,
+                  pendingList: pendingRequests,
+                  activeList: activeRequests,
+                });
+              }}
+            >
+              {displayRequestInfo(volunteer_status.PENDING, item)}
+            </TouchableHighlight>
+          )}
+        />
+      </View>
+    );
+  } else {
+    return <Text>Loading...</Text>;
+  }
 }
