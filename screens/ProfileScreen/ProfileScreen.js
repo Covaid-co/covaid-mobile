@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, View, ScrollView, Switch, ActivityIndicator } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  Switch,
+  ActivityIndicator,
+} from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./ProfileScreenStyles";
@@ -20,7 +27,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-        fetch_user_obj(route.params.userID);
+      fetch_user_obj(route.params.userID);
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -82,7 +89,7 @@ export default function ProfileScreen({ route, navigation }) {
             {user.first_name + " " + user.last_name}
           </Text>
         </View>
-        {user.phone.length != 0&& (
+        {user.phone.length != 0 && (
           <View style={styles.info}>
             <Text style={texts.label_bold}> Phone: </Text>
             <Text style={texts.label}>{user.phone}</Text>
@@ -149,9 +156,9 @@ export default function ProfileScreen({ route, navigation }) {
     );
   } else {
     return (
-      <View style = {styles.loading}>
-        <ActivityIndicator size="large" color = {Colors.blue} />
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color={Colors.blue} />
       </View>
-    )
+    );
   }
 }

@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
   TextInput,
   Alert,
   Switch,
@@ -31,21 +32,7 @@ export default function LoginScreen({ route, navigation }) {
   const [zip, setZip] = useState();
   const [initialZip, setInitialZip] = useState("");
   const [details, setDetails] = useState();
-
-  const [zipUpdated, setZipUpdated] = useState(false);
-
   const [latlong, setLatLong] = useState([]);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-
-  const [defaultResources, setDefaultResources] = useState([
-    "Food/Groceries",
-    "Medication",
-    "Donate",
-    "Emotional Support",
-    "Academic/Professional",
-    "Misc.",
-  ]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [times, setTimes] = useState({});
   const [languageChecked, setLanguageChecked] = useState({});
@@ -56,7 +43,14 @@ export default function LoginScreen({ route, navigation }) {
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [state, setFoundState] = useState([]);
 
-  const [alertPresent, setAlertPresent] = useState(false);
+  const [defaultResources, setDefaultResources] = useState([
+    "Food/Groceries",
+    "Medication",
+    "Donate",
+    "Emotional Support",
+    "Academic/Professional",
+    "Misc.",
+  ]);
 
   const defaultTaskList = [
     "Food/Groceries",
@@ -74,6 +68,7 @@ export default function LoginScreen({ route, navigation }) {
     "Cantonese",
     "Other (Specify in details)",
   ];
+  const noLocChange = 2;
 
   useEffect(() => {
     fetch_user_obj(route.params.userID);
@@ -175,28 +170,25 @@ export default function LoginScreen({ route, navigation }) {
 
   // true means location changes
   // false means location failed to change
-  // 0 means no attempt to change location
   const updateLocation = async (e) => {
-    if (zip.length !== 5 || !/^\d+$/.test(zip)) {
-      setToastMessage("Invalid zip");
-      setShowToast(true);
+    console.log(zip);
+    if (zip.length != 5 || !/^\d+$/.test(zip)) {
+      alert("Invalid Zipcode");
       return false;
     }
-    //await handleChangedZip()
     if (initialZip !== zip) {
       if (handleChangedZip()) {
         setInitialZip(zip);
         return true;
       }
-      return false
+      return false;
     } else {
       setNeighborhoods(user.offer.neighborhoods);
       setAssociation(user.association);
       setAssociationName(user.association_name);
       setLatLong(user.latlong);
-      // setShowChangeAssocModal(false)
       setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
-      return 0;
+      return noLocChange;
     }
   };
 
@@ -240,7 +232,6 @@ export default function LoginScreen({ route, navigation }) {
     setAssociation("");
     setAssociationName("");
     setResources(temp_resources);
-    //setShowChangeAssocModal(true);
   };
 
   const handleNewAssociation = (association) => {
@@ -253,7 +244,6 @@ export default function LoginScreen({ route, navigation }) {
     setResources(temp_resources);
     setAssociation(association._id);
     setAssociationName(association.name);
-    //setShowChangeAssocModal(true);
   };
 
   async function getLatLng(zip) {
@@ -327,7 +317,7 @@ export default function LoginScreen({ route, navigation }) {
     }
   };
   async function handleSaveChanges() {
-    if ((await updateLocation()) == 0) {
+    if ((await updateLocation()) == noLocChange) {
       handleSubmit();
     }
   }
@@ -335,56 +325,41 @@ export default function LoginScreen({ route, navigation }) {
   const checkInputs = () => {
     var valid = true;
     if (Object.values(languageChecked).every((v) => v === false)) {
-      alert("wtf")
-      // setToastMessage("Need to select a language");
+      alert("Need to select a language");
+      valid = false;
+    }
+    if (Object.values(resources).every((v) => v === false)) {
+      alert("Need to select categories to help");
       valid = false;
     }
     if (Object.values(times).every((v) => v === false)) {
-      alert("wtf")
-      //setToastMessage("No general availability selected");
+      alert("No general availability selected");
       valid = false;
     }
     if (firstName.length === 0) {
-      alert("wtf")
-      //setToastMessage("Enter a first name");
+      alert("Enter a first name");
       valid = false;
     } else if (lastName.length === 0) {
-      alert("wtf")
-      //setToastMessage("Enter a last name");
+      alert("Enter a last name");
       valid = false;
     } else if (
       /^\d+$/.test(phone) &&
       phone.length !== 10 &&
       phone.length !== 0
     ) {
-      alert("wtf")
-      //setToastMessage("Enter a valid phone number");
+      alert("Enter a valid phone number");
       valid = false;
-    } else if (
-      email.length === 0 ||
-      validateEmail(email) === false
-    ) {
-      alert("wtf")
-      //setToastMessage("Enter a valid email");
+    } else if (email.length === 0 || validateEmail(email) === false) {
+      alert("Enter a valid email");
       valid = false;
-    }
-    // if (zip !== initialZip && !zipUpdated) {
-    //   setToastMessage("Click the Update Zipcode button");
-    //   valid = false;
-    // }
-
-    if (valid === false) {
-      alert("WTFF")
-      //setShowToast(true);
     }
     return valid;
   };
 
-
   function handleSubmit() {
-    // if (checkInputs() === false) {
-    //   return;
-    // }
+    if (checkInputs() === false) {
+      return;
+    }
     var selectedLanguages = extractTrueObj(languageChecked);
     var selectedTimes = extractTrueObj(times);
     var resourceList = extractTrueObj(resources);
@@ -438,42 +413,67 @@ export default function LoginScreen({ route, navigation }) {
       </View>
     );
   }
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.center}>
-        {form("First Name:", setFirstName, firstName)}
-        {form("Last Name:", setLastName, lastName)}
-        {form("Email:", setEmail, email)}
-        {form("Phone:", setPhone, phone)}
-        {form("Zip Code:", setZip, zip)}
-        <Details details={details} setDetails={setDetails} />
-        <Text style={texts.label}> What languages do you speak? </Text>
-        <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
-        <Text style={texts.label}> What is your general availability? </Text>
-        <CheckForm obj={times} setObj={setTimes} />
-        <Text style={texts.label}> Select Categories</Text>
-        <CheckForm obj={resources} setObj={setResources} />
-      </View>
-      <View style={styles.row}>
-        <Text style={texts.label}> Car: </Text>
-        <Switch
-          trackColor={{ false: "#767577", true: Colors.grey }}
-          thumbColor={hasCar ? Colors.blue : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => setHasCar(!hasCar)}
-          value={hasCar}
-        />
-        {(hasCar && <Text style={texts.green_text}> Car Available</Text>) || (
-          <Text style={texts.red_text}> No Car Available</Text>
-        )}
-      </View>
-      <View style={{ marginBottom: 100 }}>
+  if (user) {
+    return (
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={styles.container}>
         <View style={styles.center}>
-          <TouchableOpacity style={buttons.edit} onPress={handleSaveChanges}>
-            <Text style={texts.button_label}>Save</Text>
-          </TouchableOpacity>
+          {form("First Name:", setFirstName, firstName)}
+          {form("Last Name:", setLastName, lastName)}
+          {form("Email:", setEmail, email)}
+          <View style={styles.form}>
+            <Text style={texts.label}>{"Phone"}</Text>
+            <TextInput
+              keyboardType="number-pad"
+              style={styles.input}
+              onChangeText={(input) => setPhone(input)}
+              defaultValue={phone}
+            />
+          </View>
+          <View style={styles.form}>
+            <Text style={texts.label}>{"Zip Code:"}</Text>
+            <TextInput
+              keyboardType="number-pad"
+              style={styles.input}
+              onChangeText={(input) => setZip(input)}
+              defaultValue={zip}
+            />
+          </View>
+
+          <Details details={details} setDetails={setDetails} />
+          <Text style={texts.label}> What languages do you speak? </Text>
+          <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
+          <Text style={texts.label}> What is your general availability? </Text>
+          <CheckForm obj={times} setObj={setTimes} />
+          <Text style={texts.label}> Select Categories</Text>
+          <CheckForm obj={resources} setObj={setResources} />
         </View>
+        <View style={styles.row}>
+          <Text style={texts.label}> Car: </Text>
+          <Switch
+            trackColor={{ false: "#767577", true: Colors.grey }}
+            thumbColor={hasCar ? Colors.blue : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={() => setHasCar(!hasCar)}
+            value={hasCar}
+          />
+          {(hasCar && <Text style={texts.green_text}> Car Available</Text>) || (
+            <Text style={texts.red_text}> No Car Available</Text>
+          )}
+        </View>
+        <View style={{ marginBottom: 100 }}>
+          <View style={styles.center}>
+            <TouchableOpacity style={buttons.edit} onPress={handleSaveChanges}>
+              <Text style={texts.button_label}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  } else {
+    return (
+      <View>
+        <ActivityIndicator size="large" color={Colors.blue} />
       </View>
-    </ScrollView>
-  );
+    );
+  }
 }

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   loading: {
     height: "100%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   line: {
     borderWidth: 0.8,
