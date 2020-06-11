@@ -184,8 +184,11 @@ export default function LoginScreen({ route, navigation }) {
     }
     //await handleChangedZip()
     if (initialZip !== zip) {
-      setInitialZip(zip);
-      return handleChangedZip();
+      if (handleChangedZip()) {
+        setInitialZip(zip);
+        return true;
+      }
+      return false
     } else {
       setNeighborhoods(user.offer.neighborhoods);
       setAssociation(user.association);
@@ -230,23 +233,29 @@ export default function LoginScreen({ route, navigation }) {
   const handleNoAssociations = () => {
     setDefaultResources(defaultTaskList);
     setCurrentUserObject([], defaultTaskList, setResources);
-    // var temp_resources = {}
-    // for (var i = 0; i < defaultTaskList.length; i++) {
-    //     temp_resources[defaultTaskList[i]] = false
-    // }
+    var temp_resources = {};
+    for (var i = 0; i < defaultTaskList.length; i++) {
+      temp_resources[defaultTaskList[i]] = false;
+    }
     setAssociation("");
     setAssociationName("");
-    // setResources(temp_resources)
+    setResources(temp_resources);
+    //setShowChangeAssocModal(true);
   };
 
   const handleNewAssociation = (association) => {
     setDefaultResources(association.resources);
-    console.log(association.resources);
     setCurrentUserObject([], association.resources, setResources);
+    var temp_resources = {};
+    for (var i = 0; i < association.resources.length; i++) {
+      temp_resources[association.resources[i]] = false;
+    }
+    setResources(temp_resources);
     setAssociation(association._id);
     setAssociationName(association.name);
+    //setShowChangeAssocModal(true);
   };
-  console.log(resources);
+
   async function getLatLng(zip) {
     try {
       if (zip.length !== 5 || !/^\d+$/.test(zip)) {
@@ -307,7 +316,6 @@ export default function LoginScreen({ route, navigation }) {
       return true;
     } catch (err) {
       alert("Invaild zipcode");
-      console.log(err);
     }
   }
 
@@ -324,6 +332,55 @@ export default function LoginScreen({ route, navigation }) {
     }
   }
 
+  const checkInputs = () => {
+    var valid = true;
+    if (Object.values(languageChecked).every((v) => v === false)) {
+      alert("wtf")
+      // setToastMessage("Need to select a language");
+      valid = false;
+    }
+    if (Object.values(times).every((v) => v === false)) {
+      alert("wtf")
+      //setToastMessage("No general availability selected");
+      valid = false;
+    }
+    if (firstName.length === 0) {
+      alert("wtf")
+      //setToastMessage("Enter a first name");
+      valid = false;
+    } else if (lastName.length === 0) {
+      alert("wtf")
+      //setToastMessage("Enter a last name");
+      valid = false;
+    } else if (
+      /^\d+$/.test(phone) &&
+      phone.length !== 10 &&
+      phone.length !== 0
+    ) {
+      alert("wtf")
+      //setToastMessage("Enter a valid phone number");
+      valid = false;
+    } else if (
+      email.length === 0 ||
+      validateEmail(email) === false
+    ) {
+      alert("wtf")
+      //setToastMessage("Enter a valid email");
+      valid = false;
+    }
+    // if (zip !== initialZip && !zipUpdated) {
+    //   setToastMessage("Click the Update Zipcode button");
+    //   valid = false;
+    // }
+
+    if (valid === false) {
+      alert("WTFF")
+      //setShowToast(true);
+    }
+    return valid;
+  };
+
+
   function handleSubmit() {
     // if (checkInputs() === false) {
     //   return;
@@ -331,7 +388,6 @@ export default function LoginScreen({ route, navigation }) {
     var selectedLanguages = extractTrueObj(languageChecked);
     var selectedTimes = extractTrueObj(times);
     var resourceList = extractTrueObj(resources);
-    console.log(latlong);
 
     let params = {
       first_name: firstName,
