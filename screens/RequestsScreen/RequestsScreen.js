@@ -209,38 +209,40 @@ export default function RequestsScreen({ route, navigation }) {
     }
   }
 
+  function getContainerType(reqType, item) { // get rid of reqType param
+    if (reqType == volunteer_status.ACTIVE) {
+      return styles.request_active
+    } else if (reqType == volunteer_status.COMPLETE) {
+      return styles.request_complete
+    } else {
+      return styles.request_pending
+    }
+  }
+
   function displayRequestInfo(reqType, item) {
     if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
-      var resourceBadges = `` 
-      /*item.resources.resource_request.forEach(req => {console.log(req); 
-        resourceBadges += `<Badge value={<><Text>${req}</Text></>} status='primary' />`; 
-      });
-      console.log(resourceBadges) 
-      var dom = React.createElement(resourceBadges)*/
-      //dom.innerHTML = resourceBadges; 
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{item.resources.resource_request.join(", ")}</Text>
-        {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
-        <Text style={texts.request_text}><Text style={texts.request_label}>Needed by: </Text>{item.needed_by}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.resources.resource_request.join(", ")}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.needed_by}</Text>
         </>
       )
-    } else if (reqType == volunteer_status.COMPLETE) {  
+    } else if (reqType == volunteer_status.COMPLETE) {  // TODO: keep needed by or add completed date? 
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}>Completed: </Text>{item.completed_date}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.resources.resource_request.join(", ")}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.needed_by}</Text>
         </>
       )
     } else {
       setCurrentRequestType(volunteer_status.PENDING)
-    return (
-      <>
+      return (
+        <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{item.resources.resource_request.join(", ")}</Text>
-        {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
-        <Text style={texts.request_text}><Text style={texts.request_label}>Needed by: </Text>{item.needed_by}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.resources.resource_request.join(", ")}</Text>
+        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.needed_by}</Text>
         </>
     )
     }
