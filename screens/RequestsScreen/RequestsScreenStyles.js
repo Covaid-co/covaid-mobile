@@ -7,6 +7,11 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "white",
   },
+  req_container: {
+    padding: 0,
+    height: "100%",
+    backgroundColor: "white",
+  },
   center: {
     justifyContent: "center",
     alignItems: "center",
@@ -16,22 +21,10 @@ const styles = StyleSheet.create({
     width: 150,
     margin: 20,
   },
-  input: {
-    marginTop: 10,
-    marginBottom: 10,
-    paddingLeft: 10,
-    width: 350,
-    height: 49,
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    fontSize: 15,
-    color: Colors.blue,
-  },
   no_request: {
     margin: 5,
     padding: 5,
-    minWidth: '108%',
+    minWidth: '100%',
     minHeight: '20%',
     backgroundColor: "white",
     borderRadius: 5,
@@ -53,7 +46,7 @@ const styles = StyleSheet.create({
     borderRightColor: Colors.white,*/
     margin: 5,
     padding: 5,
-    minWidth: '95%',
+    minWidth: '90%',
     backgroundColor: "white",
     borderRadius: 5,
     borderWidth: 2,
@@ -63,7 +56,7 @@ const styles = StyleSheet.create({
   request_active: {
     margin: 5,
     padding: 5,
-    minWidth: '95%',
+    minWidth: '90%',
     backgroundColor: "white",
     borderRadius: 5,
     borderWidth: 2,
@@ -73,7 +66,7 @@ const styles = StyleSheet.create({
   request_completed: {
     margin: 5,
     padding: 5,
-    minWidth: '95%',
+    minWidth: '90%',
     backgroundColor: "white",
     borderRadius: 5,
     borderWidth: 2,
@@ -91,29 +84,16 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     alignItems: "center",
   },
+  dropdown_style: {
+    minWidth: '1000%',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white", 
+  }
 });
 
 const buttons = StyleSheet.create({
-  tabs: {
-    margin: 5,
-    width: "32%",
-    height: 30,
-    borderRadius: 8,
-    backgroundColor: Colors.white,
-    justifyContent: "center",
-    alignItems: "center",
-
-  },
-  pressed_tab: {
-    margin: 5,
-    width: "32%",
-    height: 30,
-    borderRadius: 8,
-    backgroundColor: Colors.blue,
-    borderColor: Colors.blue, 
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  
 
 });
 
@@ -159,14 +139,6 @@ const texts = StyleSheet.create({
     fontSize: 40,
     color: "black",
     textAlign: "center",
-  },
-  button_label: {
-    fontSize: 15,
-    color: "white",
-  },
-  button_label_blue: {
-    fontSize: 15,
-    color: Colors.blue,
   },
   no_request: {
     fontSize: 15,

@@ -10,11 +10,11 @@ import {
   Button, 
   AsyncStorage,
 } from "react-native";
-//import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
+import { Dropdown } from 'react-native-material-dropdown';
 import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
-import { generateURL, validateEmail } from "../../Helpers";
+import { generateURL, validateEmail, formatDate } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
 //import getDistance from '../../util/distance'
 import PendingRequestScreen from "../IndividualRequestScreen/PendingRequestScreen";
@@ -30,6 +30,17 @@ export default function RequestsScreen({ route, navigation }) {
   const [currentRequestType, setCurrentRequestType] = useState(); 
   const [currentItem, setCurrentItem] = useState();  
   const [buttonStyles, setButtonStyles] = useState([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]);
+  const requestTypeList = [volunteer_status.PENDING, volunteer_status.IN_PROGRESS, volunteer_status.COMPLETE]
+  let options = [{
+    label: 'Requires Action',
+    value: 'Requires Action',
+  }, {
+    value: 'In Progress',
+  }, {
+    value: 'Completed',
+  }];
+
+  
   const fetchUser = async (id) => { 
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
@@ -61,10 +72,12 @@ export default function RequestsScreen({ route, navigation }) {
         //distance: 0, //getDistance(0, 0, requestData[i].location_info.coordinates[0], requestData[i].location_info.coordinates[1]) + " m", //requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1], 
         lat: parseFloat(requestData[i].location_info.coordinates[0]), 
         long: parseFloat(requestData[i].location_info.coordinates[1]), 
-        requester_contact: requestData[i].personal_info.requester_email || requestData[i].personal_info.requester_phone, 
+        requester_contact_email: requestData[i].personal_info.requester_email,
+        requester_contact_phone: requestData[i].personal_info.requester_phone, 
         details: requestData[i].request_info.details, 
         completed_date: requestData[i].status.completed_date || "",
         request_id: requestData[i]._id,  
+        languages: requestData[i].personal_info.languages, 
       } // add any relevant information 
       tempList.push(element); 
     }
@@ -128,41 +141,28 @@ export default function RequestsScreen({ route, navigation }) {
   if (pendingRequests) {
     console.log(pendingRequests.key)
     return (
-        <View style={styles.container}>
+        <View style={styles.req_container}>
+          <Dropdown
+            label=''
+            data={options} 
+            style={styles.dropdown_style}
+            onChangeText={(label, value) =>{
+                var reqType = requestTypeList[value];
+                if (reqType == volunteer_status.COMPLETE) {
+                  setCurrentRequestList(completedRequests);
+                } else if (reqType == volunteer_status.IN_PROGRESS) {
+                  setCurrentRequestList(activeRequests); 
+                } else {
+                  setCurrentRequestList(pendingRequests); 
+                }
+                //setCurrentRequestList(completedRequests); 
+                setCurrentRequestType(reqType);
+                toggleButtonStyles(reqType); 
+              }
+            }
+          />
         <View style = {styles.center}>
-        <Text style={texts.header}>Welcome back, {user.first_name}!</Text>
-        <Text></Text>
-        
-        <View style={styles.row}>
-          <TouchableOpacity 
-          style = {buttonStyles[0]}
-          onPress={() => {setCurrentRequestList(pendingRequests); 
-              setCurrentRequestType(volunteer_status.PENDING);
-              toggleButtonStyles(volunteer_status.PENDING); 
-              }}>
-            <Text style={buttonStyles[3]}>Pending ({pendingRequests.length})</Text>
-            {/*<Badge containerStyle={{ position: 'absolute', top: -7, right: 6 }} value={<><Text>{pendingRequests.length}</Text></>} status='warning' />*/}
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style = {buttonStyles[1]}
-          onPress={() => {setCurrentRequestList(activeRequests);
-              setCurrentRequestType(volunteer_status.IN_PROGRESS);
-              toggleButtonStyles(volunteer_status.IN_PROGRESS); 
-              }}>
-            <Text style={buttonStyles[4]}>Active ({activeRequests.length})</Text>
-            {/*<Badge containerStyle={{ position: 'absolute', top: -7, right: 11 }} value={<><Text>{activeRequests.length}</Text></>} status='warning' />*/}
-          </TouchableOpacity>
-          <TouchableOpacity 
-          style = {buttonStyles[2]}
-          onPress={() => {
-              // refreshStatuses(); 
-              setCurrentRequestList(completedRequests); 
-              setCurrentRequestType(volunteer_status.COMPLETE);
-              toggleButtonStyles(volunteer_status.COMPLETE); 
-              }}>
-            <Text style={buttonStyles[5]}>Complete ({completedRequests.length})</Text>
-          </TouchableOpacity>
-          </View>
+          <Text>Welcome back, {user.first_name}!</Text>   
           </View>
         
           {displayAllRequests(currentRequestList)}
@@ -236,54 +236,11 @@ export default function RequestsScreen({ route, navigation }) {
       <>
       <View style={{flexDirection:'col'}}>
         <Text style={texts.request_name_text}>{item.requester_name}</Text>
-        <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
+    <Text style={texts.request_date_text}>Due {formatDate(new Date(item.needed_by.split(" ")[0]), "MMM d", true)}</Text>
       </View>
       
       <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
       </>
     );
-    /*if (reqType == volunteer_status.PENDING) {
-      return (
-        <>
-        <View style={{flexDirection:'col'}}>
-          <Text style={texts.request_name_text}>{item.requester_name}</Text>
-          <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
-        </View>
-        
-        <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
-        </>
-      )
-    } else if (reqType == volunteer_status.IN_PROGRESS) {
-      return (
-        <>
-        <View style={{flexDirection:'col'}}>
-          <Text style={texts.request_name_text}>{item.requester_name}</Text>
-          <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
-        </View>
-        
-        <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
-        </>
-      )
-    } else if (reqType == volunteer_status.COMPLETE) {  // TODO: keep needed by or add completed date? 
-      return (
-        <>
-        <View style={{flexDirection:'col'}}>
-          <Text style={texts.request_name_text}>{item.requester_name}</Text>
-          <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
-        </View>
-        
-        <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
-        </>
-      )
-    } else {
-      setCurrentRequestType(volunteer_status.PENDING)
-      return (
-        <>
-        <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}>{item.resources.resource_request.join(", ")}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.needed_by}</Text>
-        </>
-    )
-    }*/
   };
 }

@@ -34,7 +34,7 @@ export default function ActiveRequestScreen({ route, navigation }) {
   function cancelConfirm() {
     Alert.alert(
       "Are you sure you want to cancel this request?",
-      "",
+      "This cannot be undone.",
       [  
         {  
           text: 'Yes',  
@@ -79,18 +79,36 @@ export default function ActiveRequestScreen({ route, navigation }) {
   };
 
   return (
-    <View>
-        <View style={styles.container3}>
-          <Text style={texts.desc}>
-            Thanks for accepting this request for support! Please reach out to
-            the requester by using the contact information below.
+    <View style={styles.entire_request_container}>
+        <View style={styles.active_header}>
+          <Text style={texts.individual_req_header}>Request is in-progress</Text>
+        </View>
+        <View style={styles.individual_req_container}>
+          <View>
+            <Text style={texts.individual_req_header}>{route.params.item.requester_name}</Text>
+          </View>
+          <Text style={texts.info_header}>Information</Text>
+          <Text style={texts.request_details}>Email: DISPLAY EMAIL </Text>
+          <Text style={texts.request_details}>Phone: DISPLAY PHONE </Text>
+          <Text style={texts.request_details}>Languages: DISPLAY LANGUAGES</Text>
+
+          <Text></Text>
+          <Text style={texts.details_header}>Needs:</Text>
+          <Text style={texts.request_details}>SHOW RESOURCES</Text>
+
+          <Text></Text>
+          <Text style={texts.details_header}>Details</Text>
+          <Text style={texts.request_details}>{route.params.item.details}</Text>
+
+          <Text></Text>
+          <Text style={texts.details_header}>Needed by</Text>
+          <Text style={texts.request_details}>
+            {route.params.item.needed_by.split(" ")[1]} of {formatDate(new Date(route.params.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
           </Text>
-          <Text style={texts.desc}><Text style={texts.label}>Who: </Text> {route.params.item.requester_name}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Contact: </Text>{route.params.item.requester_contact}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Details: </Text>{route.params.item.details}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Requesting support with: </Text>{route.params.item.resources.resource_request.join(", ")}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Needed by: </Text>{route.params.item.needed_by}</Text>
-          <Text style={texts.desc}><Text style={texts.label}>Distance: </Text>{getDistance(route.params.volunteer.latlong[0], route.params.volunteer.latlong[1], route.params.item.lat, route.params.item.long)} mi</Text>
+
+          <Text></Text>
+          <Text style={texts.details_header}>Reimbursement</Text>
+          <Text style={texts.request_details}>DISPLAY REIMBURSEMENT HERE</Text>
         </View>
         {showButtons()}
        
@@ -115,12 +133,12 @@ export default function ActiveRequestScreen({ route, navigation }) {
     } else {
       return (
         <View style={styles.container2}>
-          <View style={styles.row}>
+          <View>
             <TouchableOpacity style={buttons.accept} onPress={() => setModalVisible(true)}>
-              <Text style={texts.button_label_green}>Complete Request</Text>
+              <Text style={texts.button_accept_label}>Complete this request</Text>
             </TouchableOpacity>
             <TouchableOpacity style={buttons.reject} onPress={() => cancelConfirm()}>
-              <Text style={texts.button_label_red}>Cancel Request</Text>
+              <Text style={texts.button_reject_label}>Cancel this request</Text>
             </TouchableOpacity>
           </View>
           {/*modalVisible && <CompleteConfirm modalVisible={setModalVisible} item={route.params.item} setDone={setDone} activeList={route.params.activeList} completeList={route.params.completeList}/>*/}

@@ -14,10 +14,44 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontSize: 10,
   },
-  container3: {
-    marginTop: "5%",
+  entire_request_container: {
+    backgroundColor: "#FFFFFF",
+    minHeight: '100%',
+    minWidth: '100%', 
+  },
+  individual_req_container: {
+    top: '30%',
     fontSize: 10,
-    margin: "5%"
+    backgroundColor: '#FFFFFF',
+    minWidth: '0%',
+    minHeight: '0%', 
+  },
+  completed_header: {
+    position: 'absolute',
+    top: '0%',
+    bottom: '55%',
+    fontSize: 10,
+    backgroundColor: 'rgba(58, 189, 36, 0.2)',
+    minWidth: '100%',
+    justifyContent: "center"
+  },
+  pending_header: {
+    position: 'absolute',
+    top: '0%',
+    bottom: '55%',
+    fontSize: 10,
+    backgroundColor: 'rgba(38, 112, 255, 0.2)',
+    minWidth: '100%',
+    justifyContent: "center"
+  },
+  active_header: {
+    position: 'absolute',
+    top: '0%',
+    bottom: '55%',
+    fontSize: 10,
+    backgroundColor: 'rgba(219, 147, 39, 0.2)',
+    minWidth: '100%',
+    justifyContent: "center"
   },
   logo: {
     height: 150,
@@ -46,25 +80,20 @@ const styles = StyleSheet.create({
 
 const buttons = StyleSheet.create({
   accept: {
-    margin: 10,
-    width: 150,
-    height: 60,
-    backgroundColor: "white",
+    margin: '5%',
+    width: '95%',
+    height: '20%',
+    backgroundColor: "#2670FF",
     borderWidth: 3,
-    borderColor: "green",
+    borderColor: "#2670FF",
     borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    justifyContent: "center",
     alignItems: "center",
   },
   reject: {
-    margin: 10,
-    width: 150,
-    height: 60,
-    backgroundColor: "white",
-    borderWidth: 3,
-    borderColor: "red",
+    margin: '5%',
+    width: '95%',
+    height: '20%',
+    backgroundColor: "#FFFFFF",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -119,6 +148,48 @@ const texts = StyleSheet.create({
     fontSize: 15,
     color: "gray",
   },
+  button_accept_label: {
+    fontWeight: "normal",
+    fontSize: 16, 
+    color: "white",
+    margin: '5%',
+    padding: '1%',
+    
+  },
+  button_reject_label: {
+    fontSize: 16, 
+    color: "#EB5757",
+    margin: '5%',
+    padding: '1%'
+  }, 
+  individual_req_header: {
+    fontFamily: 'Montserrat-bold',
+    color: '#4F4F4F',
+    fontSize: 24, 
+    margin: '5%'
+  },
+  info_header: {
+    color: '#000000',
+    left: '5%',
+    fontSize: 16, 
+    fontWeight: 'bold'
+  },
+  details_header: {
+    color: '#4F4F4F',
+    left: '5%',
+    fontSize: 16, 
+    fontWeight: 'bold'
+  },
+  request_details: {
+    color: '#7F7F7F',
+    left: '5%',
+    fontSize: 16, 
+  },
+  completion_date: {
+    color: '#7F7F7F',
+    textAlign: 'center',
+    fontSize: 14, 
+  }
 });
 
 export { styles, buttons, texts };

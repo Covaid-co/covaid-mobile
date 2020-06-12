@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Alert,
   AsyncStorage,
+  TouchableOpacity,
 } from "react-native";
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
-import { generateURL } from "../../Helpers";
+import { formatDate } from "../../Helpers";
 
 export default function CompletedRequestScreen({ route, navigation }) {
   useEffect(() => { 
@@ -18,13 +15,40 @@ export default function CompletedRequestScreen({ route, navigation }) {
     var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { return data; });   
   }, []);
   return (
-    <View>
-      <View style={styles.container3}>
-        <Text style={texts.desc}>You have completed this request!</Text>
-        <Text style={texts.desc}><Text style={texts.label}>Who: </Text>{route.params.item.requester_name}</Text>
-        <Text style={texts.desc}><Text style={texts.label}>Contact: </Text>{route.params.item.requester_contact}</Text>
-        <Text style={texts.desc}><Text style={texts.label}>Details: </Text>{route.params.item.details}</Text>
-        <Text style={texts.desc}><Text style={texts.label}>Completed: </Text>{route.params.item.completed_date}</Text>
+    <View style={styles.entire_request_container}>
+      <View style={styles.completed_header}>
+        <Text style={texts.individual_req_header}>Completed Request</Text>
+      </View>
+      <View style={styles.individual_req_container}>
+        <View>
+          <Text style={texts.individual_req_header}>{route.params.item.requester_name}</Text>
+        </View>
+        <Text style={texts.info_header}>Information</Text>
+        <Text style={texts.request_details}>Email: {route.params.item.requester_contact_email} </Text>
+        <Text style={texts.request_details}>Phone: {route.params.item.requester_contact_phone} </Text>
+        <Text style={texts.request_details}>Languages: {route.params.item.languages}</Text>
+
+        <Text></Text>
+        <Text style={texts.details_header}>Needs:</Text>
+        <Text style={texts.request_details}>{route.params.item.resources.resource_request}</Text>
+
+        <Text></Text>
+        <Text style={texts.details_header}>Details</Text>
+        <Text style={texts.request_details}>{route.params.item.details}</Text>
+
+        <Text></Text>
+        <Text style={texts.details_header}>Needed by</Text>
+        <Text style={texts.request_details}>
+          {route.params.item.needed_by.split(" ")[1]} of {formatDate(new Date(route.params.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
+        </Text>
+
+        <Text></Text>
+        <Text style={texts.details_header}>Reimbursement</Text>
+        <Text style={texts.request_details}>DISPLAY REIMBURSEMENT HERE</Text>
+
+        <Text></Text>
+        <Text style={texts.completion_date}>Request completed on</Text>
+        <Text style={texts.completion_date}>{formatDate(new Date(route.params.item.completed_date), "MMMMMM dd, yyyy h:mm", false)}</Text>
       </View>
     </View>
   );  
