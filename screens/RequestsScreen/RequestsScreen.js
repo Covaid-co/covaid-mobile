@@ -180,7 +180,9 @@ export default function RequestsScreen({ route, navigation }) {
         <>
           <View style={styles.container}>
             <View style = {styles.center}>
-              <Text style={texts.no_request}>No requests here.</Text>
+              <View style={styles.no_request}>
+                <Text style={texts.no_request_text}>{getEmptyMessage(currentRequestType)}</Text>
+              </View>
             </View>
           </View>
         </>
@@ -191,7 +193,7 @@ export default function RequestsScreen({ route, navigation }) {
             data={currentRequestList || pendingRequests}
             contentContainerStyle={styles.center}
             renderItem={({item}) => 
-              <TouchableOpacity style={styles.request} onPress={() => { 
+              <TouchableOpacity style={getContainerType(currentRequestType)} onPress={() => { 
                 if (currentRequestType == volunteer_status.PENDING) {
                   navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests, volunteer: user}); 
                 } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
@@ -209,31 +211,68 @@ export default function RequestsScreen({ route, navigation }) {
     }
   }
 
-  function getContainerType(reqType, item) { // get rid of reqType param
+  function getContainerType(reqType) { // get rid of reqType param
     if (reqType == volunteer_status.ACTIVE) {
       return styles.request_active
     } else if (reqType == volunteer_status.COMPLETE) {
-      return styles.request_complete
+      return styles.request_completed
     } else {
       return styles.request_pending
     }
   }
 
+  function getEmptyMessage(reqType) {
+    if (reqType == volunteer_status.IN_PROGRESS) {
+      return "No tasks in-progress"; 
+    } else if (reqType == volunteer_status.COMPLETE) {
+      return "No completed tasks";
+    } else {
+      return "No tasks requiring action";
+    } 
+  }
+
   function displayRequestInfo(reqType, item) {
-    if (reqType == volunteer_status.PENDING || reqType == volunteer_status.IN_PROGRESS) {
+    return (
+      <>
+      <View style={{flexDirection:'col'}}>
+        <Text style={texts.request_name_text}>{item.requester_name}</Text>
+        <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
+      </View>
+      
+      <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
+      </>
+    );
+    /*if (reqType == volunteer_status.PENDING) {
       return (
         <>
-        <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.resources.resource_request.join(", ")}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.needed_by}</Text>
+        <View style={{flexDirection:'col'}}>
+          <Text style={texts.request_name_text}>{item.requester_name}</Text>
+          <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
+        </View>
+        
+        <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
+        </>
+      )
+    } else if (reqType == volunteer_status.IN_PROGRESS) {
+      return (
+        <>
+        <View style={{flexDirection:'col'}}>
+          <Text style={texts.request_name_text}>{item.requester_name}</Text>
+          <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
+        </View>
+        
+        <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
         </>
       )
     } else if (reqType == volunteer_status.COMPLETE) {  // TODO: keep needed by or add completed date? 
       return (
         <>
-        <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.resources.resource_request.join(", ")}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.needed_by}</Text>
+        <View style={{flexDirection:'col'}}>
+          <Text style={texts.request_name_text}>{item.requester_name}</Text>
+          <Text style={texts.request_date_text}>Due {item.needed_by.split(" ")[0]}</Text>
+        </View>
+        
+        <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
         </>
       )
     } else {
@@ -241,10 +280,10 @@ export default function RequestsScreen({ route, navigation }) {
       return (
         <>
         <Text style={texts.request_title}>{item.requester_name}</Text>
-        <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.resources.resource_request.join(", ")}</Text>
+        <Text style={texts.request_text}>{item.resources.resource_request.join(", ")}</Text>
         <Text style={texts.request_text}><Text style={texts.request_label}></Text>{item.needed_by}</Text>
         </>
     )
-    }
+    }*/
   };
 }
