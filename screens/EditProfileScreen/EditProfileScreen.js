@@ -172,6 +172,7 @@ export default function LoginScreen({ route, navigation }) {
   // false means location failed to change
   const updateLocation = async (e) => {
     console.log(zip);
+    console.log(initialZip)
     if (zip.length != 5 || !/^\d+$/.test(zip)) {
       alert("Invalid Zipcode");
       return false;
@@ -183,11 +184,6 @@ export default function LoginScreen({ route, navigation }) {
       }
       return false;
     } else {
-      setNeighborhoods(user.offer.neighborhoods);
-      setAssociation(user.association);
-      setAssociationName(user.association_name);
-      setLatLong(user.latlong);
-      setCurrentUserObject(user.offer.tasks, defaultResources, setResources);
       return noLocChange;
     }
   };
@@ -248,7 +244,7 @@ export default function LoginScreen({ route, navigation }) {
 
   async function getLatLng(zip) {
     try {
-      if (zip.length !== 5 || !/^\d+$/.test(zip)) {
+      if (zip.length != 5 || !/^\d+$/.test(zip)) {
         throw Error("Invalid zipcode");
       }
       var response = await Geocode.fromAddress(zip);
@@ -284,7 +280,6 @@ export default function LoginScreen({ route, navigation }) {
       );
       const response_assoc = await fetch(url);
       const data = await response_assoc.json();
-      setZipUpdated(true);
       if (data.length === 0) {
         setNeighborhoods(new_neighborhoods);
         setFoundState(foundState);
@@ -294,7 +289,6 @@ export default function LoginScreen({ route, navigation }) {
         setFoundState(foundState);
         handleNewAssociation(data[0]);
       }
-
       Alert.alert(
         "You have edited locations, please update your categories to help!",
         "",
@@ -305,7 +299,7 @@ export default function LoginScreen({ route, navigation }) {
       );
       return true;
     } catch (err) {
-      alert("Invaild zipcode");
+      alert("Invaild zipcode or network error");
     }
   }
 
@@ -352,7 +346,7 @@ export default function LoginScreen({ route, navigation }) {
     } else if (email.length === 0 || validateEmail(email) === false) {
       alert("Enter a valid email");
       valid = false;
-    } else if (details.length == 0) {
+    } else if (details.length === 0) {
       alert("Please describe how you can help");
       valid = false;
     }
@@ -411,7 +405,7 @@ export default function LoginScreen({ route, navigation }) {
         <Text style={texts.label}>{header}</Text>
         <TextInput
           style={styles.input}
-          onChangeText={(input) => change(input)}
+          onChangeText={(input) => change(input.trim())}
           defaultValue={value}
         />
       </View>
@@ -429,7 +423,7 @@ export default function LoginScreen({ route, navigation }) {
             <TextInput
               keyboardType="number-pad"
               style={styles.input}
-              onChangeText={(input) => setPhone(input)}
+              onChangeText={(input) => setPhone(input.trim())}
               defaultValue={phone}
             />
           </View>
@@ -438,7 +432,7 @@ export default function LoginScreen({ route, navigation }) {
             <TextInput
               keyboardType="number-pad"
               style={styles.input}
-              onChangeText={(input) => setZip(input)}
+              onChangeText={(input) => setZip(input.trim())}
               defaultValue={zip}
             />
           </View>
