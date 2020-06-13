@@ -33,11 +33,10 @@ export default function LoginScreen({ route, navigation }) {
   const [initialZip, setInitialZip] = useState("");
   const [details, setDetails] = useState();
   const [latlong, setLatLong] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [times, setTimes] = useState({});
   const [languageChecked, setLanguageChecked] = useState({});
   const [resources, setResources] = useState({});
-  const [hasCar, setHasCar] = useState(false);
+  const [hasCar, setHasCar] = useState();
   const [association, setAssociation] = useState("");
   const [associationName, setAssociationName] = useState("");
   const [neighborhoods, setNeighborhoods] = useState([]);
@@ -102,7 +101,6 @@ export default function LoginScreen({ route, navigation }) {
         if (response.ok) {
           response.json().then((key) => {
             Geocode.setApiKey(key["google"]);
-            setIsLoaded(true);
             setFirstName(data.first_name);
             setLastName(data.last_name);
             setEmail(data.email);
@@ -114,6 +112,7 @@ export default function LoginScreen({ route, navigation }) {
             setAssociation(data.association);
             setAssociationName(data.association_name);
             setDetails(data.offer.details);
+            setHasCar(data.offer.car)
             setCurrentUserObject(data.languages, languages, setLanguageChecked);
             setCurrentUserObject(
               data.offer.timesAvailable,
@@ -380,8 +379,8 @@ export default function LoginScreen({ route, navigation }) {
       },
       languages: selectedLanguages,
     };
-    var url = generateURL(homeURL + "/api/users/update?", params);
-    fetch_a(route.params.token, "token", url, {
+
+    fetch_a(route.params.token, "token",homeURL + "/api/users/update", {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),

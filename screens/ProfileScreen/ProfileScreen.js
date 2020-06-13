@@ -38,8 +38,7 @@ export default function ProfileScreen({ route, navigation }) {
     let params = {
       availability: publish,
     };
-    var url = generateURL(homeURL + "/api/users/update?", params);
-    fetch_a(route.params.token, "token", url, {
+    fetch_a(route.params.token, "token", homeURL + "/api/users/update?", {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
