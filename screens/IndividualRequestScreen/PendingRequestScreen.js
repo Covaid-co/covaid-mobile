@@ -11,11 +11,13 @@ import {
 import getDistance from '../../util/distance'
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
-import { generateURL } from "../../Helpers";
+import { generateURL, formatDate, translatePayment } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function PendingRequestScreen({ route, navigation }) {
   const [done, setDone] = useState(false); 
+  const [accepted, setAccepted] = useState(false); 
 
   useEffect(() => { 
     var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => { return data; });
@@ -32,6 +34,7 @@ export default function PendingRequestScreen({ route, navigation }) {
           onPress: () => {
             acceptRequest();
             setDone(true); 
+            setAccepted(true); 
           },   
         },  
         {   
@@ -90,7 +93,7 @@ export default function PendingRequestScreen({ route, navigation }) {
         },  
         {   
           text: 'Cancel', 
-          onPress: () => alert("Request has been unmatched")
+          onPress: () => console.log("Not rejected")
         },  
       ]  
     ); 
@@ -121,70 +124,74 @@ export default function PendingRequestScreen({ route, navigation }) {
     }); 
   };
 
-  return (
-    <View style={styles.entire_request_container}>       
-        <View style={styles.pending_header}>
-          <Text style={texts.individual_req_header}>New Pending Request</Text>
-        </View>
+  if (done && accepted) {
+    return (
+      <View style={styles.entire_request_container}>       
         <View style={styles.individual_req_container}>
-          <View>
-            <Text style={texts.individual_req_header}>{route.params.item.requester_name}</Text>
+          <View style={styles.requester_name_container}>
+            <Text style={texts.individual_req_header}>Request Accepted   <Icon name="check" size={35} color="#2670FF"/></Text>
           </View>
-          <Text style={texts.info_header}>Information</Text>
-          <Text style={texts.request_details}>Email: DISPLAY EMAIL </Text>
-          <Text style={texts.request_details}>Phone: DISPLAY PHONE </Text>
-          <Text style={texts.request_details}>Languages: DISPLAY LANGUAGES</Text>
-
-          <Text></Text>
-          <Text style={texts.details_header}>Needs:</Text>
-          <Text style={texts.request_details}>SHOW RESOURCES</Text>
-
-          <Text></Text>
-          <Text style={texts.details_header}>Details</Text>
-          <Text style={texts.request_details}>{route.params.item.details}</Text>
-
-          <Text></Text>
-          <Text style={texts.details_header}>Needed by</Text>
-          <Text style={texts.request_details}>
-            {route.params.item.needed_by.split(" ")[1]} of {formatDate(new Date(route.params.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
-          </Text>
-
-          <Text></Text>
-          <Text style={texts.details_header}>Reimbursement</Text>
-          <Text style={texts.request_details}>DISPLAY REIMBURSEMENT HERE</Text>
-        </View>
-        {showButtons()}
-    
-    </View>
-  );  
-
-  function showButtons() {
-    if (done) {
-      return (
-        <View style={styles.container2}>
-          <View style={styles.row}>
-            <TouchableOpacity style={buttons.disabled}>
-              <Text style={texts.button_label_gray}>Accept Request</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={buttons.disabled}> 
-              <Text style={texts.button_label_gray}>Reject Request</Text>
-            </TouchableOpacity>
+          <Text style={texts.info_header}></Text>
+          <Text style={texts.request_details}>Thank you for your help! We appreciate your willingness to give back.</Text>
+        </View>    
+      </View>
+    ); 
+  } else if (done & !accepted) {
+    return (
+      <View style={styles.entire_request_container}>       
+        <View style={styles.individual_req_container}>
+          <View style={styles.requester_name_container}>
+            <Text style={texts.individual_req_header}>Request Rejected   <Icon name="close" size={35} color="#7F7F7F"/></Text>
           </View>
-        </View>
-      );       
-    } else {
-      return (
-        <View style={styles.container2}>
-          <View style={styles.row}>
-            <TouchableOpacity style={buttons.accept} onPress={() => acceptConfirm()}>
-              <Text style={texts.button_label_green}>Accept Request</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={buttons.reject} onPress={() => rejectConfirm()}> 
-              <Text style={texts.button_label_red}>Reject Request</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ); 
-    }
+        </View>    
+      </View>
+    ); 
+  } else {
+    return (
+      <View style={styles.entire_request_container}>       
+          <View style={styles.individual_req_container}>
+            <View style={styles.requester_name_container}>
+              <Text style={texts.individual_req_header}>{route.params.item.requester_name}</Text>
+            </View>
+            <Text style={texts.info_header}>Information</Text>
+            <Text style={texts.request_details}>Email: {route.params.item.requester_contact_email}</Text>
+            <Text style={texts.request_details}>Phone: {route.params.item.requester_contact_phone}</Text>
+            <Text style={texts.request_details}>Languages: {route.params.item.languages}</Text>
+  
+            <Text></Text>
+            <Text style={texts.details_header}>Needs:</Text>
+            <Text style={texts.request_details}>{route.params.item.resources.resource_request}</Text>
+  
+            <Text></Text>
+            <Text style={texts.details_header}>Details</Text>
+            <Text style={texts.request_details}>{route.params.item.details}</Text>
+  
+            <Text></Text>
+            <Text style={texts.details_header}>Needed by</Text>
+            <Text style={texts.request_details}>
+              {route.params.item.needed_by.split(" ")[1]} of {formatDate(new Date(route.params.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
+            </Text>
+  
+            <Text></Text>
+            <Text style={texts.details_header}>Reimbursement</Text>
+            <Text style={texts.request_details}>{translatePayment(route.params.item.payment)}</Text>
+            {showButtons()}
+          </View>    
+      </View>
+    ); 
+  }
+
+  function showButtons() {      
+    return (
+      <>
+        <Text></Text><Text></Text><Text></Text>
+        <TouchableOpacity style={buttons.accept} onPress={() => acceptConfirm()}>
+          <Text style={texts.button_label_white}>Accept</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={buttons.reject} onPress={() => rejectConfirm()}> 
+          <Text style={texts.button_label_red}>Decline</Text>
+        </TouchableOpacity>
+      </>
+    ); 
   }
 }

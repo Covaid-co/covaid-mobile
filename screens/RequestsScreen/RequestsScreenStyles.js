@@ -85,10 +85,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dropdown_style: {
-    minWidth: '1000%',
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white", 
+    marginLeft: "35%", 
+    marginRight: "-450%"
   }
 });
 

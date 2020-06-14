@@ -3,36 +3,31 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    minHeight: '100%',
+    minWidth: '100%', 
   },
-  container2: {
-    marginTop: "5%",
-    justifyContent: "center",
-    alignItems: "center",
+  individual_req_container: {
     fontSize: 10,
+    backgroundColor: '#FFFFFF',
+    minWidth: '0%',
+    minHeight: '100%', 
   },
-  container3: {
-    marginTop: "5%",
-    fontSize: 10,
-    margin: "5%"
-  },
-  logo: {
-    height: 150,
-    width: 150,
-    margin: 20,
+  requester_name_container: {
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.grey,
+    borderColor: 'rgba(0, 0, 0, 0)',
+    borderBottomColor: "rgba(0, 0, 0, 0.2)",
   },
   input: {
-    marginTop: 10,
-    marginBottom: 10,
-    paddingLeft: 10,
-    width: 350,
+    margin: '5%',
+    paddingLeft: '3%',
+    width: '90%',
     height: 49,
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "rgba(0, 0, 0, 0)",
+    borderBottomColor: '#CECECE',
     fontSize: 15,
     color: Colors.blue,
   },
@@ -44,30 +39,19 @@ const styles = StyleSheet.create({
   },
 });
 
-
-const passwordStyles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
+const buttons = StyleSheet.create({
+  accept: {
+    marginLeft: '3%',
+    marginTop: '3%',
+    width: '95%',
+    height: '10%',
+    backgroundColor: "#2670FF",
+    borderColor: "#2670FF",
+    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-});
+}); 
 
 const texts = StyleSheet.create({
   header: {
@@ -83,31 +67,23 @@ const texts = StyleSheet.create({
     fontSize: 20,
     color: "black",
   },
-  desc: {
-    margin: "5%",
-    fontSize: 20,
-    color: "black",
-  },
   button_label: {
     fontSize: 15,
-    color: "white",
+    color: '#FFFFFF',
   },
-  button_label_blue: {
-    fontSize: 15,
-    color: Colors.blue,
+  desc: {
+    paddingLeft: '3%',
+    color: '#4F4F4F',
+    left: '5%',
+    fontSize: 16, 
+    marginTop: '3%'
   },
-  button_label_green: {
-    fontSize: 15,
-    color: "green",
-  },
-  button_label_red: {
-    fontSize: 15,
-    color: "red",
-  },
-  button_label_gray: {
-    fontSize: 15,
-    color: "gray",
+  header: {
+    fontFamily: 'Montserrat-bold',
+    color: '#333333',
+    fontSize: 24, 
+    margin: '5%'
   },
 });
 
-export { texts, styles, passwordStyles };
+export { texts, styles, buttons };

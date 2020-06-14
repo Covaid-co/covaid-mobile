@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  FlatList, StyleSheet, ListItem,
-  Button, 
+  FlatList, StyleSheet, ListItem, 
   AsyncStorage,
 } from "react-native";
 import { Dropdown } from 'react-native-material-dropdown';
@@ -16,10 +15,10 @@ import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, validateEmail, formatDate } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
-//import getDistance from '../../util/distance'
 import PendingRequestScreen from "../IndividualRequestScreen/PendingRequestScreen";
 import CompletedRequestScreen from "../IndividualRequestScreen/CompletedRequestScreen";
 import ActiveRequestScreen from "../IndividualRequestScreen/ActiveRequestScreen";
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function RequestsScreen({ route, navigation }) {
   const [user, setUser] = useState("");
@@ -78,6 +77,7 @@ export default function RequestsScreen({ route, navigation }) {
         completed_date: requestData[i].status.completed_date || "",
         request_id: requestData[i]._id,  
         languages: requestData[i].personal_info.languages, 
+        payment: requestData[i].request_info.payment, 
       } // add any relevant information 
       tempList.push(element); 
     }
@@ -146,6 +146,8 @@ export default function RequestsScreen({ route, navigation }) {
             label=''
             data={options} 
             style={styles.dropdown_style}
+            textColor="#4F4F4F"
+            
             onChangeText={(label, value) =>{
                 var reqType = requestTypeList[value];
                 if (reqType == volunteer_status.COMPLETE) {
@@ -212,7 +214,7 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function getContainerType(reqType) { // get rid of reqType param
-    if (reqType == volunteer_status.ACTIVE) {
+    if (reqType == volunteer_status.IN_PROGRESS) {
       return styles.request_active
     } else if (reqType == volunteer_status.COMPLETE) {
       return styles.request_completed
@@ -236,11 +238,21 @@ export default function RequestsScreen({ route, navigation }) {
       <>
       <View style={{flexDirection:'col'}}>
         <Text style={texts.request_name_text}>{item.requester_name}</Text>
-    <Text style={texts.request_date_text}>Due {formatDate(new Date(item.needed_by.split(" ")[0]), "MMM d", true)}</Text>
+        <Text style={texts.request_date_text}>Due {formatDate(new Date(item.needed_by.split(" ")[0]), "MMM d", true)}  {displayRequestIcon(reqType)}</Text>
       </View>
       
-      <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
+    <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
       </>
     );
   };
+
+  function displayRequestIcon(reqType) {
+    if (reqType == volunteer_status.IN_PROGRESS) {
+      return (<Icon name="clock" size={15} color="#DB9327"/>)
+    } else if (reqType == volunteer_status.COMPLETE) {
+      return (<Icon name="check" size={15} color="#3ABD24"/>)
+    } else {
+      return (<Icon name="exclamation" size={15} color="#FF5924"/>)
+    }
+  }
 }

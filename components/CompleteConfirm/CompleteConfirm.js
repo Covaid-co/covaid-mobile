@@ -9,7 +9,7 @@ import {
   AsyncStorage,
 } from "react-native";
 
-import { styles, texts, passwordStyles } from "./CompleteConfirmStyles";
+import { styles, texts, buttons } from "./CompleteConfirmStyles";
 
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
@@ -27,6 +27,7 @@ export default function CompleteConfirm({ route, navigation }) {
     completeRequest(); 
     route.params.setDone(true); 
     route.params.modalVisible(false);
+    navigation.goBack(null); 
   }
 
   function removeFromArray(item, array) {
@@ -57,7 +58,7 @@ export default function CompleteConfirm({ route, navigation }) {
           if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
             removeFromArray(route.params.item, route.params.activeList); 
             route.params.completeList.push(route.params.item); 
-            alert("Marked complete.")
+            //alert("Marked complete.")
           } else {
             alert("Unable to complete, please email us at covaidco@gmail.com.");
           }
@@ -70,21 +71,25 @@ export default function CompleteConfirm({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>   
+    <View style={styles.container}>
+      <View style={styles.active_header}>
+        <Text style={texts.header}>Confirmation</Text>
+      </View>
       <Text style={texts.desc}>How did you complete this request?</Text>
-        
       <TextInput
         style={styles.input}
-        placeholder="Enter confirmation message"
+        multiline='true'
+        placeholder="Ex: I delivered groceries to this person's front door! (min. 10 characters)"
         placeholderTextColor="#7F7F7F"
+        color="#000000"
         onChangeText={(text) => setMessage(text)}
         defaultValue={message}
       />
-      <TouchableOpacity onPress={handleConfirm} style={{display: message || "none"}}>
-        <Text style={texts.button_label_blue}>Confirm {"\n"}</Text>
+      <Text></Text>
+      <TouchableOpacity onPress={handleConfirm} style={{display: message || "none"}, buttons.accept}>
+        <Text></Text>
+        <Text style={texts.button_label}>Confirm {"\n"}</Text>
       </TouchableOpacity>
-       
-        
     </View>
   );
 }

@@ -2,29 +2,23 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: 10,
-  },
-  container2: {
-    marginTop: "5%",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: 10,
-  },
   entire_request_container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     minHeight: '100%',
     minWidth: '100%', 
   },
   individual_req_container: {
-    top: '30%',
     fontSize: 10,
     backgroundColor: '#FFFFFF',
     minWidth: '0%',
-    minHeight: '0%', 
+    minHeight: '100%', 
+  },
+  requester_name_container: {
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.grey,
+    borderColor: 'rgba(0, 0, 0, 0)',
+    borderBottomColor: "rgba(0, 0, 0, 0.2)",
   },
   completed_header: {
     position: 'absolute',
@@ -80,21 +74,24 @@ const styles = StyleSheet.create({
 
 const buttons = StyleSheet.create({
   accept: {
-    margin: '5%',
+    marginLeft: '3%',
+    marginTop: '3%',
     width: '95%',
-    height: '20%',
+    height: '10%',
     backgroundColor: "#2670FF",
-    borderWidth: 3,
     borderColor: "#2670FF",
     borderRadius: 8,
+    justifyContent: "center",
     alignItems: "center",
   },
   reject: {
-    margin: '5%',
+    marginLeft: '3%',
+    marginTop: '3%',
     width: '95%',
-    height: '20%',
-    backgroundColor: "#FFFFFF",
+    height: '10%',
+    borderColor: "#EB5757",
     borderRadius: 8,
+    borderWidth: 2,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -132,11 +129,15 @@ const texts = StyleSheet.create({
     fontSize: 15,
     color: "white",
   },
-  button_label_blue: {
+  button_label_white: { //
+    fontSize: 15,
+    color: '#FFFFFF',
+  },
+  button_label_blue: { //
     fontSize: 15,
     color: Colors.blue,
   },
-  button_label_green: {
+  button_label_green: { //
     fontSize: 15,
     color: "green",
   },
@@ -144,7 +145,7 @@ const texts = StyleSheet.create({
     fontSize: 15,
     color: "red",
   },
-  button_label_gray: {
+  button_label_gray: { //
     fontSize: 15,
     color: "gray",
   },
@@ -164,7 +165,7 @@ const texts = StyleSheet.create({
   }, 
   individual_req_header: {
     fontFamily: 'Montserrat-bold',
-    color: '#4F4F4F',
+    color: '#333333',
     fontSize: 24, 
     margin: '5%'
   },
@@ -172,7 +173,8 @@ const texts = StyleSheet.create({
     color: '#000000',
     left: '5%',
     fontSize: 16, 
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginTop: '3%'
   },
   details_header: {
     color: '#4F4F4F',
