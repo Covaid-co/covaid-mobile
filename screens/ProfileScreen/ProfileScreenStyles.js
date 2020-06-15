@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "white",
   },
+  loading: {
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   line: {
     borderWidth: 0.8,
     borderColor: Colors.grey,

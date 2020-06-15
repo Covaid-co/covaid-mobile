@@ -21,15 +21,15 @@ const INITIAL_ROUTE_NAME = "Requests";
 export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({
     headerTitle: getHeaderTitle(route),
-      headerRight: () => (
-        <TouchableOpacity
-          style={{ margin: 10 }}
-          onPress={() => navigation.navigate("Settings", route.params)}
-        >
-          <TabBarIcon name="md-settings" />
-        </TouchableOpacity>
-      ),
-      headerLeft: null,
+    headerRight: () => (
+      <TouchableOpacity
+        style={{ margin: 10 }}
+        onPress={() => navigation.navigate("Settings", route.params)}
+      >
+        <TabBarIcon name="md-settings" />
+      </TouchableOpacity>
+    ),
+    headerLeft: null,
   });
 
   return (
@@ -55,7 +55,6 @@ export default function BottomTabNavigator({ navigation, route }) {
           ),
           gesturesEnabled: false,
         }}
-        
       />
       <BottomTab.Screen
         name="Profile"

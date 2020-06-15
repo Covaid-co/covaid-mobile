@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, View, ScrollView, Switch } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  Switch,
+  ActivityIndicator,
+} from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./ProfileScreenStyles";
@@ -74,9 +81,6 @@ export default function ProfileScreen({ route, navigation }) {
   if (user) {
     return (
       <ScrollView style={styles.container}>
-        {/* <NavigationEvents
-                onDidFocus={() => Alert.alert('Refreshed')}
-                /> */}
         <Text style={texts.header}> Your Profile </Text>
         <View style={styles.line} />
         <View style={styles.info}>
@@ -85,7 +89,7 @@ export default function ProfileScreen({ route, navigation }) {
             {user.first_name + " " + user.last_name}
           </Text>
         </View>
-        {user.phone && (
+        {user.phone.length != 0 && (
           <View style={styles.info}>
             <Text style={texts.label_bold}> Phone: </Text>
             <Text style={texts.label}>{user.phone}</Text>
@@ -151,6 +155,10 @@ export default function ProfileScreen({ route, navigation }) {
       </ScrollView>
     );
   } else {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color={Colors.blue} />
+      </View>
+    );
   }
 }

@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  loading: {
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   line: {
     borderWidth: 0.8,
     borderColor: Colors.grey,
