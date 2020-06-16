@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from "react";
 import {
   Text,
-  TouchableOpacity,
   TouchableHighlight,
   View,
-  FlatList,
   AsyncStorage,
+  FlatList,
 } from "react-native";
 import {
   styles,
   texts,
 } from "../../components/Notifications/NotificationStyles";
-import Colors from "../../public/Colors";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
-import getDistance from "../../util/distance";
 import fetch_a from "../../util/fetch_auth";
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
-  const [activeRequests, setActiveRequests] = useState([]);
-
   const [user, setUser] = useState({});
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      fetch_user_obj(route.params.userID);
-    });
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
+  useEffect(() => {
+    return navigation.addListener("focus", () => {
+      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        console.log("ASYNC DATA: " + data);
+        console.log("ROUTE.PARMS.USERID: " + route.params.userID);
+        fetch_user_obj(route.params.userID);
+        fetchRequests(data);
+      });
+    });
   }, [navigation]);
 
   const fetch_user_obj = async (id) => {
@@ -39,7 +37,9 @@ export default function NotificationScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
+            console.log("USER DATA BEFORE UPDATING: " + JSON.stringify(data));
             setUser(data[0]);
+            console.log("USER (SHOULD BE EMPTY): " + JSON.stringify(user));
           });
         } else {
           alert("Error obtaining user object");
@@ -50,41 +50,50 @@ export default function NotificationScreen({ route, navigation }) {
       });
   };
 
-  function generateRequestList(requestData, requestStateChanger) {
-    let tempList = [];
-    console.log(user);
-    for (var i = 0; i < requestData.length; i++) {
-      var element = {
-        key: i,
-        requester_name: requestData[i].personal_info.requester_name,
-        resources: requestData[i].request_info,
-        needed_by:
-          requestData[i].request_info.date +
-          " " +
-          requestData[i].request_info.time,
-        distance:
-          getDistance(
-            user.latlong[0],
-            user.latlong[1],
-            requestData[i].location_info.coordinates[0],
-            requestData[i].location_info.coordinates[1]
-          ) + " m", //requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1],
-        requester_contact:
-          requestData[i].personal_info.requester_email ||
-          requestData[i].personal_info.requester_phone,
-        details: requestData[i].request_info.details,
-        completed_date: requestData[i].status.completed_date || "",
-        request_id: requestData[i]._id,
-      }; // add any relevant information
-      tempList.push(element);
+  function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = Math.floor(seconds / 31536000);
+
+    if (interval > 1) {
+      return interval + " years";
     }
-    requestStateChanger(tempList);
-    //initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
-    return tempList;
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
   }
 
-  function fetchRequests(reqStatus, requestStateChanger, token) {
-    let params = { status: reqStatus };
+  function filterRequests(requests) {
+    let pending = [];
+    requests.map((request) => {
+      pending.push({
+        key: request._id,
+        name: request.personal_info.requester_name,
+        resources: request.request_info,
+        deadline_date: getDate(request.request_info.date),
+        deadline_time: request.request_info.time,
+        timestamp: timeSince(new Date(Date.now() - request.time_posted)),
+      });
+    });
+    setPendingRequests(pending);
+  }
+
+  function fetchRequests(token) {
+    let params = { status: volunteer_status.PENDING };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
 
     fetch_a(token, "token", url, {
@@ -93,9 +102,7 @@ export default function NotificationScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            setTimeout(function () {
-              generateRequestList(data, requestStateChanger);
-            }, 750);
+            filterRequests(data);
           });
         } else {
           console.log("Error");
@@ -116,41 +123,41 @@ export default function NotificationScreen({ route, navigation }) {
     return s;
   };
 
-  function displayRequestInfo(reqType, item) {
-    var resourceBadges = ``;
-    var date = getDate(item.needed_by.split(" ")[0]);
+  function displayRequestInfo(item) {
+    console.log("USER (SHOULD NOT BE EMPTY): " + JSON.stringify(user));
+    console.log("ITEM: " + JSON.stringify(item));
     return (
       <>
         <View style={{ flexDirection: "row" }}>
           <View>
-            <Text style={texts.deadline}>Due {date}</Text>
-            <Text style={texts.header}>
-              {item.requester_name.split(" ")[0]} needs your help
-            </Text>
-            <View style={{ marginTop: 6, flexDirection: "row" }}>
-              <Text style={texts.tasks}>
-                {item.resources.resource_request.join(", ")}
-              </Text>
+            <View style={{ flexDirection: "row" }}>
               <View style={styles.dot}></View>
-              <Text style={texts.distance}>{item.distance}</Text>
+              <Text style={texts.deadline}>Needed by {item.deadline_date}</Text>
+            </View>
+            <View style={{ paddingLeft: 23 }}>
+              <Text style={texts.header}>
+                {item.name.split(" ")[0]}{" "}
+                <Text style={texts.need_help}>needs your help</Text>
+              </Text>
+              <View style={{ marginTop: 6, flexDirection: "row" }}>
+                <Text style={texts.tasks}>
+                  {item.resources.resource_request.join(", ")}
+                </Text>
+              </View>
             </View>
           </View>
           <View style={{ flexGrow: 1 }} />
-
           <View style={{ alignItems: "flex-end" }}>
-            <Text style={texts.timestamp}>1h ago</Text>
+            <Text style={texts.timestamp}>{item.timestamp}</Text>
             <View style={{ flexGrow: 1 }} />
             <Text>></Text>
           </View>
         </View>
-
-        {/* <Text style={texts.details}>{item.details}</Text> */}
-        {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
       </>
     );
   }
-  if (user.latlong) {
-    console.log(user.latlong);
+
+  if (user) {
     return (
       <View>
         <FlatList
@@ -164,11 +171,10 @@ export default function NotificationScreen({ route, navigation }) {
                   navigation: route.params,
                   item: item,
                   pendingList: pendingRequests,
-                  activeList: activeRequests,
                 });
               }}
             >
-              {displayRequestInfo(volunteer_status.PENDING, item)}
+              {displayRequestInfo(item)}
             </TouchableHighlight>
           )}
         />

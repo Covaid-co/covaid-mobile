@@ -55,7 +55,6 @@ export default function ActiveRequestScreen({ route, navigation }) {
           }
         })
         .catch((e) => {
-          console.log(url);
           console.log(e);
         });
     });
@@ -69,7 +68,6 @@ export default function ActiveRequestScreen({ route, navigation }) {
   }
 
   function cancelRequest() {
-    console.log("Cancelling this ");
     let params = {
       ID: route.params.item.request_id,
     };
@@ -90,7 +88,6 @@ export default function ActiveRequestScreen({ route, navigation }) {
           }
         })
         .catch((e) => {
-          console.log(url);
           console.log(e);
         });
     });

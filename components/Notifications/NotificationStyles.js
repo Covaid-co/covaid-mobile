@@ -3,15 +3,16 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   dot: {
-    marginTop: 7,
-    borderRadius: 2,
-    width: 4,
-    height: 4,
-    backgroundColor: "#7f7f7f",
+    borderRadius: 5,
+    marginTop: 5,
+    width: 10,
+    height: 10,
+    marginRight: 13,
+    backgroundColor: "#EB5757",
   },
   container: {
-    paddingLeft: 32,
-    paddingTop: 20,
+    paddingLeft: 19,
+    paddingTop: 21,
     paddingBottom: 16,
     paddingRight: 24,
     backgroundColor: "white",
@@ -74,9 +75,13 @@ const texts = StyleSheet.create({
     color: "#7F7F7F",
     marginLeft: 8,
   },
+  need_help: {
+    fontWeight: "600",
+    color: "#7F7F7F",
+  },
   deadline: {
     fontSize: 14,
-    color: "#2670FF",
+    color: "#EB5757",
   },
   timestamp: {
     fontSize: 14,
@@ -99,27 +104,6 @@ const texts = StyleSheet.create({
     fontSize: 14,
     color: "#7F7F7F",
     marginTop: 7,
-  },
-  label_bold: {
-    fontFamily: "Montserrat-bold",
-    fontSize: 17,
-    color: "black",
-  },
-  label: {
-    fontSize: 17,
-    color: "black",
-  },
-  button_label: {
-    fontSize: 15,
-    color: "white",
-  },
-  green_text: {
-    fontSize: 17,
-    color: "green",
-  },
-  red_text: {
-    fontSize: 17,
-    color: "red",
   },
 });
 

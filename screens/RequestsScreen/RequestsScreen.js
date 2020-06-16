@@ -60,7 +60,6 @@ export default function RequestsScreen({ route, navigation }) {
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
     let tempList = [];
-    console.log(JSON.stringify(user));
     for (var i = 0; i < requestData.length; i++) {
       var element = {
         key: i,
@@ -166,8 +165,8 @@ export default function RequestsScreen({ route, navigation }) {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
+
   if (pendingRequests) {
-    console.log(pendingRequests.key);
     return (
       <View style={styles.container}>
         <View style={styles.center}>
