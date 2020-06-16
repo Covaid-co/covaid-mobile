@@ -6,11 +6,12 @@ import {
   ScrollView,
   Switch,
   ActivityIndicator,
+  AsyncStorage
 } from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./ProfileScreenStyles";
-import { homeURL } from "../../constants";
+import { homeURL, storage_keys} from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 import { NavigationEvents } from "react-navigation";
@@ -27,7 +28,14 @@ export default function ProfileScreen({ route, navigation }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      fetch_user_obj(route.params.userID);
+      /**
+       * Hacky fix to the params not passing quick enough:???
+       */
+      // fetch_user_obj(route.params.userID);
+      AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+        console.log("GETTING USER ID " + data);
+        fetchUser(data);
+      });
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -57,8 +65,7 @@ export default function ProfileScreen({ route, navigation }) {
         console.log("Error");
       });
   };
-
-  const fetch_user_obj = async (id) => {
+  const fetchUser = async (id) => {
     let params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
@@ -77,11 +84,53 @@ export default function ProfileScreen({ route, navigation }) {
         alert(e);
       });
   };
+
+  const fetch_user_obj = async (id) => {
+    let params = { id: id };
+    var url = generateURL(homeURL + "/api/users/user?", params);
+
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setUser(data[0]);
+            setPublish(data[0].availability);
+          });
+        } else {
+          // alert("Error obtaining user object");
+        }
+      })
+      .catch((e) => {
+        // alert(e);
+      });
+  };
   if (user) {
     return (
       <ScrollView style={styles.container}>
-        <Text style={texts.header}> Your Profile </Text>
+         <View style={styles.info}>
+         {(publish && (
+          <Text style={texts.label_blue}> You are an active volunteer.</Text>
+        )) || (
+          <Text style={texts.label_bold}> You are an inactive volunteer.</Text>
+        )}
+          <Switch
+            trackColor={{ false: Colors.blue, true: Colors.blue }}
+            thumbColor={publish ? "#FFFFFF": "#FFFFFF"}
+            ios_backgroundColor= {Colors.light_grey_font}
+            onValueChange={toggleSwitch}
+            value={publish}
+            style = {{marginLeft: "auto"}}
+          />
+        </View>
+        <View pointerEvents={publish ? 'auto' : 'none'} style={publish ? {opacity: 1} : {opacity: .8}}>
         <View style={styles.line} />
+
+        <View style={styles.info}>
+          <Text style={texts.label_bold}> Offer: </Text>
+          <Text style={texts.label}>{user.offer.tasks.join(", ")}</Text>
+        </View>
+        </View>
+        {/* <View style={styles.line} />
         <View style={styles.info}>
           <Text style={texts.label_bold}> Name: </Text>
           <Text style={texts.label}>
@@ -150,7 +199,7 @@ export default function ProfileScreen({ route, navigation }) {
           onPress={() => navigation.navigate("Edit Profile", route.params)}
         >
           <Text style={texts.button_label}>Edit Profile</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     );
   } else {

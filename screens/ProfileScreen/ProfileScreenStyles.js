@@ -12,13 +12,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   line: {
-    borderWidth: 0.8,
-    borderColor: Colors.grey,
-    margin: "1%",
+    borderWidth: 1,
+    borderColor: "#EEEEEE",
+    marginTop: "5%",
   },
   info: {
     flexDirection: "row",
     marginTop: 20,
+    display: "flex",
+    alignItems: "center",
   },
 });
 
@@ -36,34 +38,30 @@ const buttons = StyleSheet.create({
 });
 
 const texts = StyleSheet.create({
-  header: {
-    margin: "1%",
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black",
-  },
   label_bold: {
-    fontFamily: "Montserrat-bold",
+    fontFamily: "Inter-bold",
     fontSize: 17,
-    color: "black",
+    color: Colors.grey_font,
   },
   label: {
+    fontFamily: "Inter",
     fontSize: 17,
-    color: "black",
+    color: Colors.grey_font,
     flex: 1,
     flexWrap: "wrap",
     overflow: "visible",
+    marginLeft: "auto"
   },
   button_label: {
     fontSize: 15,
     color: "white",
   },
-  green_text: {
-    color: "green",
-  },
-  red_text: {
-    color: "red",
-  },
+  label_blue: {
+    fontFamily: "Inter-bold",
+    fontSize: 17,
+    color: Colors.blue,
+  }
+  
 });
 
 export { styles, buttons, texts };

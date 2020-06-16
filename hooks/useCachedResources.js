@@ -18,6 +18,8 @@ export default function useCachedResources() {
           "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
           Montserrat: require("../assets/fonts/Montserrat/Montserrat-Regular.ttf"),
           "Montserrat-bold": require("../assets/fonts/Montserrat/Montserrat-Bold.ttf"),
+          Inter: require("../assets/fonts/Inter/Inter-Regular.ttf"),
+          "Inter-bold": require("../assets/fonts/Inter/Inter-Bold.ttf")
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
