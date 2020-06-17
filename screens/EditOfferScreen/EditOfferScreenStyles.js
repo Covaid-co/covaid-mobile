@@ -4,6 +4,7 @@ import Colors from "../../public/Colors";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
+    paddingTop: 10,
   },
   loading: {
     height: "100%",
@@ -13,7 +14,6 @@ const styles = StyleSheet.create({
   line: {
     borderWidth: 1,
     borderColor: "#EEEEEE",
-    marginTop: "5%",
   },
   info: {
     flexDirection: "row",

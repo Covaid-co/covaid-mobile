@@ -85,7 +85,7 @@ export default function LoginScreen({ route, navigation }) {
             setConstants(data[0]);
           });
         } else {
-          alert("Error obtaining user object");
+          // alert("Error obtaining user object");
         }
       })
       .catch((e) => {
@@ -170,8 +170,6 @@ export default function LoginScreen({ route, navigation }) {
   // true means location changes
   // false means location failed to change
   const updateLocation = async (e) => {
-    console.log(zip);
-    console.log(initialZip)
     if (zip.length != 5 || !/^\d+$/.test(zip)) {
       alert("Invalid Zipcode");
       return false;

@@ -34,7 +34,6 @@ export default function PendingRequestScreen({ route, navigation }) {
     var url = generateURL(homeURL + "/api/request/acceptRequest?", params);
 
     AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-      console.log("GETTING TOKEN " + data);
       fetch_a(data, "token", url, {
         method: "put",
       })

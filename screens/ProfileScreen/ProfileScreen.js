@@ -6,7 +6,8 @@ import {
   ScrollView,
   Switch,
   ActivityIndicator,
-  AsyncStorage
+  AsyncStorage,
+  Image
 } from "react-native";
 import Colors from "../../public/Colors";
 
@@ -15,11 +16,32 @@ import { homeURL, storage_keys} from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 import { NavigationEvents } from "react-navigation";
+import Geocode from "react-geocode";
+import EditOfferScreen from "../EditOfferScreen/EditOfferScreen.js"
+
+/**
+ * unactive volunteer request not sending?? nevermind, site was just laggy prolly
+ * android fetching not working
+ */
 
 export default function ProfileScreen({ route, navigation }) {
+  const [token, setToken] = useState();
   const [publish, setPublish] = useState(false);
-  const [isPublish, setIsPublish] = useState(false);
   const [user, setUser] = useState();
+  const [zip, setZip] = useState();
+  const [initialZip, setInitialZip] = useState("");
+  const [resources, setResources] = useState({});
+
+  const [editOffer, setEditOffer] = useState(false);
+
+  const [defaultResources, setDefaultResources] = useState([
+    "Food/Groceries",
+    "Medication",
+    "Donate",
+    "Emotional Support",
+    "Academic/Professional",
+    "Misc.",
+  ]);
 
   const toggleSwitch = () => {
     handleUpdate(!publish);
@@ -33,8 +55,10 @@ export default function ProfileScreen({ route, navigation }) {
        */
       // fetch_user_obj(route.params.userID);
       AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        console.log("GETTING USER ID " + data);
-        fetchUser(data);
+        fetch_user_obj(data);
+      });
+      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        setToken(data)
       });
     });
 
@@ -55,7 +79,8 @@ export default function ProfileScreen({ route, navigation }) {
         if (response.ok) {
           //Change the state to refect offer update
           setTimeout(function () {
-            fetch_user_obj(route.params.userI);
+            console.log("update successful")
+            fetch_user_obj(route.params.userID);
           }, 750);
         } else {
           console.log("Update not successful");
@@ -63,25 +88,6 @@ export default function ProfileScreen({ route, navigation }) {
       })
       .catch((e) => {
         console.log("Error");
-      });
-  };
-  const fetchUser = async (id) => {
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-            setPublish(data[0].availability);
-          });
-        } else {
-          alert("Error obtaining user object");
-        }
-      })
-      .catch((e) => {
-        alert(e);
       });
   };
 
@@ -93,8 +99,11 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
+            console.log("hulloooo")
+            console.log(data[0])
             setUser(data[0]);
             setPublish(data[0].availability);
+            setConstants(data[0])
           });
         } else {
           // alert("Error obtaining user object");
@@ -104,6 +113,113 @@ export default function ProfileScreen({ route, navigation }) {
         // alert(e);
       });
   };
+
+  const setConstants = (data) => {
+    let params = {};
+    var url = generateURL(homeURL + "/api/apikey/google", params);
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((key) => {
+            Geocode.setApiKey(key["google"]);
+            // setFirstName(data.first_name);
+            // setLastName(data.last_name);
+            // setEmail(data.email);
+            // setPhone(data.phone);
+            // setLatLong(data.latlong);
+            // setNeighborhoods(data.offer.neighborhoods);
+            // setFoundState(data.offer.state);
+            getZip(data.latlong);
+            // setAssociation(data.association);
+            // setAssociationName(data.association_name);
+            // setDetails(data.offer.details);
+            // setHasCar(data.offer.car)
+            // setCurrentUserObject(data.languages, languages, setLanguageChecked);
+            // setCurrentUserObject(
+            //   data.offer.timesAvailable,
+            //   timeNames,
+            //   setTimes
+            // );
+            async function getResources() {
+              if (!data.association) {
+                setCurrentUserObject(
+                  data.offer.tasks,
+                  defaultResources,
+                  setResources
+                );
+                return;
+              }
+              let params = {
+                associationID: data.association,
+              };
+              var url = generateURL(
+                homeURL + "/api/association/get_assoc/?",
+                params
+              );
+
+              const response = await fetch(url);
+              response.json().then((res) => {
+                setDefaultResources(res.resources);
+                setCurrentUserObject(
+                  data.offer.tasks,
+                  res.resources,
+                  setResources
+                );
+              });
+            }
+            getResources();
+          });
+        } else {
+          console.log("Error");
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
+
+  const setCurrentUserObject = (userList, fullList, setFunction) => {
+    for (var i = 0; i < fullList.length; i++) {
+      const curr = fullList[i];
+      const include = userList.includes(curr) ? true : false;
+      setFunction((prev) => ({
+        ...prev,
+        [curr]: include,
+      }));
+    }
+  };
+
+  function getZip(location) {
+    var latlng = { lat: parseFloat(location[1]), lng: parseFloat(location[0]) };
+    var latitude = latlng.lat;
+    var longitude = latlng.lng;
+    console.log(latitude)
+    console.log(longitude)
+    Geocode.fromLatLng(latitude, longitude).then((response) => {
+      if (response.status === "OK") {
+        console.log("worked")
+        for (var i = 0; i < response.results.length; i++) {
+          for (
+            var j = 0;
+            j < response.results[i].address_components.length;
+            j++
+          ) {
+            if (
+              response.results[i].address_components[j].types.indexOf(
+                "postal_code"
+              ) > -1
+            ) {
+              setInitialZip(
+                response.results[i].address_components[j].long_name
+              );
+              setZip(response.results[i].address_components[j].long_name);
+              break;
+            }
+          }
+        }
+      }
+    });
+  }
   if (user) {
     return (
       <ScrollView style={styles.container}>
@@ -122,13 +238,31 @@ export default function ProfileScreen({ route, navigation }) {
             style = {{marginLeft: "auto"}}
           />
         </View>
-        <View pointerEvents={publish ? 'auto' : 'none'} style={publish ? {opacity: 1} : {opacity: .8}}>
+        <View pointerEvents={publish ? 'auto' : 'none'} style={publish ? {opacity: 1} : {opacity: .5}}>
         <View style={styles.line} />
-
-        <View style={styles.info}>
+        <TouchableOpacity style={styles.info} onPress={() => navigation.navigate("Edit Offer", {token: token, resources: resources})}>
           <Text style={texts.label_bold}> Offer: </Text>
           <Text style={texts.label}>{user.offer.tasks.join(", ")}</Text>
+        </TouchableOpacity>
+        <View style={styles.line} />
+        <View style={styles.info} >
+          <Text style={texts.label_bold}> Drive Access: </Text>
+          <Text style={texts.label}>{user.offer.car ? "Yes" : "No"}</Text>
         </View>
+        <View style={styles.line} />
+        <View style={styles.info} >
+        <Text style={texts.label_bold}> Zip Code </Text>
+        <Text style={texts.label}> {zip} </Text>
+        </View>
+        <View style={styles.line} />
+        <View style={styles.info} >
+        <Text style={texts.label_bold}> Details </Text>
+        <Image
+          style={styles.arrow}
+          source={require("../../assets/images/arrow.png")}
+        />
+        </View>
+        <View style={styles.line} />
         </View>
         {/* <View style={styles.line} />
         <View style={styles.info}>

@@ -50,7 +50,7 @@ export default function RequestsScreen({ route, navigation }) {
             setUser(data[0]);
           });
         } else {
-          alert("Error obtaining user object");
+          // alert("Error obtaining user object");
         }
       })
       .catch((e) => {
@@ -60,7 +60,6 @@ export default function RequestsScreen({ route, navigation }) {
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
     let tempList = [];
-    console.log(JSON.stringify(user));
     for (var i = 0; i < requestData.length; i++) {
       var element = {
         key: i,
@@ -152,12 +151,10 @@ export default function RequestsScreen({ route, navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        console.log("GETTING USER ID " + data);
         fetchUser(data);
       });
 
       AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        console.log("GETTING TOKEN " + data);
         fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
         fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
         fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
@@ -167,7 +164,6 @@ export default function RequestsScreen({ route, navigation }) {
     return unsubscribe;
   }, [navigation]);
   if (pendingRequests) {
-    console.log(pendingRequests.key);
     return (
       <View style={styles.container}>
         <View style={styles.center}>
