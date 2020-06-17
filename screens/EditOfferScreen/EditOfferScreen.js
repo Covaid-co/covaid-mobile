@@ -105,17 +105,27 @@ export default function EditOfferScreen({ route, navigation }) {
     })
       .then((response) => {
         if (response.ok) {
-          //Change the state to refect offer update
-          setTimeout(function () {
-            console.log("Update successful")
             navigation.goBack()
-          }, 750);
         } else {
-          console.log("Update not successful");
+            Alert.alert(
+                "Update not successful",
+                "Please check your network connection",
+                [{ text: "OK" }],
+                {
+                  cancelable: false,
+                }
+              );
         }
       })
       .catch((e) => {
-        console.log("Error");
+        Alert.alert(
+            "Update not successful",
+            "Please check your network connection",
+            [{ text: "OK" }],
+            {
+              cancelable: false,
+            }
+          );
       });
   };
 
