@@ -40,7 +40,11 @@ export default function EditDetailsScreen({ route, navigation }) {
   }, [route.params.userID]);
 
   navigation.setOptions({
-    headerTitle: "Offer",
+    headerTitle: "Details",
+    headerTitleStyle: {
+      fontFamily: "Inter-bold",
+      color: Colors.grey_font
+    },
     headerRight: () => (
         <TouchableOpacity
           style={{ margin: 10 }}
