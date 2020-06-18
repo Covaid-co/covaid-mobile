@@ -23,6 +23,14 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
+  drive: {
+    flexDirection: "row",
+    marginTop: 20,
+    display: "flex",
+    alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
   arrow: {
     height: 15,
     width: 15,

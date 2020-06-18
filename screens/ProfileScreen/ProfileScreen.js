@@ -31,6 +31,7 @@ export default function ProfileScreen({ route, navigation }) {
   const [zip, setZip] = useState();
   const [initialZip, setInitialZip] = useState("");
   const [resources, setResources] = useState({});
+  const [hasCar, setHasCar] = useState();
 
   const [editOffer, setEditOffer] = useState(false);
 
@@ -133,7 +134,7 @@ export default function ProfileScreen({ route, navigation }) {
             // setAssociation(data.association);
             // setAssociationName(data.association_name);
             // setDetails(data.offer.details);
-            // setHasCar(data.offer.car)
+            setHasCar(data.offer.car)
             // setCurrentUserObject(data.languages, languages, setLanguageChecked);
             // setCurrentUserObject(
             //   data.offer.timesAvailable,
@@ -220,6 +221,41 @@ export default function ProfileScreen({ route, navigation }) {
       }
     });
   }
+
+  const handleCarUpdate = async (someshit) => {
+    setHasCar(!hasCar)
+    let params = {
+      "offer.car": !hasCar,
+    };
+    fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    })
+      .then((response) => {
+        if (response.ok) {
+        } else {
+            Alert.alert(
+                "Update not successful",
+                "Please check your network connection",
+                [{ text: "OK" }],
+                {
+                  cancelable: false,
+                }
+              );
+        }
+      })
+      .catch((e) => {
+        Alert.alert(
+            "Update not successful",
+            "Please check your network connection",
+            [{ text: "OK" }],
+            {
+              cancelable: false,
+            }
+          );
+      });
+  };
   if (user) {
     return (
       <ScrollView style={styles.container}>
@@ -245,10 +281,10 @@ export default function ProfileScreen({ route, navigation }) {
           <Text style={texts.label}>{user.offer.tasks.join(", ")}</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-        <View style={styles.info} >
+        <TouchableOpacity style={styles.info} onPress={() => handleCarUpdate(hasCar)}>
           <Text style={texts.label_bold}> Drive Access: </Text>
-          <Text style={texts.label}>{user.offer.car ? "Yes" : "No"}</Text>
-        </View>
+          <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
+        </TouchableOpacity>
         <View style={styles.line} />
         <View style={styles.info} >
         <Text style={texts.label_bold}> Zip Code </Text>
