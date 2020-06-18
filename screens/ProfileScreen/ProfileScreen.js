@@ -7,17 +7,17 @@ import {
   Switch,
   ActivityIndicator,
   AsyncStorage,
-  Image
+  Image,
 } from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./ProfileScreenStyles";
-import { homeURL, storage_keys} from "../../constants";
+import { homeURL, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 import { NavigationEvents } from "react-navigation";
 import Geocode from "react-geocode";
-import EditOfferScreen from "../EditOfferScreen/EditOfferScreen.js"
+import EditOfferScreen from "../EditOfferScreen/EditOfferScreen.js";
 
 /**
  * unactive volunteer request not sending?? nevermind, site was just laggy prolly
@@ -60,7 +60,7 @@ export default function ProfileScreen({ route, navigation }) {
         fetch_user_obj(data);
       });
       AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        setToken(data)
+        setToken(data);
       });
     });
 
@@ -81,7 +81,7 @@ export default function ProfileScreen({ route, navigation }) {
         if (response.ok) {
           //Change the state to refect offer update
           setTimeout(function () {
-            console.log("update successful")
+            console.log("update successful");
             fetch_user_obj(route.params.userID);
           }, 750);
         } else {
@@ -101,11 +101,11 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            console.log("hulloooo")
-            console.log(data[0])
+            console.log("hulloooo");
+            console.log(data[0]);
             setUser(data[0]);
             setPublish(data[0].availability);
-            setConstants(data[0])
+            setConstants(data[0]);
           });
         } else {
           // alert("Error obtaining user object");
@@ -135,7 +135,7 @@ export default function ProfileScreen({ route, navigation }) {
             // setAssociation(data.association);
             // setAssociationName(data.association_name);
             setDetails(data.offer.details);
-            setHasCar(data.offer.car)
+            setHasCar(data.offer.car);
             // setCurrentUserObject(data.languages, languages, setLanguageChecked);
             // setCurrentUserObject(
             //   data.offer.timesAvailable,
@@ -195,11 +195,11 @@ export default function ProfileScreen({ route, navigation }) {
     var latlng = { lat: parseFloat(location[1]), lng: parseFloat(location[0]) };
     var latitude = latlng.lat;
     var longitude = latlng.lng;
-    console.log(latitude)
-    console.log(longitude)
+    console.log(latitude);
+    console.log(longitude);
     Geocode.fromLatLng(latitude, longitude).then((response) => {
       if (response.status === "OK") {
-        console.log("worked")
+        console.log("worked");
         for (var i = 0; i < response.results.length; i++) {
           for (
             var j = 0;
@@ -224,7 +224,7 @@ export default function ProfileScreen({ route, navigation }) {
   }
 
   const handleCarUpdate = async (someshit) => {
-    setHasCar(!hasCar)
+    setHasCar(!hasCar);
     let params = {
       "offer.car": !hasCar,
     };
@@ -236,18 +236,7 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
         } else {
-            Alert.alert(
-                "Update not successful",
-                "Please check your network connection",
-                [{ text: "OK" }],
-                {
-                  cancelable: false,
-                }
-              );
-        }
-      })
-      .catch((e) => {
-        Alert.alert(
+          Alert.alert(
             "Update not successful",
             "Please check your network connection",
             [{ text: "OK" }],
@@ -255,51 +244,87 @@ export default function ProfileScreen({ route, navigation }) {
               cancelable: false,
             }
           );
+        }
+      })
+      .catch((e) => {
+        Alert.alert(
+          "Update not successful",
+          "Please check your network connection",
+          [{ text: "OK" }],
+          {
+            cancelable: false,
+          }
+        );
       });
   };
   if (user) {
     return (
       <ScrollView style={styles.container}>
-         <View style={styles.info}>
-         {(publish && (
-          <Text style={texts.label_blue}> You are an active volunteer.</Text>
-        )) || (
-          <Text style={texts.label_bold}> You are an inactive volunteer.</Text>
-        )}
+        <View style={styles.info}>
+          {(publish && (
+            <Text style={texts.label_blue}> You are an active volunteer.</Text>
+          )) || (
+            <Text style={texts.label_bold}>
+              {" "}
+              You are an inactive volunteer.
+            </Text>
+          )}
           <Switch
             trackColor={{ false: Colors.blue, true: Colors.blue }}
-            thumbColor={publish ? "#FFFFFF": "#FFFFFF"}
-            ios_backgroundColor= {Colors.light_grey_font}
+            thumbColor={publish ? "#FFFFFF" : "#FFFFFF"}
+            ios_backgroundColor={Colors.light_grey_font}
             onValueChange={toggleSwitch}
             value={publish}
-            style = {{marginLeft: "auto"}}
+            style={{ marginLeft: "auto" }}
           />
         </View>
-        <View pointerEvents={publish ? 'auto' : 'none'} style={publish ? {opacity: 1} : {opacity: .5}}>
-        <View style={styles.line} />
-        <TouchableOpacity style={styles.info} onPress={() => navigation.navigate("Edit Offer", {token: token, resources: resources})}>
-          <Text style={texts.label_bold}> Offer: </Text>
-          <Text style={texts.label}>{user.offer.tasks.join(", ")}</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
-        <TouchableOpacity style={styles.info} onPress={() => handleCarUpdate(hasCar)}>
-          <Text style={texts.label_bold}> Drive Access: </Text>
-          <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
-        <View style={styles.info} >
-        <Text style={texts.label_bold}> Zip Code </Text>
-        <Text style={texts.label}> {zip} </Text>
-        </View>
-        <View style={styles.line} />
-        <TouchableOpacity style={styles.info} onPress={() => navigation.navigate("Edit Details", {token: token, details: details})}>
-        <Text style={texts.label_bold}> Details </Text>
-        <Image
-          style={styles.arrow}
-          source={require("../../assets/images/arrow.png")}
-        />
-        </TouchableOpacity>
-        <View style={styles.line} />
+        <View
+          pointerEvents={publish ? "auto" : "none"}
+          style={publish ? { opacity: 1 } : { opacity: 0.5 }}
+        >
+          <View style={styles.line} />
+          <TouchableOpacity
+            style={styles.info}
+            onPress={() =>
+              navigation.navigate("Edit Offer", {
+                token: token,
+                resources: resources,
+              })
+            }
+          >
+            <Text style={texts.label_bold}> Offer: </Text>
+            <Text style={texts.label}>{user.offer.tasks.join(", ")}</Text>
+          </TouchableOpacity>
+          <View style={styles.line} />
+          <TouchableOpacity
+            style={styles.info}
+            onPress={() => handleCarUpdate(hasCar)}
+          >
+            <Text style={texts.label_bold}> Drive Access: </Text>
+            <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
+          </TouchableOpacity>
+          <View style={styles.line} />
+          <View style={styles.info}>
+            <Text style={texts.label_bold}> Zip Code </Text>
+            <Text style={texts.label}> {zip} </Text>
+          </View>
+          <View style={styles.line} />
+          <TouchableOpacity
+            style={styles.info}
+            onPress={() =>
+              navigation.navigate("Edit Details", {
+                token: token,
+                details: details,
+              })
+            }
+          >
+            <Text style={texts.label_bold}> Details </Text>
+            <Image
+              style={styles.arrow}
+              source={require("../../assets/images/arrow.png")}
+            />
+          </TouchableOpacity>
+          <View style={styles.line} />
         </View>
         {/* <View style={styles.line} />
         <View style={styles.info}>

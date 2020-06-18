@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.light_grey_font,
     fontFamily: "Inter",
-    width: "100%"
+    width: "100%",
   },
 });
 
@@ -22,8 +22,8 @@ const texts = StyleSheet.create({
   label: {
     fontSize: 17,
     color: Colors.grey_font,
-    fontFamily: "Inter-bold"
-  }
+    fontFamily: "Inter-bold",
+  },
 });
 
 export { styles, texts };

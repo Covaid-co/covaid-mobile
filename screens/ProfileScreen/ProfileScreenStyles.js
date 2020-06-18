@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
   arrow: {
     height: 15,
     width: 15,
-    marginLeft:"auto"
-  }
+    marginLeft: "auto",
+  },
 });
 
 const buttons = StyleSheet.create({
@@ -65,7 +65,7 @@ const texts = StyleSheet.create({
     flexWrap: "wrap",
     overflow: "visible",
     marginLeft: "auto",
-    textAlign: "right"
+    textAlign: "right",
   },
   button_label: {
     fontSize: 15,
@@ -75,8 +75,7 @@ const texts = StyleSheet.create({
     fontFamily: "Inter-bold",
     fontSize: 17,
     color: Colors.blue,
-  }
-  
+  },
 });
 
 export { styles, buttons, texts };

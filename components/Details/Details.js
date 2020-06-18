@@ -1,15 +1,6 @@
 import React from "react";
 import { styles, texts } from "./DetailsStyles";
-import {
-  ScrollView,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-  Switch,
-} from "react-native";
+import { View, Text, TextInput } from "react-native";
 
 export default function Details(props) {
   return (
@@ -21,7 +12,7 @@ export default function Details(props) {
         pressure, but any information helps us match you more quickly!
       </Text>
       <TextInput
-        style = {styles.input}
+        style={styles.input}
         multiline
         numberOfLines={3}
         style={styles.input}

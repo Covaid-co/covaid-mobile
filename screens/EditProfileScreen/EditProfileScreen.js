@@ -112,7 +112,7 @@ export default function LoginScreen({ route, navigation }) {
             setAssociation(data.association);
             setAssociationName(data.association_name);
             setDetails(data.offer.details);
-            setHasCar(data.offer.car)
+            setHasCar(data.offer.car);
             setCurrentUserObject(data.languages, languages, setLanguageChecked);
             setCurrentUserObject(
               data.offer.timesAvailable,
@@ -378,7 +378,7 @@ export default function LoginScreen({ route, navigation }) {
       languages: selectedLanguages,
     };
 
-    fetch_a(route.params.token, "token",homeURL + "/api/users/update", {
+    fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),

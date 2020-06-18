@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 20,
     backgroundColor: Colors.white,
-    flex: 1
+    flex: 1,
   },
   circle_blue: {
     width: 30,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   checkbox: {
     flexDirection: "row",
     flexWrap: "wrap",
-    alignItems: "center"
+    alignItems: "center",
   },
   label: {
     fontFamily: "Inter",
