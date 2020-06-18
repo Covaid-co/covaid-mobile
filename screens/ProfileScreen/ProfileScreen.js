@@ -32,6 +32,7 @@ export default function ProfileScreen({ route, navigation }) {
   const [initialZip, setInitialZip] = useState("");
   const [resources, setResources] = useState({});
   const [hasCar, setHasCar] = useState();
+  const [details, setDetails] = useState();
 
   const [editOffer, setEditOffer] = useState(false);
 
@@ -133,7 +134,7 @@ export default function ProfileScreen({ route, navigation }) {
             getZip(data.latlong);
             // setAssociation(data.association);
             // setAssociationName(data.association_name);
-            // setDetails(data.offer.details);
+            setDetails(data.offer.details);
             setHasCar(data.offer.car)
             // setCurrentUserObject(data.languages, languages, setLanguageChecked);
             // setCurrentUserObject(
@@ -291,13 +292,13 @@ export default function ProfileScreen({ route, navigation }) {
         <Text style={texts.label}> {zip} </Text>
         </View>
         <View style={styles.line} />
-        <View style={styles.info} >
+        <TouchableOpacity style={styles.info} onPress={() => navigation.navigate("Edit Details", {token: token, details: details})}>
         <Text style={texts.label_bold}> Details </Text>
         <Image
           style={styles.arrow}
           source={require("../../assets/images/arrow.png")}
         />
-        </View>
+        </TouchableOpacity>
         <View style={styles.line} />
         </View>
         {/* <View style={styles.line} />
