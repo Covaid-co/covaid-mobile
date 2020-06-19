@@ -362,6 +362,7 @@ export default function LoginScreen({ route, navigation }) {
     return valid;
   };
 
+
   function handleSubmit() {
     if (checkInputs() === false) {
       return;
