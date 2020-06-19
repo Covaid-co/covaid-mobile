@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   line: {
+    marginTop: "5%",
     borderWidth: 1,
     borderColor: "#EEEEEE",
   },

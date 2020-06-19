@@ -18,4 +18,5 @@ export default {
   grey_font: "#4F4F4F",
   light_grey_font: "#7F7F7F",
   white: "#FFFFFF",
+  black: "#000000"
 };

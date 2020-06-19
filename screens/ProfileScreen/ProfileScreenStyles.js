@@ -5,6 +5,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
   },
+  center: {
+    marginTop: "5%",
+    // justifyContent: "center",
+    backgroundColor: Colors.white,
+    //textAlign: "center",
+    alignItems: "center",
+  },
   loading: {
     height: "100%",
     justifyContent: "center",
@@ -76,6 +83,22 @@ const texts = StyleSheet.create({
     fontSize: 17,
     color: Colors.blue,
   },
+  button_label_blue: {
+    fontSize: 15,
+    color: Colors.blue,
+  },
+  name: {
+    fontFamily: "Inter-bold",
+    fontSize: 22,
+    color: Colors.grey_font,
+    marginBottom: "2%",
+  },
+  association: {
+    fontFamily: "Inter",
+    fontSize: 17,
+    color: Colors.light_grey_font,
+    marginBottom: "2%",
+  }
 });
 
 export { styles, buttons, texts };

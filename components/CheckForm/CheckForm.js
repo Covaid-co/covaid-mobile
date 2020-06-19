@@ -43,7 +43,6 @@ export default function CheckForm(props) {
           </TouchableOpacity>
         );
       })}
-      <View style={styles.line} />
     </View>
     // </>
   );

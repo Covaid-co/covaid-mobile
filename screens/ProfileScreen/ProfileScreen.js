@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
   AsyncStorage,
   Image,
+  TextInput,
+  Alert
 } from "react-native";
 import Colors from "../../public/Colors";
 
@@ -34,6 +36,12 @@ export default function ProfileScreen({ route, navigation }) {
   const [hasCar, setHasCar] = useState();
   const [details, setDetails] = useState();
 
+  const [association, setAssociation] = useState("");
+  const [associationName, setAssociationName] = useState("");
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [state, setFoundState] = useState([]);
+  const [latlong, setLatLong] = useState([]);
+
   const [editOffer, setEditOffer] = useState(false);
 
   const [defaultResources, setDefaultResources] = useState([
@@ -44,6 +52,15 @@ export default function ProfileScreen({ route, navigation }) {
     "Academic/Professional",
     "Misc.",
   ]);
+
+  const defaultTaskList = [
+    "Food/Groceries",
+    "Medication",
+    "Donate",
+    "Emotional Support",
+    "Academic/Professional",
+    "Misc.",
+  ];
 
   const toggleSwitch = () => {
     handleUpdate(!publish);
@@ -66,7 +83,7 @@ export default function ProfileScreen({ route, navigation }) {
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [navigation]);
+  }, [user]);
 
   const handleUpdate = async (publish) => {
     let params = {
@@ -128,12 +145,13 @@ export default function ProfileScreen({ route, navigation }) {
             // setLastName(data.last_name);
             // setEmail(data.email);
             // setPhone(data.phone);
-            // setLatLong(data.latlong);
-            // setNeighborhoods(data.offer.neighborhoods);
-            // setFoundState(data.offer.state);
+            setLatLong(data.latlong);
+            setNeighborhoods(data.offer.neighborhoods);
+            setFoundState(data.offer.state);
             getZip(data.latlong);
-            // setAssociation(data.association);
-            // setAssociationName(data.association_name);
+            console.log(data);
+            setAssociation(data.association);
+            setAssociationName(data.association_name);
             setDetails(data.offer.details);
             setHasCar(data.offer.car);
             // setCurrentUserObject(data.languages, languages, setLanguageChecked);
@@ -192,11 +210,10 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   function getZip(location) {
+    try {
     var latlng = { lat: parseFloat(location[1]), lng: parseFloat(location[0]) };
     var latitude = latlng.lat;
     var longitude = latlng.lng;
-    console.log(latitude);
-    console.log(longitude);
     Geocode.fromLatLng(latitude, longitude).then((response) => {
       if (response.status === "OK") {
         console.log("worked");
@@ -221,6 +238,9 @@ export default function ProfileScreen({ route, navigation }) {
         }
       }
     });
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const handleCarUpdate = async (someshit) => {
@@ -235,6 +255,8 @@ export default function ProfileScreen({ route, navigation }) {
     })
       .then((response) => {
         if (response.ok) {
+          fetch_user_obj(route.params.userID);
+
         } else {
           Alert.alert(
             "Update not successful",
@@ -257,9 +279,250 @@ export default function ProfileScreen({ route, navigation }) {
         );
       });
   };
+  const updateLocation = async (e) => {
+    if (zip.length != 5 || !/^\d+$/.test(zip)) {
+      alert("Invalid Zipcode");
+      return false;
+    }
+    if (initialZip !== zip) {
+      if (handleChangedZip()) {
+        setInitialZip(zip);
+        return true;
+      }
+      return false;
+    }
+    return false;
+  };
+
+  const handleChangedZip = () => {
+    if (getLatLng(zip)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  async function getLatLng(zip) {
+    try {
+      if (zip.length != 5 || !/^\d+$/.test(zip)) {
+        throw Error("Invalid zipcode");
+      }
+      var response = await Geocode.fromAddress(zip);
+      var new_neighborhoods = [];
+      var foundState = [];
+      for (var i = 0; i < Math.min(5, response.results.length); i++) {
+        const results = response.results[i]["address_components"];
+        for (var j = 0; j < results.length; j++) {
+          const types = results[j].types;
+          if (types.includes("neighborhood") || types.includes("locality")) {
+            const currNeighborhoodName = results[j]["long_name"];
+            if (new_neighborhoods.includes(currNeighborhoodName) === false) {
+              new_neighborhoods.push(currNeighborhoodName);
+            }
+          }
+          for (var k = 0; k < types.length; k++) {
+            const type = types[k];
+            if (
+              foundState.length === 0 &&
+              type === "administrative_area_level_1"
+            ) {
+              foundState = [results[j]["long_name"], results[j]["short_name"]];
+            }
+          }
+        }
+      }
+      const { lat, lng } = response.results[0].geometry.location;
+      setLatLong([lng, lat]);
+      let params = { latitude: lat, longitude: lng };
+      const url = generateURL(
+        homeURL + "/api/association/get_assoc/lat_long?",
+        params
+      );
+      const response_assoc = await fetch(url);
+      const data = await response_assoc.json();
+      var temp_resources = {};
+      var association_name = "";
+      var association = "";
+      if (data.length === 0) {
+        setNeighborhoods(new_neighborhoods);
+        setFoundState(foundState);
+        setDefaultResources(defaultTaskList);
+        setCurrentUserObject([], defaultTaskList, setResources);
+        for (var i = 0; i < defaultTaskList.length; i++) {
+          temp_resources[defaultTaskList[i]] = false;
+        }
+        setAssociation("");
+        setAssociationName("");
+        setResources(temp_resources);
+        // handleNoAssociations();
+      } else {
+        setNeighborhoods(new_neighborhoods);
+        setFoundState(foundState);
+        //handleNewAssociation(data[0]);
+        console.log(data[0])
+        setDefaultResources(data[0].resources);
+        setCurrentUserObject([], data[0].resources, setResources);
+        for (var i = 0; i < data[0].resources.length; i++) {
+          temp_resources[data[0].resources[i]] = false;
+        }
+        setResources(temp_resources);
+        setAssociation(data[0]._id);
+        setAssociationName(data[0].name);
+        association = data[0]._id
+        association_name = data[0].name
+      }
+
+      let form = {
+        "offer.neighborhoods": new_neighborhoods,
+        "offer.state": foundState,
+        association: association,
+        association_name: association_name,
+        location: {
+          type: "Point",
+          coordinates: [lng, lat],
+        },
+      };
+      fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+        .then((response) => {
+          if (response.ok) {
+            fetch_user_obj(route.params.userID);
+            navigation.navigate('Edit Offer', {token: token,
+              resources: temp_resources});
+          } else {
+            Alert.alert(
+              "Update not successful",
+              "Please check your network connection",
+              [{ text: "OK" }],
+              {
+                cancelable: false,
+              }
+            );
+          }
+        })
+        .catch((e) => {
+          Alert.alert(
+            "Update not successful",
+            "Please check your network connection",
+            [{ text: "OK" }],
+            {
+              cancelable: false,
+            }
+          );
+        });
+      Alert.alert(
+        "You have edited locations, please update your categories to help!",
+        "",
+        [{ text: "OK" }],
+        {
+          cancelable: false,
+        }
+      );
+      return true;
+    } catch (err) {
+      alert("Invaild zipcode or network error");
+    }
+  }
+
+  const handleNoAssociations = () => {
+    setDefaultResources(defaultTaskList);
+    setCurrentUserObject([], defaultTaskList, setResources);
+    var temp_resources = {};
+    for (var i = 0; i < defaultTaskList.length; i++) {
+      temp_resources[defaultTaskList[i]] = false;
+    }
+    setAssociation("");
+    setAssociationName("");
+    setResources(temp_resources);
+    // navigation.navigate('Edit Offer', {token: token,
+    //   resources: temp_resources});
+  };
+
+  const handleNewAssociation = (association) => {
+    setDefaultResources(association.resources);
+    setCurrentUserObject([], association.resources, setResources);
+    var temp_resources = {};
+    for (var i = 0; i < association.resources.length; i++) {
+      temp_resources[association.resources[i]] = false;
+    }
+    setResources(temp_resources);
+    setAssociation(association._id);
+    setAssociationName(association.name);
+    // navigation.navigate('Edit Offer', {token: token,
+    //   resources: temp_resources});
+  };
+
+  const handleLocationUpdate = async (huh) => {
+    if (!(await updateLocation())) {
+      return;
+    }
+    // let params = {
+    //   "offer.neighborhoods": neighborhoods,
+    //   "offer.state": state,
+    //   association: association,
+    //   association_name: associationName,
+    //   location: {
+    //     type: "Point",
+    //     coordinates: latlong,
+    //   },
+    // };
+    // fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
+    //   method: "put",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(params),
+    // })
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       alert("stupid bitch")
+    //       fetch_user_obj(route.params.userID);
+    //       // navigation.navigate("Edit Offer", {
+    //       //   token: token,
+    //       //   resources: resources,
+    //       // })
+    //       // navigation.navigate('Edit Offer', {token: token,
+    //       //   resources: resources});
+    //     } else {
+    //       Alert.alert(
+    //         "Update not successful",
+    //         "Please check your network connection",
+    //         [{ text: "OK" }],
+    //         {
+    //           cancelable: false,
+    //         }
+    //       );
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     Alert.alert(
+    //       "Update not successful",
+    //       "Please check your network connection",
+    //       [{ text: "OK" }],
+    //       {
+    //         cancelable: false,
+    //       }
+    //     );
+    //   });
+  };
   if (user) {
     return (
       <ScrollView style={styles.container}>
+        <View style={styles.center}>
+          <Text style={texts.name}>
+            {user.first_name + " " + user.last_name}
+          </Text>
+        
+        {user.association_name.length > 0 && (
+            <Text style={texts.association}>{user.association_name}</Text>
+        )}
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Edit Profile", route.params)}
+        >
+          <Text style={texts.button_label_blue}>Edit Profile</Text>
+        </TouchableOpacity> 
+        </View>
         <View style={styles.info}>
           {(publish && (
             <Text style={texts.label_blue}> You are an active volunteer.</Text>
@@ -306,7 +569,15 @@ export default function ProfileScreen({ route, navigation }) {
           <View style={styles.line} />
           <View style={styles.info}>
             <Text style={texts.label_bold}> Zip Code </Text>
-            <Text style={texts.label}> {zip} </Text>
+            <TextInput
+              style={texts.label}
+              placeholder="Zip Code"
+              placeholderTextColor={Colors.grey}
+              onChangeText={(text) => setZip(text)}
+              onSubmitEditing={(text)=> handleLocationUpdate(text)}
+              defaultValue={zip}
+              returnKeyType="done"
+            />
           </View>
           <View style={styles.line} />
           <TouchableOpacity

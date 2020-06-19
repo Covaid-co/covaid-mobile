@@ -33,6 +33,7 @@ export default function EditOfferScreen({ route, navigation }) {
   const [initialZip, setInitialZip] = useState("");
   const [resources, setResources] = useState({});
 
+
   useEffect(() => {
     setResources(route.params.resources);
   }, [route.params.userID]);
@@ -47,6 +48,7 @@ export default function EditOfferScreen({ route, navigation }) {
         </Text>
       </TouchableOpacity>
     ),
+    headerLeft: null,
   });
   console.log(route.params);
   const toggleSwitch = () => {
@@ -57,30 +59,7 @@ export default function EditOfferScreen({ route, navigation }) {
     console.log("BITCH WTF");
     navigation.navigate("Profile");
   }
-  //   const handleUpdate = async (publish) => {
-  //     let params = {
-  //       availability: publish,
-  //     };
-  //     fetch_a(route.params.token, "token", homeURL + "/api/users/update?", {
-  //       method: "put",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(params),
-  //     })
-  //       .then((response) => {
-  //         if (response.ok) {
-  //           //Change the state to refect offer update
-  //           setTimeout(function () {
-  //             console.log("update successful")
-  //             fetch_user_obj(route.params.userID);
-  //           }, 750);
-  //         } else {
-  //           console.log("Update not successful");
-  //         }
-  //       })
-  //       .catch((e) => {
-  //         console.log("Error");
-  //       });
-  //   };
+
   const handleUpdate = async (someshit) => {
     if (Object.values(resources).every((v) => v === false)) {
       Alert.alert(
@@ -132,6 +111,7 @@ export default function EditOfferScreen({ route, navigation }) {
   return (
     <ScrollView style={styles.container}>
       <CheckForm obj={resources} setObj={setResources} />
+      <View style={styles.line} />
     </ScrollView>
   );
 }
