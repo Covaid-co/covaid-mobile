@@ -4,35 +4,18 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
-  Switch,
-  ActivityIndicator,
-  AsyncStorage,
-  Image,
-  Modal,
   Alert,
 } from "react-native";
 import Colors from "../../public/Colors";
 
-import { styles, buttons, texts } from "./EditOfferScreenStyles";
-import { homeURL, storage_keys } from "../../constants";
-import { generateURL, validateEmail, extractTrueObj } from "../../Helpers";
+import { styles } from "./EditOfferScreenStyles";
+import { homeURL } from "../../constants";
+import { extractTrueObj } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
-import { NavigationEvents } from "react-navigation";
-import Geocode from "react-geocode";
 import CheckForm from "../../components/CheckForm/CheckForm";
 
-/**
- * unactive volunteer request not sending?? nevermind, site was just laggy prolly
- * android fetching not working
- */
-
 export default function EditOfferScreen({ route, navigation }) {
-  const [publish, setPublish] = useState(false);
-  const [user, setUser] = useState();
-  const [zip, setZip] = useState();
-  const [initialZip, setInitialZip] = useState("");
   const [resources, setResources] = useState({});
-
 
   useEffect(() => {
     setResources(route.params.resources);
@@ -50,15 +33,6 @@ export default function EditOfferScreen({ route, navigation }) {
     ),
     headerLeft: null,
   });
-  console.log(route.params);
-  const toggleSwitch = () => {
-    handleUpdate(!publish);
-    setPublish(!publish);
-  };
-  function bitchwtf() {
-    console.log("BITCH WTF");
-    navigation.navigate("Profile");
-  }
 
   const handleUpdate = async (someshit) => {
     if (Object.values(resources).every((v) => v === false)) {
@@ -76,7 +50,6 @@ export default function EditOfferScreen({ route, navigation }) {
     let params = {
       "offer.tasks": resourceList,
     };
-    console.log(resourceList);
     fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
       method: "put",
       headers: { "Content-Type": "application/json" },

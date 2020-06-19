@@ -29,7 +29,6 @@ export default function EditDetailsScreen({ route, navigation }) {
       </TouchableOpacity>
     ),
   });
-  console.log(route.params);
 
   const handleUpdate = async (someshit) => {
     if (details.length === 0) {

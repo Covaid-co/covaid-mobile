@@ -111,8 +111,6 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            console.log("hulloooo");
-            console.log(data[0]);
             setUser(data[0]);
             setPublish(data[0].availability);
             setConstants(data[0]);
