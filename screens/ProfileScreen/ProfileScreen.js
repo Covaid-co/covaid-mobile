@@ -13,18 +13,11 @@ import {
 } from "react-native";
 import Colors from "../../public/Colors";
 
-import { styles, buttons, texts } from "./ProfileScreenStyles";
+import { styles, texts } from "./ProfileScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
-import { generateURL, validateEmail } from "../../Helpers";
+import { generateURL,} from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
-import { NavigationEvents } from "react-navigation";
 import Geocode from "react-geocode";
-import EditOfferScreen from "../EditOfferScreen/EditOfferScreen.js";
-
-/**
- * unactive volunteer request not sending?? nevermind, site was just laggy prolly
- * android fetching not working
- */
 
 export default function ProfileScreen({ route, navigation }) {
   const [token, setToken] = useState();
@@ -42,7 +35,6 @@ export default function ProfileScreen({ route, navigation }) {
   const [state, setFoundState] = useState([]);
   const [latlong, setLatLong] = useState([]);
 
-  const [editOffer, setEditOffer] = useState(false);
 
   const [defaultResources, setDefaultResources] = useState([
     "Food/Groceries",
@@ -70,9 +62,10 @@ export default function ProfileScreen({ route, navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       /**
-       * Hacky fix to the params not passing quick enough:???
+       * Hacky fix to the params not passing quick enough
+       * should just be:
+       * fetch_user_obj(route.params.userID);
        */
-      // fetch_user_obj(route.params.userID);
       AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
         fetch_user_obj(data);
       });
@@ -125,11 +118,9 @@ export default function ProfileScreen({ route, navigation }) {
             setConstants(data[0]);
           });
         } else {
-          // alert("Error obtaining user object");
         }
       })
       .catch((e) => {
-        // alert(e);
       });
   };
 
@@ -141,25 +132,14 @@ export default function ProfileScreen({ route, navigation }) {
         if (response.ok) {
           response.json().then((key) => {
             Geocode.setApiKey(key["google"]);
-            // setFirstName(data.first_name);
-            // setLastName(data.last_name);
-            // setEmail(data.email);
-            // setPhone(data.phone);
             setLatLong(data.latlong);
             setNeighborhoods(data.offer.neighborhoods);
             setFoundState(data.offer.state);
             getZip(data.latlong);
-            console.log(data);
             setAssociation(data.association);
             setAssociationName(data.association_name);
             setDetails(data.offer.details);
             setHasCar(data.offer.car);
-            // setCurrentUserObject(data.languages, languages, setLanguageChecked);
-            // setCurrentUserObject(
-            //   data.offer.timesAvailable,
-            //   timeNames,
-            //   setTimes
-            // );
             async function getResources() {
               if (!data.association) {
                 setCurrentUserObject(
@@ -190,7 +170,7 @@ export default function ProfileScreen({ route, navigation }) {
             getResources();
           });
         } else {
-          console.log("Error");
+          console.log("Error: User info not obtained");
         }
       })
       .catch((e) => {
@@ -216,7 +196,6 @@ export default function ProfileScreen({ route, navigation }) {
     var longitude = latlng.lng;
     Geocode.fromLatLng(latitude, longitude).then((response) => {
       if (response.status === "OK") {
-        console.log("worked");
         for (var i = 0; i < response.results.length; i++) {
           for (
             var j = 0;
@@ -289,6 +268,7 @@ export default function ProfileScreen({ route, navigation }) {
         setInitialZip(zip);
         return true;
       }
+      alert("Invalid Zipcode");
       return false;
     }
     return false;
@@ -344,30 +324,13 @@ export default function ProfileScreen({ route, navigation }) {
       var association_name = "";
       var association = "";
       if (data.length === 0) {
-        setNeighborhoods(new_neighborhoods);
-        setFoundState(foundState);
-        setDefaultResources(defaultTaskList);
-        setCurrentUserObject([], defaultTaskList, setResources);
         for (var i = 0; i < defaultTaskList.length; i++) {
           temp_resources[defaultTaskList[i]] = false;
         }
-        setAssociation("");
-        setAssociationName("");
-        setResources(temp_resources);
-        // handleNoAssociations();
       } else {
-        setNeighborhoods(new_neighborhoods);
-        setFoundState(foundState);
-        //handleNewAssociation(data[0]);
-        console.log(data[0])
-        setDefaultResources(data[0].resources);
-        setCurrentUserObject([], data[0].resources, setResources);
         for (var i = 0; i < data[0].resources.length; i++) {
           temp_resources[data[0].resources[i]] = false;
         }
-        setResources(temp_resources);
-        setAssociation(data[0]._id);
-        setAssociationName(data[0].name);
         association = data[0]._id
         association_name = data[0].name
       }
@@ -427,84 +390,10 @@ export default function ProfileScreen({ route, navigation }) {
     }
   }
 
-  const handleNoAssociations = () => {
-    setDefaultResources(defaultTaskList);
-    setCurrentUserObject([], defaultTaskList, setResources);
-    var temp_resources = {};
-    for (var i = 0; i < defaultTaskList.length; i++) {
-      temp_resources[defaultTaskList[i]] = false;
-    }
-    setAssociation("");
-    setAssociationName("");
-    setResources(temp_resources);
-    // navigation.navigate('Edit Offer', {token: token,
-    //   resources: temp_resources});
-  };
-
-  const handleNewAssociation = (association) => {
-    setDefaultResources(association.resources);
-    setCurrentUserObject([], association.resources, setResources);
-    var temp_resources = {};
-    for (var i = 0; i < association.resources.length; i++) {
-      temp_resources[association.resources[i]] = false;
-    }
-    setResources(temp_resources);
-    setAssociation(association._id);
-    setAssociationName(association.name);
-    // navigation.navigate('Edit Offer', {token: token,
-    //   resources: temp_resources});
-  };
-
   const handleLocationUpdate = async (huh) => {
     if (!(await updateLocation())) {
       return;
     }
-    // let params = {
-    //   "offer.neighborhoods": neighborhoods,
-    //   "offer.state": state,
-    //   association: association,
-    //   association_name: associationName,
-    //   location: {
-    //     type: "Point",
-    //     coordinates: latlong,
-    //   },
-    // };
-    // fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
-    //   method: "put",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(params),
-    // })
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       alert("stupid bitch")
-    //       fetch_user_obj(route.params.userID);
-    //       // navigation.navigate("Edit Offer", {
-    //       //   token: token,
-    //       //   resources: resources,
-    //       // })
-    //       // navigation.navigate('Edit Offer', {token: token,
-    //       //   resources: resources});
-    //     } else {
-    //       Alert.alert(
-    //         "Update not successful",
-    //         "Please check your network connection",
-    //         [{ text: "OK" }],
-    //         {
-    //           cancelable: false,
-    //         }
-    //       );
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     Alert.alert(
-    //       "Update not successful",
-    //       "Please check your network connection",
-    //       [{ text: "OK" }],
-    //       {
-    //         cancelable: false,
-    //       }
-    //     );
-    //   });
   };
   if (user) {
     return (
@@ -597,76 +486,6 @@ export default function ProfileScreen({ route, navigation }) {
           </TouchableOpacity>
           <View style={styles.line} />
         </View>
-        {/* <View style={styles.line} />
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Name: </Text>
-          <Text style={texts.label}>
-            {user.first_name + " " + user.last_name}
-          </Text>
-        </View>
-        {user.phone.length != 0 && (
-          <View style={styles.info}>
-            <Text style={texts.label_bold}> Phone: </Text>
-            <Text style={texts.label}>{user.phone}</Text>
-          </View>
-        )}
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Email: </Text>
-          <Text style={texts.label}>{user.email}</Text>
-        </View>
-        {user.association_name.length > 0 && (
-          <View style={styles.info}>
-            <Text style={texts.label_bold}> Mutual Aid: </Text>
-            <Text style={texts.label}>{user.association_name}</Text>
-          </View>
-        )}
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Location: </Text>
-          <Text style={texts.label}>{user.offer.neighborhoods.join(", ")}</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Languages: </Text>
-          <Text style={texts.label}>{user.languages.join(", ")}</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Car: </Text>
-          <Text style={texts.label}>{user.offer.car ? "Yes" : "No"}</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Availability: </Text>
-          <Text style={texts.label}>
-            {user.offer.timesAvailable.join(", ")}
-          </Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Tasks: </Text>
-          <Text style={texts.label}>{user.offer.tasks.join(", ")}</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Details: </Text>
-          <Text style={texts.label}>{user.offer.details}</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={texts.label_bold}> Publish Offer: </Text>
-          <Switch
-            trackColor={{ false: "#767577", true: Colors.grey }}
-            thumbColor={publish ? Colors.blue : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={publish}
-          />
-        </View>
-        {(publish && (
-          <Text style={texts.green_text}> Your offer is now public!</Text>
-        )) || (
-          <Text style={texts.red_text}> Your offer is currently inactive</Text>
-        )}
-        <TouchableOpacity
-          style={buttons.edit}
-          onPress={() => navigation.navigate("Edit Profile", route.params)}
-        >
-          <Text style={texts.button_label}>Edit Profile</Text>
-        </TouchableOpacity> */}
       </ScrollView>
     );
   } else {

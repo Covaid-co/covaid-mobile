@@ -7,9 +7,7 @@ const styles = StyleSheet.create({
   },
   center: {
     marginTop: "5%",
-    // justifyContent: "center",
     backgroundColor: Colors.white,
-    //textAlign: "center",
     alignItems: "center",
   },
   loading: {
@@ -45,19 +43,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const buttons = StyleSheet.create({
-  edit: {
-    marginTop: 15,
-    marginBottom: 100,
-    width: 350,
-    height: 60,
-    backgroundColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
-
 const texts = StyleSheet.create({
   label_bold: {
     fontFamily: "Inter-bold",
@@ -73,10 +58,6 @@ const texts = StyleSheet.create({
     overflow: "visible",
     marginLeft: "auto",
     textAlign: "right",
-  },
-  button_label: {
-    fontSize: 15,
-    color: "white",
   },
   label_blue: {
     fontFamily: "Inter-bold",
@@ -101,4 +82,4 @@ const texts = StyleSheet.create({
   }
 });
 
-export { styles, buttons, texts };
+export { styles, texts };
