@@ -21,6 +21,7 @@ export default function useCachedResources() {
           "Montserrat-bold": require("../assets/fonts/Montserrat/Montserrat-Bold.ttf"),
           Inter: require("../assets/fonts/Inter/Inter-Regular.ttf"),
           "Inter-bold": require("../assets/fonts/Inter/Inter-Bold.ttf"),
+          "Inter-semibold": require("../assets/fonts/Inter/Inter-SemiBold.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

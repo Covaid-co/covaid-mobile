@@ -2,48 +2,37 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
-  main_container: {
+  screen: {
     flex: 1,
-  },
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 0.5,
-    fontSize: 10,
     backgroundColor: "#FFFFFF",
   },
-  input_container: {
-    marginLeft: 24,
-    marginRight: 24,
-    marginTop: 80,
+  content_container: {
+    flex: 0.62,
   },
-  logo: {
-    height: 150,
-    width: 150,
-    margin: 20,
+  input_container: {
+    marginLeft: "5%",
+    marginRight: "5%",
+    marginTop: "30%",
   },
   input: {
-    marginBottom: 36,
-    paddingTop: 4,
-    paddingBottom: 4,
+    marginBottom: 48,
+    paddingBottom: 10,
     borderBottomWidth: 1,
-    borderColor: "#EEEEEE",
+    borderColor: "#eeeeee",
     fontSize: 16,
-    color: "#7F7F7F",
+    fontFamily: "Inter-semibold",
+    color: "#4F4F4F",
+  },
+  footer: {
+    paddingLeft: "5%",
+    paddingRight: "5%",
+    textAlign: "left",
+    flex: 0.05,
+    flexDirection: "row",
   },
 });
 
 const buttons = StyleSheet.create({
-  login: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   signup: {
     marginBottom: 10,
     marginTop: 10,
@@ -56,10 +45,20 @@ const buttons = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  login: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    marginTop: -5,
+    height: 60,
+    backgroundColor: "#2670FF",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   disabled: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
+    paddingTop: 15,
+    paddingBottom: 15,
+    marginTop: -5,
     height: 60,
     backgroundColor: Colors.grey,
     borderRadius: 8,
@@ -88,12 +87,21 @@ const texts = StyleSheet.create({
     color: "#4F4F4F",
   },
   button_label: {
-    fontSize: 15,
-    color: "white",
+    fontSize: 16,
+    color: "#FFFFFF",
+    fontFamily: "Inter-semibold",
   },
-  button_label_blue: {
-    fontSize: 15,
-    color: Colors.blue,
+  forgot_password: {
+    marginTop: 16,
+    fontFamily: "Inter",
+    fontSize: 16,
+    color: "#314CCE",
+    textAlign: "center",
+  },
+  footer_text: {
+    color: "#CECECE",
+    fontFamily: "Inter",
+    fontSize: 14,
   },
 });
 

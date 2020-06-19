@@ -7,7 +7,14 @@ import {
   TextInput,
   Alert,
   AsyncStorage,
+  KeyboardAvoidingView,
+  ScrollView,
+  Animated,
+  Keyboard,
+  StyleSheet,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, validateEmail } from "../../Helpers";
@@ -18,6 +25,8 @@ export default function LoginScreen({ route, navigation }) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(new Animated.Value(0));
+  const [isFocused, setFocus] = useState(false);
 
   useEffect(() => {
     var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then(
@@ -30,11 +39,38 @@ export default function LoginScreen({ route, navigation }) {
         return data;
       }
     );
+    Keyboard.addListener("keyboardDidShow", _keyboardWillShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardWillHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardWillShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardWillHide);
+    };
 
     // if (idHolder && tokenHolder) {
     //   navigation.navigate("Covaid");
     // }
   }, []);
+
+  const _keyboardWillShow = (event) => {
+    setFocus(true);
+    Animated.parallel([
+      Animated.timing(keyboardHeight, {
+        duration: event.duration,
+        toValue: event.endCoordinates.height * 1.75,
+      }),
+    ]).start();
+  };
+
+  const _keyboardWillHide = (event) => {
+    setFocus(false);
+    Animated.parallel([
+      Animated.timing(keyboardHeight, {
+        duration: event.duration,
+        toValue: 0,
+      }),
+    ]).start();
+  };
 
   async function handleLogin() {
     let form = {
@@ -112,48 +148,56 @@ export default function LoginScreen({ route, navigation }) {
   }
 
   return (
-    // <View style={{ backgroundColor: "white" }}>
-    <View style={styles.main_container}>
-      <View style={{ flex: 0.5 }} />
-      <View>
+    // <View style={{ backgroundColor: "white" }}
+    <Animated.View style={[styles.screen, { paddingBottom: keyboardHeight }]}>
+      <View style={{ flex: 0.33 }} />
+      <View style={styles.content_container}>
         <Text style={texts.header}>covaid</Text>
         <Text style={texts.subheader}>volunteers</Text>
         <View style={styles.input_container}>
-          <Text style={texts.input_label}>Email</Text>
-          {/* <TextInput
-            style={styles.input}
-            label="Email"
-            onChangeText={(text) => setUsername(text)}
-            defaultValue={username}
-          /> */}
-          {/* <Text style={texts.input_label}>Password</Text>
           <TextInput
             style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#CECECE"
+            onChangeText={(text) => setUsername(text)}
+            defaultValue={username}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#CECECE"
             onChangeText={(text) => setPassword(text)}
             secureTextEntry={true}
             defaultValue={password}
-          /> */}
+          />
+          <TouchableOpacity
+            style={
+              !validateEmail(username) || !password
+                ? buttons.disabled
+                : buttons.login
+            }
+            onPress={handleLogin}
+            disabled={!validateEmail(username) || !password}
+          >
+            <Text style={texts.button_label}>Login</Text>
+          </TouchableOpacity>
+          {!isFocused && (
+            <TouchableOpacity onPress={handlePasswordReset}>
+              <Text style={texts.forgot_password}>Forgot password?</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-
-      {/* <TouchableOpacity onPress={handlePasswordReset}>
-        <Text style={texts.button_label_blue}>Forgot your Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={
-          !validateEmail(username) || !password
-            ? buttons.disabled
-            : buttons.login
-        }
-        onPress={handleLogin}
-        disabled={!validateEmail(username) || !password}
-      >
-        <Text style={texts.button_label}>LOGIN</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={buttons.signup}>
+      <View style={styles.footer}>
+        <Text style={texts.footer_text}>
+          Don’t have an account? To register as a new volunteer, please visit{" "}
+        </Text>
+        <Text style={texts.footer_text}>www.covaid.co</Text>
+      </View>
+      {/* <TouchableOpacity style={buttons.signup}>
         <Text style={texts.button_label_blue}>SIGN UP</Text>
       </TouchableOpacity>
       {modalVisible && <ResetPassword modalVisible={setModalVisible} />} */}
-    </View>
+    </Animated.View>
   );
 }
