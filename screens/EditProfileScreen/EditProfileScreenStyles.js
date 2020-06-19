@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 17,
     fontFamily: "Inter",
-    color: Colors.black
+    color: Colors.black,
   },
   row: {
     margin: 10,
@@ -64,7 +64,7 @@ const texts = StyleSheet.create({
   label: {
     fontSize: 15,
     color: Colors.grey_font,
-    fontFamily: "Inter-bold"
+    fontFamily: "Inter-bold",
   },
   // button_label: {
   //   fontSize: 15,

@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     borderWidth: 1,
     borderColor: "#EEEEEE",
-  }
+  },
 });
 
 export { styles };

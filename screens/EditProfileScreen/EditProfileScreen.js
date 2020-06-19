@@ -354,14 +354,13 @@ export default function LoginScreen({ route, navigation }) {
     } else if (email.length === 0 || validateEmail(email) === false) {
       alert("Enter a valid email");
       valid = false;
-    } 
+    }
     // else if (details.length === 0) {
     //   alert("Please describe how you can help");
     //   valid = false;
     // }
     return valid;
   };
-
 
   function handleSubmit() {
     if (checkInputs() === false) {
@@ -424,15 +423,13 @@ export default function LoginScreen({ route, navigation }) {
   }
   if (user) {
     return (
-      <ScrollView  
-      style={styles.container}
-      >
-        <View 
-        style = {{
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-        // style={styles.center}
+      <ScrollView style={styles.container}>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          // style={styles.center}
         >
           {form("First Name", setFirstName, firstName)}
           {form("Last Name", setLastName, lastName)}
@@ -456,10 +453,10 @@ export default function LoginScreen({ route, navigation }) {
               defaultValue={zip}
             />
           </View> */}
-          </View>
-          {/* <Details details={details} setDetails={setDetails} /> */}
-          <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
-          {/* <Text style={texts.label}> What is your general availability? </Text>
+        </View>
+        {/* <Details details={details} setDetails={setDetails} /> */}
+        <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
+        {/* <Text style={texts.label}> What is your general availability? </Text>
           <CheckForm obj={times} setObj={setTimes} />
           <Text style={texts.label}> Select Categories</Text>
           <CheckForm obj={resources} setObj={setResources} /> */}

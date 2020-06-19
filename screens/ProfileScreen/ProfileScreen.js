@@ -9,13 +9,13 @@ import {
   AsyncStorage,
   Image,
   TextInput,
-  Alert
+  Alert,
 } from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles, texts } from "./ProfileScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
-import { generateURL,} from "../../Helpers";
+import { generateURL } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 import Geocode from "react-geocode";
 
@@ -34,7 +34,6 @@ export default function ProfileScreen({ route, navigation }) {
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [state, setFoundState] = useState([]);
   const [latlong, setLatLong] = useState([]);
-
 
   const [defaultResources, setDefaultResources] = useState([
     "Food/Groceries",
@@ -118,8 +117,7 @@ export default function ProfileScreen({ route, navigation }) {
         } else {
         }
       })
-      .catch((e) => {
-      });
+      .catch((e) => {});
   };
 
   const setConstants = (data) => {
@@ -189,34 +187,37 @@ export default function ProfileScreen({ route, navigation }) {
 
   function getZip(location) {
     try {
-    var latlng = { lat: parseFloat(location[1]), lng: parseFloat(location[0]) };
-    var latitude = latlng.lat;
-    var longitude = latlng.lng;
-    Geocode.fromLatLng(latitude, longitude).then((response) => {
-      if (response.status === "OK") {
-        for (var i = 0; i < response.results.length; i++) {
-          for (
-            var j = 0;
-            j < response.results[i].address_components.length;
-            j++
-          ) {
-            if (
-              response.results[i].address_components[j].types.indexOf(
-                "postal_code"
-              ) > -1
+      var latlng = {
+        lat: parseFloat(location[1]),
+        lng: parseFloat(location[0]),
+      };
+      var latitude = latlng.lat;
+      var longitude = latlng.lng;
+      Geocode.fromLatLng(latitude, longitude).then((response) => {
+        if (response.status === "OK") {
+          for (var i = 0; i < response.results.length; i++) {
+            for (
+              var j = 0;
+              j < response.results[i].address_components.length;
+              j++
             ) {
-              setInitialZip(
-                response.results[i].address_components[j].long_name
-              );
-              setZip(response.results[i].address_components[j].long_name);
-              break;
+              if (
+                response.results[i].address_components[j].types.indexOf(
+                  "postal_code"
+                ) > -1
+              ) {
+                setInitialZip(
+                  response.results[i].address_components[j].long_name
+                );
+                setZip(response.results[i].address_components[j].long_name);
+                break;
+              }
             }
           }
         }
-      }
-    });
+      });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
 
@@ -233,7 +234,6 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           fetch_user_obj(route.params.userID);
-
         } else {
           Alert.alert(
             "Update not successful",
@@ -329,8 +329,8 @@ export default function ProfileScreen({ route, navigation }) {
         for (var i = 0; i < data[0].resources.length; i++) {
           temp_resources[data[0].resources[i]] = false;
         }
-        association = data[0]._id
-        association_name = data[0].name
+        association = data[0]._id;
+        association_name = data[0].name;
       }
 
       let form = {
@@ -351,8 +351,10 @@ export default function ProfileScreen({ route, navigation }) {
         .then((response) => {
           if (response.ok) {
             fetch_user_obj(route.params.userID);
-            navigation.navigate('Edit Offer', {token: token,
-              resources: temp_resources});
+            navigation.navigate("Edit Offer", {
+              token: token,
+              resources: temp_resources,
+            });
           } else {
             Alert.alert(
               "Update not successful",
@@ -400,15 +402,15 @@ export default function ProfileScreen({ route, navigation }) {
           <Text style={texts.name}>
             {user.first_name + " " + user.last_name}
           </Text>
-        
-        {user.association_name.length > 0 && (
+
+          {user.association_name.length > 0 && (
             <Text style={texts.association}>{user.association_name}</Text>
-        )}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Edit Profile", route.params)}
-        >
-          <Text style={texts.button_label_blue}>Edit Profile</Text>
-        </TouchableOpacity> 
+          )}
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Edit Profile", route.params)}
+          >
+            <Text style={texts.button_label_blue}>Edit Profile</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.info}>
           {(publish && (
@@ -461,7 +463,7 @@ export default function ProfileScreen({ route, navigation }) {
               placeholder="Zip Code"
               placeholderTextColor={Colors.grey}
               onChangeText={(text) => setZip(text)}
-              onSubmitEditing={(text)=> handleLocationUpdate(text)}
+              onSubmitEditing={(text) => handleLocationUpdate(text)}
               defaultValue={zip}
               returnKeyType="done"
             />

@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { Text, TouchableOpacity, View, ScrollView, Alert } from "react-native";
 import Colors from "../../public/Colors";
 
 import { styles } from "./EditOfferScreenStyles";

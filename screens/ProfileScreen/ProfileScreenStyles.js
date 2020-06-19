@@ -79,7 +79,7 @@ const texts = StyleSheet.create({
     fontSize: 17,
     color: Colors.light_grey_font,
     marginBottom: "2%",
-  }
+  },
 });
 
 export { styles, texts };
