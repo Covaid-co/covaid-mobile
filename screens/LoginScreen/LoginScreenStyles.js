@@ -2,11 +2,20 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
+  main_container: {
+    flex: 1,
+  },
   container: {
-    marginTop: "50%",
     justifyContent: "center",
     alignItems: "center",
+    flex: 0.5,
     fontSize: 10,
+    backgroundColor: "#FFFFFF",
+  },
+  input_container: {
+    marginLeft: 24,
+    marginRight: 24,
+    marginTop: 80,
   },
   logo: {
     height: 150,
@@ -14,16 +23,13 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   input: {
-    marginTop: 10,
-    marginBottom: 10,
-    paddingLeft: 10,
-    width: 350,
-    height: 49,
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    fontSize: 15,
-    color: Colors.blue,
+    marginBottom: 36,
+    paddingTop: 4,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderColor: "#EEEEEE",
+    fontSize: 16,
+    color: "#7F7F7F",
   },
 });
 
@@ -64,11 +70,22 @@ const buttons = StyleSheet.create({
 
 const texts = StyleSheet.create({
   header: {
-    marginBottom: 10,
-    fontFamily: "Montserrat",
-    fontSize: 40,
-    color: "black",
+    fontFamily: "Baloo Chettan 2 Medium",
+    marginBottom: -20,
+    fontSize: 50,
+    color: "#2670ff",
     textAlign: "center",
+  },
+  subheader: {
+    fontFamily: "Baloo Chettan 2 Medium",
+    fontSize: 29,
+    color: "#2670ff",
+    textAlign: "center",
+  },
+  input_label: {
+    fontWeight: "600",
+    fontSize: 14,
+    color: "#4F4F4F",
   },
   button_label: {
     fontSize: 15,

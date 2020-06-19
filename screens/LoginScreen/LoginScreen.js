@@ -31,9 +31,9 @@ export default function LoginScreen({ route, navigation }) {
       }
     );
 
-    if (idHolder && tokenHolder) {
-      navigation.navigate("Covaid");
-    }
+    // if (idHolder && tokenHolder) {
+    //   navigation.navigate("Covaid");
+    // }
   }, []);
 
   async function handleLogin() {
@@ -112,47 +112,48 @@ export default function LoginScreen({ route, navigation }) {
   }
 
   return (
-    <View>
-      <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={require("../../assets/images/C-LOGO.png")}
-        />
-        <Text style={texts.header}>Volunteer App for COVID-19</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#7F7F7F"
-          onChangeText={(text) => setUsername(text)}
-          defaultValue={username}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#7F7F7F"
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry={true}
-          defaultValue={password}
-        />
-        <TouchableOpacity onPress={handlePasswordReset}>
-          <Text style={texts.button_label_blue}>Forgot your Password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={
-            !validateEmail(username) || !password
-              ? buttons.disabled
-              : buttons.login
-          }
-          onPress={handleLogin}
-          disabled={!validateEmail(username) || !password}
-        >
-          <Text style={texts.button_label}>LOGIN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={buttons.signup}>
-          <Text style={texts.button_label_blue}>SIGN UP</Text>
-        </TouchableOpacity>
-        {modalVisible && <ResetPassword modalVisible={setModalVisible} />}
+    // <View style={{ backgroundColor: "white" }}>
+    <View style={styles.main_container}>
+      <View style={{ flex: 0.5 }} />
+      <View>
+        <Text style={texts.header}>covaid</Text>
+        <Text style={texts.subheader}>volunteers</Text>
+        <View style={styles.input_container}>
+          <Text style={texts.input_label}>Email</Text>
+          {/* <TextInput
+            style={styles.input}
+            label="Email"
+            onChangeText={(text) => setUsername(text)}
+            defaultValue={username}
+          /> */}
+          {/* <Text style={texts.input_label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry={true}
+            defaultValue={password}
+          /> */}
+        </View>
       </View>
+
+      {/* <TouchableOpacity onPress={handlePasswordReset}>
+        <Text style={texts.button_label_blue}>Forgot your Password?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={
+          !validateEmail(username) || !password
+            ? buttons.disabled
+            : buttons.login
+        }
+        onPress={handleLogin}
+        disabled={!validateEmail(username) || !password}
+      >
+        <Text style={texts.button_label}>LOGIN</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={buttons.signup}>
+        <Text style={texts.button_label_blue}>SIGN UP</Text>
+      </TouchableOpacity>
+      {modalVisible && <ResetPassword modalVisible={setModalVisible} />} */}
     </View>
   );
 }
