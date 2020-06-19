@@ -3,8 +3,12 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     backgroundColor: "white",
+  },
+  center: {
+    marginTop: "5%",
+    backgroundColor: Colors.white,
+    alignItems: "center",
   },
   loading: {
     height: "100%",
@@ -12,58 +16,70 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   line: {
-    borderWidth: 0.8,
-    borderColor: Colors.grey,
-    margin: "1%",
+    borderWidth: 1,
+    borderColor: "#EEEEEE",
+    marginTop: "5%",
   },
   info: {
     flexDirection: "row",
     marginTop: 20,
-  },
-});
-
-const buttons = StyleSheet.create({
-  edit: {
-    marginTop: 15,
-    marginBottom: 100,
-    width: 350,
-    height: 60,
-    backgroundColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
+    display: "flex",
     alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  drive: {
+    flexDirection: "row",
+    marginTop: 20,
+    display: "flex",
+    alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  arrow: {
+    height: 15,
+    width: 15,
+    marginLeft: "auto",
   },
 });
 
 const texts = StyleSheet.create({
-  header: {
-    margin: "1%",
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black",
-  },
   label_bold: {
-    fontFamily: "Montserrat-bold",
+    fontFamily: "Inter-bold",
     fontSize: 17,
-    color: "black",
+    color: Colors.grey_font,
   },
   label: {
+    fontFamily: "Inter",
     fontSize: 17,
-    color: "black",
+    color: Colors.grey_font,
     flex: 1,
     flexWrap: "wrap",
     overflow: "visible",
+    marginLeft: "auto",
+    textAlign: "right",
   },
-  button_label: {
+  label_blue: {
+    fontFamily: "Inter-bold",
+    fontSize: 17,
+    color: Colors.blue,
+  },
+  button_label_blue: {
     fontSize: 15,
-    color: "white",
+    color: Colors.blue,
   },
-  green_text: {
-    color: "green",
+  name: {
+    fontFamily: "Inter-bold",
+    fontSize: 22,
+    color: Colors.grey_font,
+    marginBottom: "2%",
   },
-  red_text: {
-    color: "red",
+  association: {
+    fontFamily: "Inter",
+    fontSize: 17,
+    color: Colors.light_grey_font,
+    marginBottom: "2%",
   },
 });
 
-export { styles, buttons, texts };
+export { styles, texts };

@@ -3,7 +3,7 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingTop: "5%",
     backgroundColor: "white",
   },
   center: {
@@ -16,22 +16,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   line: {
-    borderWidth: 0.8,
-    borderColor: Colors.grey,
-    margin: "1%",
+    borderWidth: 1,
+    borderColor: "#EEEEEE",
   },
   form: {
     margin: 5,
   },
   input: {
     width: 350,
-    height: 50,
-    paddingLeft: 10,
+    height: 40,
     fontSize: 17,
-    borderWidth: 2,
-    borderColor: Colors.grey,
-    borderRadius: 8,
-    fontSize: 15,
+    fontFamily: "Inter",
+    color: Colors.black,
   },
   row: {
     margin: 10,
@@ -66,21 +62,22 @@ const texts = StyleSheet.create({
     color: "black",
   },
   label: {
-    fontSize: 17,
-    color: "black",
-  },
-  button_label: {
     fontSize: 15,
-    color: "white",
+    color: Colors.grey_font,
+    fontFamily: "Inter-bold",
   },
-  green_text: {
-    fontSize: 17,
-    color: "green",
-  },
-  red_text: {
-    fontSize: 17,
-    color: "red",
-  },
+  // button_label: {
+  //   fontSize: 15,
+  //   color: "white",
+  // },
+  // green_text: {
+  //   fontSize: 17,
+  //   color: "green",
+  // },
+  // red_text: {
+  //   fontSize: 17,
+  //   color: "red",
+  // },
 });
 
 export { styles, buttons, texts };

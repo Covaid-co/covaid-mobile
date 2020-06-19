@@ -24,6 +24,17 @@ import fetch_a from "../../util/fetch_auth";
  * hacky fix: idk how to make the screen longer when the keyboard pops up so everything is in a very specific order for a reason
  */
 export default function LoginScreen({ route, navigation }) {
+  navigation.setOptions({
+    headerRight: () => (
+      <TouchableOpacity style={{ margin: 10 }} onPress={() => handleSubmit()}>
+        <Text style={{ color: Colors.blue, fontFamily: "Inter", fontSize: 16 }}>
+          {" "}
+          Done{" "}
+        </Text>
+      </TouchableOpacity>
+    ),
+  });
+
   const [user, setUser] = useState();
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
@@ -33,11 +44,10 @@ export default function LoginScreen({ route, navigation }) {
   const [initialZip, setInitialZip] = useState("");
   const [details, setDetails] = useState();
   const [latlong, setLatLong] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [times, setTimes] = useState({});
   const [languageChecked, setLanguageChecked] = useState({});
   const [resources, setResources] = useState({});
-  const [hasCar, setHasCar] = useState(false);
+  const [hasCar, setHasCar] = useState();
   const [association, setAssociation] = useState("");
   const [associationName, setAssociationName] = useState("");
   const [neighborhoods, setNeighborhoods] = useState([]);
@@ -86,7 +96,7 @@ export default function LoginScreen({ route, navigation }) {
             setConstants(data[0]);
           });
         } else {
-          alert("Error obtaining user object");
+          // alert("Error obtaining user object");
         }
       })
       .catch((e) => {
@@ -102,52 +112,52 @@ export default function LoginScreen({ route, navigation }) {
         if (response.ok) {
           response.json().then((key) => {
             Geocode.setApiKey(key["google"]);
-            setIsLoaded(true);
             setFirstName(data.first_name);
             setLastName(data.last_name);
             setEmail(data.email);
             setPhone(data.phone);
-            setLatLong(data.latlong);
-            setNeighborhoods(data.offer.neighborhoods);
-            setFoundState(data.offer.state);
-            getZip(data.latlong);
-            setAssociation(data.association);
-            setAssociationName(data.association_name);
-            setDetails(data.offer.details);
+            // setLatLong(data.latlong);
+            // setNeighborhoods(data.offer.neighborhoods);
+            // setFoundState(data.offer.state);
+            // getZip(data.latlong);
+            // setAssociation(data.association);
+            // setAssociationName(data.association_name);
+            // setDetails(data.offer.details);
+            // setHasCar(data.offer.car);
             setCurrentUserObject(data.languages, languages, setLanguageChecked);
-            setCurrentUserObject(
-              data.offer.timesAvailable,
-              timeNames,
-              setTimes
-            );
-            async function getResources() {
-              if (!data.association) {
-                setCurrentUserObject(
-                  data.offer.tasks,
-                  defaultResources,
-                  setResources
-                );
-                return;
-              }
-              let params = {
-                associationID: data.association,
-              };
-              var url = generateURL(
-                homeURL + "/api/association/get_assoc/?",
-                params
-              );
+            // setCurrentUserObject(
+            //   data.offer.timesAvailable,
+            //   timeNames,
+            //   setTimes
+            // );
+            // async function getResources() {
+            //   if (!data.association) {
+            //     setCurrentUserObject(
+            //       data.offer.tasks,
+            //       defaultResources,
+            //       setResources
+            //     );
+            //     return;
+            //   }
+            //   let params = {
+            //     associationID: data.association,
+            //   };
+            //   var url = generateURL(
+            //     homeURL + "/api/association/get_assoc/?",
+            //     params
+            //   );
 
-              const response = await fetch(url);
-              response.json().then((res) => {
-                setDefaultResources(res.resources);
-                setCurrentUserObject(
-                  data.offer.tasks,
-                  res.resources,
-                  setResources
-                );
-              });
-            }
-            getResources();
+            //   const response = await fetch(url);
+            //   response.json().then((res) => {
+            //     setDefaultResources(res.resources);
+            //     setCurrentUserObject(
+            //       data.offer.tasks,
+            //       res.resources,
+            //       setResources
+            //     );
+            //   });
+            // }
+            // getResources();
           });
         } else {
           console.log("Error");
@@ -170,77 +180,75 @@ export default function LoginScreen({ route, navigation }) {
 
   // true means location changes
   // false means location failed to change
-  const updateLocation = async (e) => {
-    console.log(zip);
-    console.log(initialZip)
-    if (zip.length != 5 || !/^\d+$/.test(zip)) {
-      alert("Invalid Zipcode");
-      return false;
-    }
-    if (initialZip !== zip) {
-      if (handleChangedZip()) {
-        setInitialZip(zip);
-        return true;
-      }
-      return false;
-    } else {
-      return noLocChange;
-    }
-  };
+  // const updateLocation = async (e) => {
+  //   if (zip.length != 5 || !/^\d+$/.test(zip)) {
+  //     alert("Invalid Zipcode");
+  //     return false;
+  //   }
+  //   if (initialZip !== zip) {
+  //     if (handleChangedZip()) {
+  //       setInitialZip(zip);
+  //       return true;
+  //     }
+  //     return false;
+  //   } else {
+  //     return noLocChange;
+  //   }
+  // };
 
-  function getZip(location) {
-    var latlng = { lat: parseFloat(location[1]), lng: parseFloat(location[0]) };
-    var latitude = latlng.lat;
-    var longitude = latlng.lng;
+  // function getZip(location) {
+  //   var latlng = { lat: parseFloat(location[1]), lng: parseFloat(location[0]) };
+  //   var latitude = latlng.lat;
+  //   var longitude = latlng.lng;
 
-    Geocode.fromLatLng(latitude, longitude).then((response) => {
-      if (response.status === "OK") {
-        for (var i = 0; i < response.results.length; i++) {
-          for (
-            var j = 0;
-            j < response.results[i].address_components.length;
-            j++
-          ) {
-            if (
-              response.results[i].address_components[j].types.indexOf(
-                "postal_code"
-              ) > -1
-            ) {
-              setInitialZip(
-                response.results[i].address_components[j].long_name
-              );
-              setZip(response.results[i].address_components[j].long_name);
-              break;
-            }
-          }
-        }
-      }
-    });
-  }
+  //   Geocode.fromLatLng(latitude, longitude).then((response) => {
+  //     if (response.status === "OK") {
+  //       for (var i = 0; i < response.results.length; i++) {
+  //         for (
+  //           var j = 0;
+  //           j < response.results[i].address_components.length;
+  //           j++
+  //         ) {
+  //           if (
+  //             response.results[i].address_components[j].types.indexOf(
+  //               "postal_code"
+  //             ) > -1
+  //           ) {
+  //             setInitialZip(
+  //               response.results[i].address_components[j].long_name
+  //             );
+  //             setZip(response.results[i].address_components[j].long_name);
+  //             break;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
 
-  const handleNoAssociations = () => {
-    setDefaultResources(defaultTaskList);
-    setCurrentUserObject([], defaultTaskList, setResources);
-    var temp_resources = {};
-    for (var i = 0; i < defaultTaskList.length; i++) {
-      temp_resources[defaultTaskList[i]] = false;
-    }
-    setAssociation("");
-    setAssociationName("");
-    setResources(temp_resources);
-  };
+  // const handleNoAssociations = () => {
+  //   setDefaultResources(defaultTaskList);
+  //   setCurrentUserObject([], defaultTaskList, setResources);
+  //   var temp_resources = {};
+  //   for (var i = 0; i < defaultTaskList.length; i++) {
+  //     temp_resources[defaultTaskList[i]] = false;
+  //   }
+  //   setAssociation("");
+  //   setAssociationName("");
+  //   setResources(temp_resources);
+  // };
 
-  const handleNewAssociation = (association) => {
-    setDefaultResources(association.resources);
-    setCurrentUserObject([], association.resources, setResources);
-    var temp_resources = {};
-    for (var i = 0; i < association.resources.length; i++) {
-      temp_resources[association.resources[i]] = false;
-    }
-    setResources(temp_resources);
-    setAssociation(association._id);
-    setAssociationName(association.name);
-  };
+  // const handleNewAssociation = (association) => {
+  //   setDefaultResources(association.resources);
+  //   setCurrentUserObject([], association.resources, setResources);
+  //   var temp_resources = {};
+  //   for (var i = 0; i < association.resources.length; i++) {
+  //     temp_resources[association.resources[i]] = false;
+  //   }
+  //   setResources(temp_resources);
+  //   setAssociation(association._id);
+  //   setAssociationName(association.name);
+  // };
 
   async function getLatLng(zip) {
     try {
@@ -303,18 +311,18 @@ export default function LoginScreen({ route, navigation }) {
     }
   }
 
-  const handleChangedZip = () => {
-    if (getLatLng(zip)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  async function handleSaveChanges() {
-    if ((await updateLocation()) == noLocChange) {
-      handleSubmit();
-    }
-  }
+  // const handleChangedZip = () => {
+  //   if (getLatLng(zip)) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
+  // async function handleSaveChanges() {
+  //   if ((await updateLocation()) == noLocChange) {
+  //     handleSubmit();
+  //   }
+  // }
 
   const checkInputs = () => {
     var valid = true;
@@ -322,14 +330,14 @@ export default function LoginScreen({ route, navigation }) {
       alert("Need to select a language");
       valid = false;
     }
-    if (Object.values(resources).every((v) => v === false)) {
-      alert("Need to select categories to help");
-      valid = false;
-    }
-    if (Object.values(times).every((v) => v === false)) {
-      alert("No general availability selected");
-      valid = false;
-    }
+    // if (Object.values(resources).every((v) => v === false)) {
+    //   alert("Need to select categories to help");
+    //   valid = false;
+    // }
+    // if (Object.values(times).every((v) => v === false)) {
+    //   alert("No general availability selected");
+    //   valid = false;
+    // }
     if (firstName.length === 0) {
       alert("Enter a first name");
       valid = false;
@@ -346,10 +354,11 @@ export default function LoginScreen({ route, navigation }) {
     } else if (email.length === 0 || validateEmail(email) === false) {
       alert("Enter a valid email");
       valid = false;
-    } else if (details.length === 0) {
-      alert("Please describe how you can help");
-      valid = false;
     }
+    // else if (details.length === 0) {
+    //   alert("Please describe how you can help");
+    //   valid = false;
+    // }
     return valid;
   };
 
@@ -366,22 +375,22 @@ export default function LoginScreen({ route, navigation }) {
       last_name: lastName,
       email: email,
       phone: phone,
-      "offer.timesAvailable": selectedTimes,
-      "offer.car": hasCar,
-      "offer.neighborhoods": neighborhoods,
-      "offer.state": state,
-      "offer.details": details,
-      association: association,
-      association_name: associationName,
-      "offer.tasks": resourceList,
-      location: {
-        type: "Point",
-        coordinates: latlong,
-      },
+      // "offer.timesAvailable": selectedTimes,
+      // "offer.car": hasCar,
+      // "offer.neighborhoods": neighborhoods,
+      // "offer.state": state,
+      // "offer.details": details,
+      // association: association,
+      // association_name: associationName,
+      // "offer.tasks": resourceList,
+      // location: {
+      //   type: "Point",
+      //   coordinates: latlong,
+      // },
       languages: selectedLanguages,
     };
-    var url = generateURL(homeURL + "/api/users/update?", params);
-    fetch_a(route.params.token, "token", url, {
+
+    fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
@@ -408,26 +417,34 @@ export default function LoginScreen({ route, navigation }) {
           onChangeText={(input) => change(input.trim())}
           defaultValue={value}
         />
+        <View style={styles.line} />
       </View>
     );
   }
   if (user) {
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={styles.container}>
-        <View style={styles.center}>
-          {form("First Name:", setFirstName, firstName)}
-          {form("Last Name:", setLastName, lastName)}
-          {form("Email:", setEmail, email)}
+      <ScrollView style={styles.container}>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          // style={styles.center}
+        >
+          {form("First Name", setFirstName, firstName)}
+          {form("Last Name", setLastName, lastName)}
+          {form("Email", setEmail, email)}
           <View style={styles.form}>
-            <Text style={texts.label}>{"Phone"}</Text>
+            <Text style={texts.label}>{"Phone #"}</Text>
             <TextInput
               keyboardType="number-pad"
               style={styles.input}
               onChangeText={(input) => setPhone(input.trim())}
               defaultValue={phone}
             />
+            <View style={styles.line} />
           </View>
-          <View style={styles.form}>
+          {/* <View style={styles.form}>
             <Text style={texts.label}>{"Zip Code:"}</Text>
             <TextInput
               keyboardType="number-pad"
@@ -435,17 +452,16 @@ export default function LoginScreen({ route, navigation }) {
               onChangeText={(input) => setZip(input.trim())}
               defaultValue={zip}
             />
-          </View>
-
-          <Details details={details} setDetails={setDetails} />
-          <Text style={texts.label}> What languages do you speak? </Text>
-          <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
-          <Text style={texts.label}> What is your general availability? </Text>
+          </View> */}
+        </View>
+        {/* <Details details={details} setDetails={setDetails} /> */}
+        <CheckForm obj={languageChecked} setObj={setLanguageChecked} />
+        {/* <Text style={texts.label}> What is your general availability? </Text>
           <CheckForm obj={times} setObj={setTimes} />
           <Text style={texts.label}> Select Categories</Text>
-          <CheckForm obj={resources} setObj={setResources} />
-        </View>
-        <View style={styles.row}>
+          <CheckForm obj={resources} setObj={setResources} /> */}
+        {/* </View> */}
+        {/* <View style={styles.row}>
           <Text style={texts.label}> Car: </Text>
           <Switch
             trackColor={{ false: "#767577", true: Colors.grey }}
@@ -457,14 +473,14 @@ export default function LoginScreen({ route, navigation }) {
           {(hasCar && <Text style={texts.green_text}> Car Available</Text>) || (
             <Text style={texts.red_text}> No Car Available</Text>
           )}
-        </View>
-        <View style={{ marginBottom: 100 }}>
+        </View> */}
+        {/* <View style={{ marginBottom: 100 }}>
           <View style={styles.center}>
             <TouchableOpacity style={buttons.edit} onPress={handleSaveChanges}>
               <Text style={texts.button_label}>Save</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     );
   } else {
