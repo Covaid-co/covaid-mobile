@@ -17,6 +17,8 @@ import { homeURL, storage_keys } from "./constants";
 
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js";
+import EditOfferScreen from "./screens/EditOfferScreen/EditOfferScreen.js";
+import EditDetailsScreen from "./screens/EditDetailsScreen/EditDetailsScreen.js";
 import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
 import ActiveRequestScreen from "./screens/IndividualRequestScreen/ActiveRequestScreen.js";
 import PendingRequestScreen from "./screens/IndividualRequestScreen/PendingRequestScreen.js";
@@ -69,6 +71,8 @@ export default function App(props) {
             }}
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+          <Stack.Screen name="Edit Offer" component={EditOfferScreen} />
+          <Stack.Screen name="Edit Details" component={EditDetailsScreen} />
           <Stack.Screen name="Active Request" component={ActiveRequestScreen} />
           <Stack.Screen
             name="Pending Request"
