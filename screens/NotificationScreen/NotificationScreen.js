@@ -102,7 +102,7 @@ export default function NotificationScreen({ route, navigation }) {
 
   function displayRequestInfo(item) {
     return (
-      <>
+      <View style={{ flex: 1 }}>
         <View style={{ flexDirection: "row" }}>
           <View>
             <View style={{ flexDirection: "row" }}>
@@ -128,12 +128,12 @@ export default function NotificationScreen({ route, navigation }) {
             <Text>></Text>
           </View>
         </View>
-      </>
+      </View>
     );
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={pendingRequests}
         renderItem={({ item }) => (
