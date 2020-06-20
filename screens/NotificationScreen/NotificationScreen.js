@@ -16,41 +16,18 @@ import fetch_a from "../../util/fetch_auth";
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
-  const [user, setUser] = useState({});
 
   useEffect(() => {
     return navigation.addListener("focus", () => {
       AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        console.log("ASYNC DATA: " + data);
-        console.log("ROUTE.PARMS.USERID: " + route.params.userID);
-        fetch_user_obj(route.params.userID);
+        console.log("DATA: " + data);
         fetchRequests(data);
       });
     });
   }, [navigation]);
 
-  const fetch_user_obj = async (id) => {
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            console.log("USER DATA BEFORE UPDATING: " + JSON.stringify(data));
-            setUser(data[0]);
-            console.log("USER (SHOULD BE EMPTY): " + JSON.stringify(user));
-          });
-        } else {
-          alert("Error obtaining user object");
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  };
-
   function timeSince(date) {
+    console.log("DATE: " + date);
     var seconds = Math.floor((new Date() - date) / 1000);
 
     var interval = Math.floor(seconds / 31536000);
@@ -124,8 +101,6 @@ export default function NotificationScreen({ route, navigation }) {
   };
 
   function displayRequestInfo(item) {
-    console.log("USER (SHOULD NOT BE EMPTY): " + JSON.stringify(user));
-    console.log("ITEM: " + JSON.stringify(item));
     return (
       <>
         <View style={{ flexDirection: "row" }}>
@@ -157,30 +132,26 @@ export default function NotificationScreen({ route, navigation }) {
     );
   }
 
-  if (user) {
-    return (
-      <View>
-        <FlatList
-          data={pendingRequests}
-          renderItem={({ item }) => (
-            <TouchableHighlight
-              underlayColor="#F3F5F9"
-              style={styles.container}
-              onPress={() => {
-                navigation.navigate("Pending Request", {
-                  navigation: route.params,
-                  item: item,
-                  pendingList: pendingRequests,
-                });
-              }}
-            >
-              {displayRequestInfo(item)}
-            </TouchableHighlight>
-          )}
-        />
-      </View>
-    );
-  } else {
-    return <Text>Loading...</Text>;
-  }
+  return (
+    <View>
+      <FlatList
+        data={pendingRequests}
+        renderItem={({ item }) => (
+          <TouchableHighlight
+            underlayColor="#F3F5F9"
+            style={styles.container}
+            onPress={() => {
+              navigation.navigate("Pending Request", {
+                navigation: route.params,
+                item: item,
+                pendingList: pendingRequests,
+              });
+            }}
+          >
+            {displayRequestInfo(item)}
+          </TouchableHighlight>
+        )}
+      />
+    </View>
+  );
 }

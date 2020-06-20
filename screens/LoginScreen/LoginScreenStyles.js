@@ -4,7 +4,7 @@ import Colors from "../../public/Colors";
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    paddingBottom: 0,
   },
   content_container: {
     flex: 0.62,
@@ -20,31 +20,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#eeeeee",
     fontSize: 16,
-    fontFamily: "Inter-semibold",
-    color: "#4F4F4F",
+    fontFamily: "Inter",
+    color: "#7F7F7F",
   },
   footer: {
-    paddingLeft: "5%",
-    paddingRight: "5%",
+    flex: 0.1,
+    justifyContent: "flex-start",
+    marginLeft: "12.5%",
+    marginRight: "12.5%",
     textAlign: "left",
-    flex: 0.05,
-    flexDirection: "row",
   },
 });
 
 const buttons = StyleSheet.create({
-  signup: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: "white",
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   login: {
     paddingTop: 15,
     paddingBottom: 15,
@@ -80,11 +68,6 @@ const texts = StyleSheet.create({
     fontSize: 29,
     color: "#2670ff",
     textAlign: "center",
-  },
-  input_label: {
-    fontWeight: "600",
-    fontSize: 14,
-    color: "#4F4F4F",
   },
   button_label: {
     fontSize: 16,

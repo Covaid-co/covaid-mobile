@@ -56,7 +56,6 @@ export default function App(props) {
             component={LoginScreen}
             options={{
               headerShown: false,
-              backgroundColor: "#FFFFFF",
             }}
           />
           <Stack.Screen

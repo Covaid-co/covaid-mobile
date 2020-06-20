@@ -4,9 +4,8 @@ import Colors from "../../public/Colors";
 const passwordStyles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
+    justifyContent: "flex-end",
+    marginBottom: 0,
   },
   modalView: {
     margin: 20,

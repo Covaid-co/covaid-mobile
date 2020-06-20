@@ -24,7 +24,7 @@ export default function ResetPassword(props) {
   const [email, setEmail] = useState();
 
   function handleClose() {
-    props.modalVisible(false);
+    props.setVisible(false);
   }
 
   function handleSubmitForgot() {
@@ -57,13 +57,10 @@ export default function ResetPassword(props) {
   }
   return (
     <View style={styles.centeredView}>
-      <Modal animationType="slide" transparent={false}>
+      <Modal animationType="slide" transparent={true} visible={props.visible}>
         <View style={passwordStyles.centeredView}>
           <View style={passwordStyles.modalView}>
-            <Text style={passwordStyles.descriptTest}>
-              {" "}
-              Reset your password{" "}
-            </Text>
+            <Text style={passwordStyles.descriptTest}>Reset your password</Text>
 
             <TextInput
               style={styles.input}
