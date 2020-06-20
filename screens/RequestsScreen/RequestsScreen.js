@@ -234,7 +234,9 @@ export default function RequestsScreen({ route, navigation }) {
     } else {
       return (
         <FlatList
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
           data={currentRequestList || pendingRequests}
           contentContainerStyle={styles.center}
           renderItem={({ item }) => (

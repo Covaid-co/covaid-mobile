@@ -27,8 +27,7 @@ export default function LoginScreen({ route, navigation }) {
       toValue: 1,
       duration: 400,
     }).start();
-    getKeys();
-
+    checkPreviousLogin();
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
 
@@ -66,17 +65,19 @@ export default function LoginScreen({ route, navigation }) {
     }
   }
 
-  async function getKeys() {
+  async function checkPreviousLogin() {
     try {
-      var idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-      var tokenHolder = await AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY);
+      const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
+      const tokenHolder = await AsyncStorage.getItem(
+        storage_keys.SAVE_TOKEN_KEY
+      );
       if (idHolder && tokenHolder) {
         console.log("IDHOLDER: " + JSON.stringify(idHolder));
         console.log("TokenHolder: " + JSON.stringify(tokenHolder));
         navigation.navigate("Covaid");
       }
-    } catch (error) {
-      console.log("Something went wrong", error);
+    } catch (e) {
+      alert(e);
     }
   }
 
