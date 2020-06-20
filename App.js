@@ -50,7 +50,7 @@ export default function App(props) {
     <View style={styles.container}>
       {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
       <NavigationContainer linking={LinkingConfiguration}>
-        <Stack.Navigator initialRouteName="Login" backgroundColor="#FFFFFF">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Login"
             component={LoginScreen}
@@ -92,6 +92,6 @@ export default function App(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
   },
 });
