@@ -20,20 +20,25 @@ export default function LoginScreen({ route, navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    var idHolder = AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then(
-      (data) => {
+    var loggedIn = true;
+    async function checkPreviousLogin() {
+      await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+        if (data == null) {
+          loggedIn = false;
+        }
         return data;
-      }
-    );
-    var tokenHolder = AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then(
-      (data) => {
+      });
+      await AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        if (data == null) {
+          loggedIn = false;
+        }
         return data;
+      });
+      if (loggedIn) {
+        navigation.navigate("Covaid");
       }
-    );
-
-    if (idHolder && tokenHolder) {
-      navigation.navigate("Covaid");
     }
+    checkPreviousLogin();
   }, []);
 
   async function handleLogin() {
