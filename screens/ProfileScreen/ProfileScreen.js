@@ -10,6 +10,7 @@ import {
   Image,
   TextInput,
   Alert,
+  Keyboard
 } from "react-native";
 import Colors from "../../public/Colors";
 
@@ -21,6 +22,7 @@ import Geocode from "react-geocode";
 
 export default function ProfileScreen({ route, navigation }) {
   const [token, setToken] = useState();
+  const [id, setID] = useState();
   const [publish, setPublish] = useState(false);
   const [user, setUser] = useState();
   const [zip, setZip] = useState();
@@ -60,34 +62,32 @@ export default function ProfileScreen({ route, navigation }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      /**
-       * Hacky fix to the params not passing quick enough
-       * should just be:
-       * fetch_user_obj(route.params.userID);
-       */
-      // AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-      //   fetch_user_obj(data);
-      // });
-      // AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-      //   setToken(data);
-      // });
-
-      async function checkPreviousLogin() {
-        console.log(resources)
+      Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+      async function func() {
+        //prevent offer from showing resources of a previous location after a change
         await setResources(null)
         AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+          setID(data)
           fetch_user_obj(data);
         });
         AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
           setToken(data);
         });
       }
-      checkPreviousLogin();
+      func();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [user]);
+
+  const _keyboardDidHide = () => {
+    //hacky way of letting user know they need to press "done" to submit. If they close their keyboard, then the textinput will just go to original zipcode
+    AsyncStorage.getItem(storage_keys.SAVE_ZIP).then((data) => {
+      setZip(data);
+    });
+  };
+
 
   const handleUpdate = async (publish) => {
     let params = {
@@ -133,7 +133,6 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   const setConstants = (data) => {
-    console.log(resources)
     let params = {};
     var url = generateURL(homeURL + "/api/apikey/google", params);
     fetch(url)
@@ -151,7 +150,6 @@ export default function ProfileScreen({ route, navigation }) {
             setHasCar(data.offer.car);
             async function getResources() {
               if (!data.association) {
-                console.log("default resources")
                 setCurrentUserObject(
                   data.offer.tasks,
                   defaultResources,
@@ -159,7 +157,6 @@ export default function ProfileScreen({ route, navigation }) {
                 );
                 return;
               }
-              console.log("association resources")
               let params = {
                 associationID: data.association,
               };
@@ -199,7 +196,7 @@ export default function ProfileScreen({ route, navigation }) {
     }
   };
 
-  function getZip(location) {
+  async function getZip(location) {
     try {
       var latlng = {
         lat: parseFloat(location[1]),
@@ -220,6 +217,14 @@ export default function ProfileScreen({ route, navigation }) {
                   "postal_code"
                 ) > -1
               ) {
+                console.log(response.results[i].address_components[j].long_name)
+                async function storeZip() {
+                  await AsyncStorage.setItem(
+                    storage_keys.SAVE_ZIP,
+                    response.results[i].address_components[j].long_name
+                  );
+                }
+                storeZip();
                 setInitialZip(
                   response.results[i].address_components[j].long_name
                 );
@@ -271,7 +276,7 @@ export default function ProfileScreen({ route, navigation }) {
       });
   };
   const updateLocation = async (e) => {
-    if (zip.length != 5 || !/^\d+$/.test(zip)) {
+    if (!zip || zip.length != 5 || !/^\d+$/.test(zip)) {
       alert("Invalid Zipcode");
       return false;
     }
@@ -336,24 +341,13 @@ export default function ProfileScreen({ route, navigation }) {
       var association_name = "";
       var association = "";
       if (data.length === 0) {
-        // setDefaultResources(defaultTaskList);
-        //setCurrentUserObject([], defaultTaskList, setResources);
         for (var i = 0; i < defaultTaskList.length; i++) {
           temp_resources[defaultTaskList[i]] = false;
         }
-        // setAssociation("");
-        // setAssociationName("");
-        //console.log(temp_resources)
-        //setResources(temp_resources);
       } else {
-        // setDefaultResources(data[0].resources);
-        //  setCurrentUserObject([], data[0].resources, setResources);
         for (var i = 0; i < data[0].resources.length; i++) {
           temp_resources[data[0].resources[i]] = false;
         }
-        // setResources(temp_resources);
-        // setAssociation(data[0]._id);
-        // setAssociationName(data[0].name);
         association = data[0]._id;
         association_name = data[0].name;
       }
@@ -403,7 +397,7 @@ export default function ProfileScreen({ route, navigation }) {
           );
         });
       Alert.alert(
-        "You have edited locations, please update your categories to help!",
+        "You have edited your location, please update your categories to help!",
         "",
         [{ text: "OK" }],
         {
@@ -412,7 +406,7 @@ export default function ProfileScreen({ route, navigation }) {
       );
       return true;
     } catch (err) {
-      alert("Invaild zipcode or network error");
+      alert("Invaild zipcode");
     }
   }
 
@@ -422,7 +416,7 @@ export default function ProfileScreen({ route, navigation }) {
     }
   };
 
-  if (user) {
+  if (user && initialZip) {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.center}>
@@ -483,6 +477,7 @@ export default function ProfileScreen({ route, navigation }) {
             <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
           </TouchableOpacity>
           <View style={styles.line} />
+          
           <View style={styles.info}>
             <Text style={texts.label_bold}> Zip Code </Text>
             <TextInput
@@ -495,6 +490,7 @@ export default function ProfileScreen({ route, navigation }) {
               returnKeyType="done"
             />
           </View>
+
           <View style={styles.line} />
           <TouchableOpacity
             style={styles.info}

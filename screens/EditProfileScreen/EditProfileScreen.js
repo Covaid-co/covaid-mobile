@@ -160,7 +160,7 @@ export default function LoginScreen({ route, navigation }) {
             // getResources();
           });
         } else {
-          console.log("Error");
+          //console.log("Error");
         }
       })
       .catch((e) => {
