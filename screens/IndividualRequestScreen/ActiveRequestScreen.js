@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
-  TextInput,
   Alert,
   AsyncStorage,
+  FlatList,
 } from "react-native";
 import getDistance from '../../util/distance'
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
@@ -112,29 +111,32 @@ export default function ActiveRequestScreen({ route, navigation }) {
             <View style={styles.requester_name_container}>
               <Text style={texts.individual_req_header}>{route.params.item.requester_name}</Text>
             </View>
-            <Text style={texts.info_header}>Information</Text>
-            <Text style={texts.request_details}>Email: {route.params.item.requester_contact_email}</Text>
-            <Text style={texts.request_details}>Phone: {route.params.item.requester_contact_phone}</Text>
-            <Text style={texts.request_details}>Languages: {route.params.item.languages}</Text>
-  
-            <Text></Text>
-            <Text style={texts.details_header}>Needs:</Text>
-            <Text style={texts.request_details}>{route.params.item.resources.resource_request.join(", ")}</Text>
-  
-            <Text></Text>
-            <Text style={texts.details_header}>Details</Text>
-            <Text style={texts.request_details}>{route.params.item.details}</Text>
-  
-            <Text></Text>
-            <Text style={texts.details_header}>Needed by</Text>
-            <Text style={texts.request_details}>
-              {route.params.item.needed_by.split(" ")[1]} of {formatDate(new Date(route.params.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
-            </Text>
-  
-            <Text></Text>
-            <Text style={texts.details_header}>Reimbursement</Text>
-            <Text style={texts.request_details}>{translatePayment(route.params.item.payment)}</Text>
-            {showButtons()}
+
+            <View style={styles.info_container}>
+              <Text style={texts.info_header}>Information</Text>
+              <Text style={texts.request_details}>Email: {route.params.item.requester_contact_email}</Text>
+              <Text style={texts.request_details}>Phone: {route.params.item.requester_contact_phone}</Text>
+              <Text style={texts.request_details}>Languages: {route.params.item.languages}</Text>
+    
+              <Text></Text>
+              <Text style={texts.details_header}>Needs:</Text>
+              {showResourceBadges(route.params.item.resources.resource_request)}
+    
+              <Text></Text>
+              <Text style={texts.details_header}>Details</Text>
+              <Text style={texts.request_details}>{route.params.item.details}</Text>
+    
+              <Text></Text>
+              <Text style={texts.details_header}>Needed by</Text>
+              <Text style={texts.request_details}>
+                {route.params.item.needed_by.split(" ")[1]} of {formatDate(new Date(route.params.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
+              </Text>
+    
+              <Text></Text>
+              <Text style={texts.details_header}>Reimbursement</Text>
+              <Text style={texts.request_details}>{translatePayment(route.params.item.payment)}</Text>
+              {showButtons()}
+            </View>
           </View>
          
       </View>
@@ -156,5 +158,26 @@ export default function ActiveRequestScreen({ route, navigation }) {
         {modalVisible && navigation.navigate("Confirm Completion", {navigation: route.params, item: route.params.item, modalVisible: setModalVisible, setDone: setDone, activeList: route.params.activeList, completeList: route.params.completeList})}
       </>
     ); 
+  }
+
+  function showResourceBadges(resources) {
+    return (
+      <>
+        <FlatList
+          data={resources}
+          horizontal={false}
+          numColumns={3}
+          contentContainerStyle={styles.center}
+          renderItem={({item}) => 
+            <>
+              <View style={styles.resource_badge}>
+                <Text style={texts.resource_text}>{item}</Text>
+              </View>
+            </>
+          }
+          keyExtractor={(item, index) => index}
+          /> 
+      </>
+    )
   }
 }

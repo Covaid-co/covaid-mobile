@@ -13,6 +13,10 @@ const styles = StyleSheet.create({
     minWidth: '0%',
     minHeight: '100%', 
   },
+  info_container: {
+    left: '5%',
+    marginRight: '5%',
+  },
   requester_name_container: {
     borderRadius: 5,
     borderWidth: 2,
@@ -70,12 +74,23 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     alignItems: "center",
   },
+  resource_list: {
+    margin: '5%', 
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+  },
+  resource_badge: {
+    backgroundColor: '#2670FF',
+    borderRadius: 20,
+    margin: '1%',
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 const buttons = StyleSheet.create({
   accept: {
-    marginLeft: '3%',
-    marginTop: '3%',
     width: '95%',
     height: '10%',
     backgroundColor: "#2670FF",
@@ -85,7 +100,6 @@ const buttons = StyleSheet.create({
     alignItems: "center",
   },
   reject: {
-    marginLeft: '3%',
     marginTop: '3%',
     width: '95%',
     height: '10%',
@@ -95,15 +109,6 @@ const buttons = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  disabled: {
-    margin: 10, 
-    width: 150,
-    height: 60,
-    backgroundColor: Colors.grey,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  }
 });
 
 const texts = StyleSheet.create({
@@ -171,26 +176,32 @@ const texts = StyleSheet.create({
   },
   info_header: {
     color: '#000000',
-    left: '5%',
     fontSize: 16, 
     fontWeight: 'bold',
     marginTop: '3%'
   },
   details_header: {
     color: '#4F4F4F',
-    left: '5%',
     fontSize: 16, 
     fontWeight: 'bold'
   },
   request_details: {
     color: '#7F7F7F',
-    left: '5%',
     fontSize: 16, 
   },
   completion_date: {
     color: '#7F7F7F',
     textAlign: 'center',
     fontSize: 14, 
+  },
+  resource_text: { // fix font 
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    paddingBottom: '2%',
+    margin: '2%', 
+    fontSize: 13, 
   }
 });
 

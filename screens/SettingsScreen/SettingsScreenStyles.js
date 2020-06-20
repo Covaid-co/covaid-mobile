@@ -3,46 +3,29 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: "5%",
+    padding: 20,
     backgroundColor: "white",
-  },
-  center: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loading: {
     height: "100%",
-    justifyContent: "center",
     alignItems: "center",
   },
   line: {
-    borderWidth: 1,
-    borderColor: "#EEEEEE",
+    borderWidth: 0.8,
+    borderColor: Colors.grey,
+    margin: "1%",
   },
-  form: {
-    margin: 5,
-  },
-  input: {
-    width: 350,
-    height: 40,
-    fontSize: 17,
-    fontFamily: "Inter",
-    color: Colors.black,
-  },
-  row: {
-    margin: 10,
-    display: "flex",
+  info: {
     flexDirection: "row",
-    alignItems: "center",
+    marginTop: 20,
   },
 });
 
 const buttons = StyleSheet.create({
-  edit: {
+  logout: {
     marginTop: 15,
+    marginBottom: 100,
     width: 350,
     height: 60,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.grey,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -62,22 +45,22 @@ const texts = StyleSheet.create({
     color: "black",
   },
   label: {
-    fontSize: 15,
-    color: Colors.grey_font,
-    fontFamily: "Inter-bold",
+    fontSize: 17,
+    color: "black",
+    flex: 1,
+    flexWrap: "wrap",
+    overflow: "visible",
   },
-  // button_label: {
-  //   fontSize: 15,
-  //   color: "white",
-  // },
-  // green_text: {
-  //   fontSize: 17,
-  //   color: "green",
-  // },
-  // red_text: {
-  //   fontSize: 17,
-  //   color: "red",
-  // },
+  button_label: {
+    fontSize: 15,
+    color: "white",
+  },
+  green_text: {
+    color: "green",
+  },
+  red_text: {
+    color: "red",
+  },
 });
 
 export { styles, buttons, texts };

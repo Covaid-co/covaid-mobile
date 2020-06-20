@@ -43,8 +43,6 @@ export default function RequestsScreen({ route, navigation }) {
           response.json().then((data) => {
             setUser(data[0]);
           });
-        } else {
-          alert("Error obtaining user object");
         }
       })
       .catch((e) => {
@@ -61,7 +59,6 @@ export default function RequestsScreen({ route, navigation }) {
         requester_name: requestData[i].personal_info.requester_name, 
         resources: requestData[i].request_info, 
         needed_by: requestData[i].request_info.date + " " + requestData[i].request_info.time, 
-        //distance: 0, //getDistance(0, 0, requestData[i].location_info.coordinates[0], requestData[i].location_info.coordinates[1]) + " m", //requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1], 
         lat: parseFloat(requestData[i].location_info.coordinates[0]), 
         long: parseFloat(requestData[i].location_info.coordinates[1]), 
         requester_contact_email: requestData[i].personal_info.requester_email,
@@ -71,7 +68,7 @@ export default function RequestsScreen({ route, navigation }) {
         request_id: requestData[i]._id,  
         languages: requestData[i].personal_info.languages, 
         payment: requestData[i].request_info.payment, 
-      } // add any relevant information 
+      } 
       tempList.push(element); 
     }
     //initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
@@ -140,7 +137,7 @@ export default function RequestsScreen({ route, navigation }) {
             data={options} 
             style={styles.dropdown_style}
             textColor="#4F4F4F"
-            placeholder="Requires Action"
+            defaultValue="Requires Action"
             
             
             onChangeText={(label, value) =>{
@@ -189,7 +186,7 @@ export default function RequestsScreen({ route, navigation }) {
             contentContainerStyle={styles.center}
             renderItem={({item}) => 
               <TouchableOpacity style={getContainerType(currentRequestType)} onPress={() => { 
-                if (currentRequestType == volunteer_status.PENDING) {
+                if (currentRequestType == volunteer_status.PENDING || currentRequestType == null) {
                   navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests, volunteer: user}); 
                 } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
                   navigation.navigate("Active Request", {navigation: route.params, item: item, activeList: activeRequests, completeList: completedRequests, volunteer: user});
@@ -201,6 +198,7 @@ export default function RequestsScreen({ route, navigation }) {
                 {displayRequestInfo(currentRequestType, item)}
               </TouchableOpacity>
             }
+            keyExtractor={(item, index) => index}
             /> 
       );
     }

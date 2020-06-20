@@ -42,18 +42,15 @@ export default function CompleteConfirm({ route, navigation }) {
     };
 
     var url = generateURL(homeURL + "/api/request/completeRequest?", params);
-
-    // TODO: remove useless token string 
     
     AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => { 
       fetch_a(data, "token", url, {
         method: "put",
       })
         .then((response) => {
-          if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
+          if (response.ok) { 
             removeFromArray(route.params.item, route.params.activeList); 
             route.params.completeList.push(route.params.item); 
-            //alert("Marked complete.")
           } else {
             alert("Unable to complete, please email us at covaidco@gmail.com.");
           }
@@ -82,7 +79,6 @@ export default function CompleteConfirm({ route, navigation }) {
       />
       <Text></Text>
       <View style={{display: message.length < 10, style: styles.container}}>
-        <Text>{message.length} afasfasldkjfa</Text>
         <TouchableOpacity onPress={handleConfirm} style={buttons.accept}>
           <Text></Text>
           <Text style={texts.button_label}>Confirm {"\n"}</Text>
