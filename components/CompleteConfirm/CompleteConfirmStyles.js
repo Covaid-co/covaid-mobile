@@ -3,7 +3,7 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 1)',
     minHeight: '100%',
     minWidth: '100%', 
   },
@@ -44,7 +44,7 @@ const buttons = StyleSheet.create({
     marginLeft: '3%',
     marginTop: '3%',
     width: '95%',
-    height: '10%',
+    height: '30%',
     backgroundColor: "#2670FF",
     borderColor: "#2670FF",
     borderRadius: 8,
@@ -68,6 +68,7 @@ const texts = StyleSheet.create({
     color: "black",
   },
   button_label: {
+    padding: '3%',
     fontSize: 15,
     color: '#FFFFFF',
   },

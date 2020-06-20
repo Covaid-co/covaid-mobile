@@ -69,7 +69,6 @@ export default function ActiveRequestScreen({ route, navigation }) {
         .then((response) => {
           if (response.ok) { // TODO: Move it from pending to active on RequestsScreen
             removeFromArray(route.params.item, route.params.activeList); 
-            alert("Cancelled request.")
           } else {
             alert("Unable to cancel, please email us at covaidco@gmail.com.");
           }
@@ -120,7 +119,7 @@ export default function ActiveRequestScreen({ route, navigation }) {
   
             <Text></Text>
             <Text style={texts.details_header}>Needs:</Text>
-            <Text style={texts.request_details}>{route.params.item.resources.resource_request}</Text>
+            <Text style={texts.request_details}>{route.params.item.resources.resource_request.join(", ")}</Text>
   
             <Text></Text>
             <Text style={texts.details_header}>Details</Text>

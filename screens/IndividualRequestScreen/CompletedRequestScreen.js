@@ -28,7 +28,7 @@ export default function CompletedRequestScreen({ route, navigation }) {
         <Text></Text>
         <Text style={texts.details_header}>Needs:</Text>
         <Text style={texts.request_details}>{route.params.item.resources.resource_request}</Text>
-
+        
         <Text></Text>
         <Text style={texts.details_header}>Details</Text>
         <Text style={texts.request_details}>{route.params.item.details}</Text>
@@ -44,7 +44,7 @@ export default function CompletedRequestScreen({ route, navigation }) {
         <Text style={texts.request_details}>{translatePayment(route.params.item.payment)}</Text>
 
         <Text></Text>
-        <Text style={texts.completion_date}>Request completed on</Text>
+        <Text style={texts.completion_date}>Request aaaaaacompleted on</Text>
         <Text style={texts.completion_date}>{formatDate(new Date(route.params.item.completed_date), "MMMMMM dd, yyyy h:mm TT", false)}</Text>
       </View>
     </View>

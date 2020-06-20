@@ -2,22 +2,15 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
-  TextInput,
-  Alert,
-  FlatList, StyleSheet, ListItem, 
+  FlatList, 
   AsyncStorage,
 } from "react-native";
 import { Dropdown } from 'react-native-material-dropdown';
-import Modal from 'react-native-modal';
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
-import { generateURL, validateEmail, formatDate } from "../../Helpers";
+import { generateURL, formatDate } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
-import PendingRequestScreen from "../IndividualRequestScreen/PendingRequestScreen";
-import CompletedRequestScreen from "../IndividualRequestScreen/CompletedRequestScreen";
-import ActiveRequestScreen from "../IndividualRequestScreen/ActiveRequestScreen";
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 export default function RequestsScreen({ route, navigation }) {
@@ -147,6 +140,8 @@ export default function RequestsScreen({ route, navigation }) {
             data={options} 
             style={styles.dropdown_style}
             textColor="#4F4F4F"
+            placeholder="Requires Action"
+            
             
             onChangeText={(label, value) =>{
                 var reqType = requestTypeList[value];
@@ -163,10 +158,8 @@ export default function RequestsScreen({ route, navigation }) {
               }
             }
           />
-        <View style = {styles.center}>
-          <Text>Welcome back, {user.first_name}!</Text>   
-          </View>
-        
+        <View style = {styles.center}> 
+          </View>        
           {displayAllRequests(currentRequestList)}
       </View>  
     );

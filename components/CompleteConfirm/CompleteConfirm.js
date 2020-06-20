@@ -2,28 +2,23 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  Alert,
-  Modal,
   TouchableOpacity,
   TextInput,
   AsyncStorage,
 } from "react-native";
 
 import { styles, texts, buttons } from "./CompleteConfirmStyles";
-
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
 
 /**
- * Reset Password modal
+ * Complete confirm modal
  */
 export default function CompleteConfirm({ route, navigation }) {
   const [message, setMessage] = useState("");
 
   function handleConfirm() {
-    //alert(message + " fasjflsakjld")
-    //console.log(props.item.request_id + "reqid")
     completeRequest(); 
     route.params.setDone(true); 
     route.params.modalVisible(false);
@@ -39,7 +34,7 @@ export default function CompleteConfirm({ route, navigation }) {
 
   function completeRequest() {
     let form = {
-      reason: message,
+      reason: message.trim(),
       adminMode: true,
     };
     let params = {
@@ -86,10 +81,14 @@ export default function CompleteConfirm({ route, navigation }) {
         defaultValue={message}
       />
       <Text></Text>
-      <TouchableOpacity onPress={handleConfirm} style={{display: message || "none"}, buttons.accept}>
-        <Text></Text>
-        <Text style={texts.button_label}>Confirm {"\n"}</Text>
-      </TouchableOpacity>
+      <View style={{display: message.length < 10, style: styles.container}}>
+        <Text>{message.length} afasfasldkjfa</Text>
+        <TouchableOpacity onPress={handleConfirm} style={buttons.accept}>
+          <Text></Text>
+          <Text style={texts.button_label}>Confirm {"\n"}</Text>
+        </TouchableOpacity>
+      </View>
+      
     </View>
   );
 }

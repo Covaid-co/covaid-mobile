@@ -160,7 +160,7 @@ export default function PendingRequestScreen({ route, navigation }) {
   
             <Text></Text>
             <Text style={texts.details_header}>Needs:</Text>
-            <Text style={texts.request_details}>{route.params.item.resources.resource_request}</Text>
+            <Text style={texts.request_details}>{route.params.item.resources.resource_request.join(", ")}</Text>
   
             <Text></Text>
             <Text style={texts.details_header}>Details</Text>

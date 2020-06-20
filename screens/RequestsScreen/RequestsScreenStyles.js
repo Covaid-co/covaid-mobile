@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 5,
     minWidth: '90%',
+    maxWidth: '90%',
     backgroundColor: "white",
     borderRadius: 5,
     borderWidth: 2,
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 5,
     minWidth: '90%',
+    maxWidth: '90%',
     backgroundColor: "white",
     borderRadius: 5,
     borderWidth: 2,
@@ -67,6 +69,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 5,
     minWidth: '90%',
+    maxWidth: '90%',
     backgroundColor: "white",
     borderRadius: 5,
     borderWidth: 2,
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white", 
     marginLeft: "35%", 
-    marginRight: "-450%"
+    marginRight: "-450%",
   }
 });
 
