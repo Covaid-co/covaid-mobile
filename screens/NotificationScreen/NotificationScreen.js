@@ -52,7 +52,7 @@ export default function NotificationScreen({ route, navigation }) {
   }
 
   function filterRequests(requests) {
-    let pending = [];
+    const pending = [];
     requests.map((request) => {
       pending.push({
         key: request._id,
@@ -67,7 +67,7 @@ export default function NotificationScreen({ route, navigation }) {
   }
 
   function fetchRequests(token) {
-    let params = { status: volunteer_status.PENDING };
+    const params = { status: volunteer_status.PENDING };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
 
     fetch_a(token, "token", url, {
@@ -89,7 +89,7 @@ export default function NotificationScreen({ route, navigation }) {
 
   const getDate = (date) => {
     var d = new Date(date);
-    let arr = d.toDateString().split(" ");
+    const arr = d.toDateString().split(" ");
     let s = "";
     s += arr[1];
     s += " ";
@@ -99,7 +99,7 @@ export default function NotificationScreen({ route, navigation }) {
 
   function displayRequestInfo(item) {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.screen}>
         <View style={{ flexDirection: "row" }}>
           <View>
             <View style={{ flexDirection: "row" }}>
@@ -111,18 +111,17 @@ export default function NotificationScreen({ route, navigation }) {
                 {item.name.split(" ")[0]}{" "}
                 <Text style={texts.need_help}>needs your help</Text>
               </Text>
-              <View style={{ marginTop: 6, flexDirection: "row" }}>
+              <View style={styles.resources}>
                 <Text style={texts.tasks}>
                   {item.resources.resource_request.join(", ")}
                 </Text>
               </View>
             </View>
           </View>
-          <View style={{ flexGrow: 1 }} />
-          <View style={{ alignItems: "flex-end" }}>
+          <View style={styles.grow} />
+          <View style={styles.rhs}>
             <Text style={texts.timestamp}>{item.timestamp}</Text>
-            <View style={{ flexGrow: 1 }} />
-            <Text>></Text>
+            <View style={styles.grow} />
           </View>
         </View>
       </View>
@@ -130,7 +129,7 @@ export default function NotificationScreen({ route, navigation }) {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.screen}>
       <FlatList
         data={pendingRequests}
         renderItem={({ item }) => (

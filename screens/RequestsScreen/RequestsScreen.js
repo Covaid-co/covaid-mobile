@@ -12,7 +12,7 @@ import {
   Button,
   AsyncStorage,
 } from "react-native";
-//import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
+// import { Avatar, Badge, Icon, withBadge } from 'react-native-elements'
 import Modal from "react-native-modal";
 import { styles, buttons, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
@@ -40,7 +40,7 @@ export default function RequestsScreen({ route, navigation }) {
     texts.button_label_blue,
   ]);
   const fetchUser = async (id) => {
-    let params = { id: id };
+    const params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
     fetch(url)
@@ -59,7 +59,7 @@ export default function RequestsScreen({ route, navigation }) {
   };
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
-    let tempList = [];
+    const tempList = [];
     for (var i = 0; i < requestData.length; i++) {
       var element = {
         key: i,
@@ -75,7 +75,7 @@ export default function RequestsScreen({ route, navigation }) {
             0,
             requestData[i].location_info.coordinates[0],
             requestData[i].location_info.coordinates[1]
-          ) + " m", //requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1],
+          ) + " m", // requestData[i].location_info.coordinates[0] + ", " + requestData[i].location_info.coordinates[1],
         requester_contact:
           requestData[i].personal_info.requester_email ||
           requestData[i].personal_info.requester_phone,
@@ -85,7 +85,7 @@ export default function RequestsScreen({ route, navigation }) {
       }; // add any relevant information
       tempList.push(element);
     }
-    //initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
+    // initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
     if (reqStatus == currentRequestType) {
       setCurrentRequestList(tempList);
     }
@@ -94,7 +94,7 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function fetchRequests(reqStatus, requestStateChanger, token) {
-    let params = { status: reqStatus };
+    const params = { status: reqStatus };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
 
     fetch_a(token, "token", url, {
@@ -183,7 +183,7 @@ export default function RequestsScreen({ route, navigation }) {
               <Text style={buttonStyles[3]}>
                 Pending ({pendingRequests.length})
               </Text>
-              {/*<Badge containerStyle={{ position: 'absolute', top: -7, right: 6 }} value={<><Text>{pendingRequests.length}</Text></>} status='warning' />*/}
+              {/* <Badge containerStyle={{ position: 'absolute', top: -7, right: 6 }} value={<><Text>{pendingRequests.length}</Text></>} status='warning' /> */}
             </TouchableOpacity>
             <TouchableOpacity
               style={buttonStyles[1]}
@@ -196,7 +196,7 @@ export default function RequestsScreen({ route, navigation }) {
               <Text style={buttonStyles[4]}>
                 Active ({activeRequests.length})
               </Text>
-              {/*<Badge containerStyle={{ position: 'absolute', top: -7, right: 11 }} value={<><Text>{activeRequests.length}</Text></>} status='warning' />*/}
+              {/* <Badge containerStyle={{ position: 'absolute', top: -7, right: 11 }} value={<><Text>{activeRequests.length}</Text></>} status='warning' /> */}
             </TouchableOpacity>
             <TouchableOpacity
               style={buttonStyles[2]}
@@ -280,12 +280,12 @@ export default function RequestsScreen({ route, navigation }) {
       reqType == volunteer_status.IN_PROGRESS
     ) {
       var resourceBadges = ``;
-      /*item.resources.resource_request.forEach(req => {console.log(req); 
+      /* item.resources.resource_request.forEach(req => {console.log(req); 
         resourceBadges += `<Badge value={<><Text>${req}</Text></>} status='primary' />`; 
       });
       console.log(resourceBadges) 
-      var dom = React.createElement(resourceBadges)*/
-      //dom.innerHTML = resourceBadges;
+      var dom = React.createElement(resourceBadges) */
+      // dom.innerHTML = resourceBadges;
       return (
         <>
           <Text style={texts.request_title}>{item.requester_name}</Text>
@@ -293,7 +293,7 @@ export default function RequestsScreen({ route, navigation }) {
             <Text style={texts.request_label}>Request resources: </Text>
             {item.resources.resource_request.join(", ")}
           </Text>
-          {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
+          {/* <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text> */}
           <Text style={texts.request_text}>
             <Text style={texts.request_label}>Needed by: </Text>
             {item.needed_by}
@@ -319,7 +319,7 @@ export default function RequestsScreen({ route, navigation }) {
             <Text style={texts.request_label}>Request resources: </Text>
             {item.resources.resource_request.join(", ")}
           </Text>
-          {/*<Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text>*/}
+          {/* <Text style={texts.request_text}><Text style={texts.request_label}>Request resources: </Text>{dom}</Text> */}
           <Text style={texts.request_text}>
             <Text style={texts.request_label}>Needed by: </Text>
             {item.needed_by}

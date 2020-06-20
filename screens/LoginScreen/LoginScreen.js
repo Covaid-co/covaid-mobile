@@ -55,11 +55,8 @@ export default function LoginScreen({ route, navigation }) {
 
   async function storeKeys(data) {
     try {
-      await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data["user"]._id);
-      await AsyncStorage.setItem(
-        storage_keys.SAVE_TOKEN_KEY,
-        data["user"].token
-      );
+      await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data.user._id);
+      await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data.user.token);
     } catch (e) {
       alert(e);
     }
@@ -82,7 +79,7 @@ export default function LoginScreen({ route, navigation }) {
   }
 
   async function handlePasswordReset() {
-    let form = { email: username };
+    const form = { email: username };
 
     fetch(homeURL + "/api/users/emailpasswordresetlink", {
       method: "post",
@@ -118,7 +115,7 @@ export default function LoginScreen({ route, navigation }) {
   }
 
   async function handleLogin() {
-    let form = {
+    const form = {
       user: {
         email: username,
         password: password,

@@ -54,29 +54,29 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fafafa",
+    flex: 1,
   },
   contentContainer: {
     paddingTop: 15,
   },
-  optionIconContainer: {
-    marginRight: 12,
-  },
-  option: {
-    backgroundColor: "#fdfdfd",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: "#ededed",
-  },
   lastOption: {
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  option: {
+    backgroundColor: "#fdfdfd",
+    borderBottomWidth: 0,
+    borderColor: "#ededed",
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+  },
+  optionIconContainer: {
+    marginRight: 12,
+  },
   optionText: {
-    fontSize: 15,
     alignSelf: "flex-start",
+    fontSize: 15,
     marginTop: 1,
   },
 });

@@ -23,7 +23,7 @@ export default function CheckForm(props) {
     // <>
     <View style={styles.center}>
       {sortedObj.map((key) => {
-        const isTranslated = props.translations ? true : false;
+        const isTranslated = !!props.translations;
         const taskString =
           isTranslated && props.translations[props.language][key]
             ? props.translations[props.language][key]

@@ -28,7 +28,7 @@ export default function PendingRequestScreen({ route, navigation }) {
   }, []);
 
   function acceptRequest() {
-    let params = {
+    const params = {
       ID: route.params.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/acceptRequest?", params);
@@ -60,7 +60,7 @@ export default function PendingRequestScreen({ route, navigation }) {
   }
 
   function rejectRequest() {
-    let params = {
+    const params = {
       ID: route.params.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/rejectRequest?", params);

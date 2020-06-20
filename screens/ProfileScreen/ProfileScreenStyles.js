@@ -2,82 +2,82 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
+  arrow: {
+    height: 15,
+    marginLeft: "auto",
+    width: 15,
+  },
+  center: {
+    alignItems: "center",
+    backgroundColor: Colors.white,
+    marginTop: "5%",
+  },
   container: {
     backgroundColor: "white",
   },
-  center: {
-    marginTop: "5%",
-    backgroundColor: Colors.white,
+  drive: {
     alignItems: "center",
-  },
-  loading: {
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  line: {
-    borderWidth: 1,
-    borderColor: "#EEEEEE",
-    marginTop: "5%",
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   info: {
+    alignItems: "center",
+    display: "flex",
     flexDirection: "row",
     marginTop: 20,
-    display: "flex",
-    alignItems: "center",
     paddingLeft: 20,
     paddingRight: 20,
   },
-  drive: {
-    flexDirection: "row",
-    marginTop: 20,
-    display: "flex",
-    alignItems: "center",
-    paddingLeft: 20,
-    paddingRight: 20,
+  line: {
+    borderColor: "#EEEEEE",
+    borderWidth: 1,
+    marginTop: "5%",
   },
-  arrow: {
-    height: 15,
-    width: 15,
-    marginLeft: "auto",
+  loading: {
+    alignItems: "center",
+    height: "100%",
+    justifyContent: "center",
   },
 });
 
 const texts = StyleSheet.create({
-  label_bold: {
-    fontFamily: "Inter-bold",
-    fontSize: 17,
-    color: Colors.grey_font,
-  },
-  label: {
+  association: {
+    color: Colors.light_grey_font,
     fontFamily: "Inter",
     fontSize: 17,
+    marginBottom: "2%",
+  },
+  button_label_blue: {
+    color: Colors.blue,
+    fontSize: 15,
+  },
+  label: {
     color: Colors.grey_font,
     flex: 1,
     flexWrap: "wrap",
-    overflow: "visible",
+    fontFamily: "Inter",
+    fontSize: 17,
     marginLeft: "auto",
+    overflow: "visible",
     textAlign: "right",
   },
   label_blue: {
+    color: Colors.blue,
     fontFamily: "Inter-bold",
     fontSize: 17,
-    color: Colors.blue,
   },
-  button_label_blue: {
-    fontSize: 15,
-    color: Colors.blue,
+  label_bold: {
+    color: Colors.grey_font,
+    fontFamily: "Inter-bold",
+    fontSize: 17,
   },
   name: {
+    color: Colors.grey_font,
     fontFamily: "Inter-bold",
     fontSize: 22,
-    color: Colors.grey_font,
-    marginBottom: "2%",
-  },
-  association: {
-    fontFamily: "Inter",
-    fontSize: 17,
-    color: Colors.light_grey_font,
     marginBottom: "2%",
   },
 });

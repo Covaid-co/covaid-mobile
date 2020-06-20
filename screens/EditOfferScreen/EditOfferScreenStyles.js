@@ -7,9 +7,9 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   line: {
-    marginTop: "5%",
-    borderWidth: 1,
     borderColor: "#EEEEEE",
+    borderWidth: 1,
+    marginTop: "5%",
   },
 });
 

@@ -28,11 +28,11 @@ export default function ActiveRequestScreen({ route, navigation }) {
   }, []);
 
   function completeRequest() {
-    let form = {
+    const form = {
       reason: "fake reason",
       adminMode: true,
     };
-    let params = {
+    const params = {
       ID: route.params.item.request_id,
     };
 
@@ -68,7 +68,7 @@ export default function ActiveRequestScreen({ route, navigation }) {
   }
 
   function cancelRequest() {
-    let params = {
+    const params = {
       ID: route.params.item.request_id,
     };
 

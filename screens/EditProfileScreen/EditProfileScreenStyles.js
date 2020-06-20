@@ -2,69 +2,69 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: "5%",
-    backgroundColor: "white",
-  },
   center: {
-    justifyContent: "center",
     alignItems: "center",
-  },
-  loading: {
-    height: "100%",
     justifyContent: "center",
-    alignItems: "center",
   },
-  line: {
-    borderWidth: 1,
-    borderColor: "#EEEEEE",
+  container: {
+    backgroundColor: "white",
+    paddingTop: "5%",
   },
   form: {
     margin: 5,
   },
   input: {
-    width: 350,
-    height: 40,
-    fontSize: 17,
-    fontFamily: "Inter",
     color: Colors.black,
+    fontFamily: "Inter",
+    fontSize: 17,
+    height: 40,
+    width: 350,
+  },
+  line: {
+    borderColor: "#EEEEEE",
+    borderWidth: 1,
+  },
+  loading: {
+    alignItems: "center",
+    height: "100%",
+    justifyContent: "center",
   },
   row: {
-    margin: 10,
+    alignItems: "center",
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    margin: 10,
   },
 });
 
 const buttons = StyleSheet.create({
   edit: {
-    marginTop: 15,
-    width: 350,
-    height: 60,
+    alignItems: "center",
     backgroundColor: Colors.blue,
     borderRadius: 8,
+    height: 60,
     justifyContent: "center",
-    alignItems: "center",
+    marginTop: 15,
+    width: 350,
   },
 });
 
 const texts = StyleSheet.create({
   header: {
-    margin: "1%",
-    fontWeight: "bold",
+    color: "black",
     fontSize: 30,
-    color: "black",
-  },
-  label_bold: {
-    fontFamily: "Montserrat-bold",
-    fontSize: 17,
-    color: "black",
+    fontWeight: "bold",
+    margin: "1%",
   },
   label: {
-    fontSize: 15,
     color: Colors.grey_font,
     fontFamily: "Inter-bold",
+    fontSize: 15,
+  },
+  label_bold: {
+    color: "black",
+    fontFamily: "Montserrat-bold",
+    fontSize: 17,
   },
   // button_label: {
   //   fontSize: 15,
