@@ -10,7 +10,7 @@ import {
   Image,
   TextInput,
   Alert,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import Colors from "../../public/Colors";
 
@@ -65,9 +65,9 @@ export default function ProfileScreen({ route, navigation }) {
       Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
       async function func() {
         //prevent offer from showing resources of a previous location after a change
-        await setResources(null)
+        await setResources(null);
         AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-          setID(data)
+          setID(data);
           fetch_user_obj(data);
         });
         AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
@@ -87,7 +87,6 @@ export default function ProfileScreen({ route, navigation }) {
       setZip(data);
     });
   };
-
 
   const handleUpdate = async (publish) => {
     let params = {
@@ -475,7 +474,7 @@ export default function ProfileScreen({ route, navigation }) {
             <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
           </TouchableOpacity>
           <View style={styles.line} />
-          
+
           <View style={styles.info}>
             <Text style={texts.label_bold}> Zip Code </Text>
             <TextInput
