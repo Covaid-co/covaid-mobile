@@ -217,7 +217,6 @@ export default function ProfileScreen({ route, navigation }) {
                   "postal_code"
                 ) > -1
               ) {
-                console.log(response.results[i].address_components[j].long_name)
                 async function storeZip() {
                   await AsyncStorage.setItem(
                     storage_keys.SAVE_ZIP,
@@ -370,7 +369,6 @@ export default function ProfileScreen({ route, navigation }) {
         .then((response) => {
           if (response.ok) {
             fetch_user_obj(route.params.userID);
-            console.log(temp_resources)
             navigation.navigate("Edit Offer", {
               token: token,
               resources: temp_resources,
