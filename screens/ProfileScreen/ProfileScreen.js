@@ -25,7 +25,7 @@ export default function ProfileScreen({ route, navigation }) {
   const [user, setUser] = useState();
   const [zip, setZip] = useState();
   const [initialZip, setInitialZip] = useState("");
-  const [resources, setResources] = useState({});
+  const [resources, setResources] = useState(undefined);
   const [hasCar, setHasCar] = useState();
   const [details, setDetails] = useState();
 
@@ -65,12 +65,24 @@ export default function ProfileScreen({ route, navigation }) {
        * should just be:
        * fetch_user_obj(route.params.userID);
        */
-      AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        fetch_user_obj(data);
-      });
-      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        setToken(data);
-      });
+      // AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+      //   fetch_user_obj(data);
+      // });
+      // AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+      //   setToken(data);
+      // });
+
+      async function checkPreviousLogin() {
+        console.log(resources)
+        await setResources(null)
+        AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+          fetch_user_obj(data);
+        });
+        AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+          setToken(data);
+        });
+      }
+      checkPreviousLogin();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -88,7 +100,7 @@ export default function ProfileScreen({ route, navigation }) {
     })
       .then((response) => {
         if (response.ok) {
-          //Change the state to refect offer update
+          //Change the state to reflect offer update
           setTimeout(function () {
             console.log("update successful");
             fetch_user_obj(route.params.userID);
@@ -98,7 +110,7 @@ export default function ProfileScreen({ route, navigation }) {
         }
       })
       .catch((e) => {
-        console.log("Error");
+        //console.log("Error");
       });
   };
 
@@ -121,6 +133,7 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   const setConstants = (data) => {
+    console.log(resources)
     let params = {};
     var url = generateURL(homeURL + "/api/apikey/google", params);
     fetch(url)
@@ -138,6 +151,7 @@ export default function ProfileScreen({ route, navigation }) {
             setHasCar(data.offer.car);
             async function getResources() {
               if (!data.association) {
+                console.log("default resources")
                 setCurrentUserObject(
                   data.offer.tasks,
                   defaultResources,
@@ -145,6 +159,7 @@ export default function ProfileScreen({ route, navigation }) {
                 );
                 return;
               }
+              console.log("association resources")
               let params = {
                 associationID: data.association,
               };
@@ -155,7 +170,6 @@ export default function ProfileScreen({ route, navigation }) {
 
               const response = await fetch(url);
               response.json().then((res) => {
-                setDefaultResources(res.resources);
                 setCurrentUserObject(
                   data.offer.tasks,
                   res.resources,
@@ -322,13 +336,24 @@ export default function ProfileScreen({ route, navigation }) {
       var association_name = "";
       var association = "";
       if (data.length === 0) {
+        // setDefaultResources(defaultTaskList);
+        //setCurrentUserObject([], defaultTaskList, setResources);
         for (var i = 0; i < defaultTaskList.length; i++) {
           temp_resources[defaultTaskList[i]] = false;
         }
+        // setAssociation("");
+        // setAssociationName("");
+        //console.log(temp_resources)
+        //setResources(temp_resources);
       } else {
+        // setDefaultResources(data[0].resources);
+        //  setCurrentUserObject([], data[0].resources, setResources);
         for (var i = 0; i < data[0].resources.length; i++) {
           temp_resources[data[0].resources[i]] = false;
         }
+        // setResources(temp_resources);
+        // setAssociation(data[0]._id);
+        // setAssociationName(data[0].name);
         association = data[0]._id;
         association_name = data[0].name;
       }
@@ -351,6 +376,7 @@ export default function ProfileScreen({ route, navigation }) {
         .then((response) => {
           if (response.ok) {
             fetch_user_obj(route.params.userID);
+            console.log(temp_resources)
             navigation.navigate("Edit Offer", {
               token: token,
               resources: temp_resources,
@@ -395,6 +421,7 @@ export default function ProfileScreen({ route, navigation }) {
       return;
     }
   };
+
   if (user) {
     return (
       <ScrollView style={styles.container}>
