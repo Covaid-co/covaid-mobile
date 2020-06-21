@@ -19,6 +19,7 @@ import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 import Geocode from "react-geocode";
+import ProfileHeader from "../../components/ProfileHeader/ProfileHeader.js"
 
 export default function ProfileScreen({ route, navigation }) {
   const [token, setToken] = useState();
@@ -417,6 +418,7 @@ export default function ProfileScreen({ route, navigation }) {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.center}>
+          <ProfileHeader user = {user}/>
           <Text style={texts.name}>
             {user.first_name + " " + user.last_name}
           </Text>
