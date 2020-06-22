@@ -12,6 +12,9 @@ import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, formatDate } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import PendingModal from '../IndividualRequestScreen/PendingModal'
+import ActiveModal from '../IndividualRequestScreen/ActiveModal'
+import CompletedModal from '../IndividualRequestScreen/CompletedModal'
 
 export default function RequestsScreen({ route, navigation }) {
   const [user, setUser] = useState("");
@@ -23,6 +26,11 @@ export default function RequestsScreen({ route, navigation }) {
   const [currentItem, setCurrentItem] = useState();  
   const [buttonStyles, setButtonStyles] = useState([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]);
   const requestTypeList = [volunteer_status.PENDING, volunteer_status.IN_PROGRESS, volunteer_status.COMPLETE]
+  const [modalVisible, setModalVisible] = useState(false);
+  const [pendingModalVisible, setPendingModalVisible] = useState(false); 
+  const [activeModalVisible, setActiveModalVisible] = useState(false); 
+  const [completedModalVisible, setCompletedModalVisible] = useState(false); 
+
   let options = [{
     label: 'Requires Action',
     value: 'Requires Action',
@@ -52,7 +60,6 @@ export default function RequestsScreen({ route, navigation }) {
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) { 
     let tempList = []; 
-    console.log(JSON.stringify(requestData))
     for (var i = 0; i < requestData.length; i++) { 
       var element = { 
         key: i, 
@@ -181,25 +188,43 @@ export default function RequestsScreen({ route, navigation }) {
       );
     } else {
       return (
+        <>
         <FlatList
             data={currentRequestList || pendingRequests}
             contentContainerStyle={styles.center}
             renderItem={({item}) => 
               <TouchableOpacity style={getContainerType(currentRequestType)} onPress={() => { 
-                if (currentRequestType == volunteer_status.PENDING || currentRequestType == null) {
-                  navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests, volunteer: user}); 
-                } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
-                  navigation.navigate("Active Request", {navigation: route.params, item: item, activeList: activeRequests, completeList: completedRequests, volunteer: user});
-                } else if (currentRequestType == volunteer_status.COMPLETE) {
-                  navigation.navigate("Completed Request", {navigation: route.params, item: item});
-                }
                 setCurrentItem(item); 
+                if (currentRequestType == volunteer_status.PENDING || currentRequestType == null) {
+                  //navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests, volunteer: user}); 
+                  setModalVisible(true); 
+                  setPendingModalVisible(true);
+                  setActiveModalVisible(false);
+                  setCompletedModalVisible(false);
+                } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
+                  //navigation.navigate("Active Request", {navigation: route.params, item: item, activeList: activeRequests, completeList: completedRequests, volunteer: user});
+                  setModalVisible(true); 
+                  setPendingModalVisible(false);
+                  setActiveModalVisible(true);
+                  setCompletedModalVisible(false);
+                } else if (currentRequestType == volunteer_status.COMPLETE) {
+                  //navigation.navigate("Completed Request", {navigation: route.params, item: item});
+                  setModalVisible(true); 
+                  setPendingModalVisible(false);
+                  setActiveModalVisible(false);
+                  setCompletedModalVisible(true);
+                }
               }}>
                 {displayRequestInfo(currentRequestType, item)}
               </TouchableOpacity>
             }
             keyExtractor={(item, index) => index}
             /> 
+            
+            {pendingModalVisible && <PendingModal modalVisible={setPendingModalVisible} item={currentItem} pendingList={pendingRequests} activeList={activeRequests} volunteer={user}/>}
+            {activeModalVisible && <ActiveModal modalVisible={setActiveModalVisible} item={currentItem} activeList={activeRequests} completeList={completedRequests} volunteer={user}/>}
+            {completedModalVisible && <CompletedModal modalVisible={setCompletedModalVisible} item={currentItem} />}
+          </>
       );
     }
   }
