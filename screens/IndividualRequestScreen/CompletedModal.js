@@ -7,21 +7,18 @@ import {
   FlatList,
 } from "react-native";
 
-import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
+import { styles, texts } from "./IndividualRequestScreenStyles";
 import { homeURL } from "../../constants";
 import { formatDate, translatePayment } from "../../Helpers";
 
-/**
- * Reset Password modal
- */
 export default function CompletedModal(props) {
   function handleClose() {
     props.modalVisible(false);
   }
 
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType="slide" transparent={false}>
+    <View>
+      <Modal animationType="slide" transparent={false} style={styles.entire_request_container}>
         <View>
           <View style={styles.requester_name_container}>
             <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>

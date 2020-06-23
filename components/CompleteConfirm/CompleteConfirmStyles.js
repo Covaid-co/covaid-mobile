@@ -80,7 +80,7 @@ const texts = StyleSheet.create({
     marginTop: '3%'
   },
   header: {
-    fontFamily: 'Montserrat-bold',
+    fontFamily: 'Inter-bold',
     color: '#333333',
     fontSize: 24, 
     margin: '5%'

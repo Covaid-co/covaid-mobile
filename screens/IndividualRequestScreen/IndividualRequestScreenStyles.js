@@ -3,9 +3,11 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   entire_request_container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    minHeight: '100%',
-    minWidth: '100%', 
+    marginTop: "50%", 
+    backgroundColor: '#000000',
+    top: 400,
+    maxWidth: '10%', 
+    padding: '10%'
   },
   individual_req_container: {
     fontSize: 10,
@@ -50,11 +52,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(219, 147, 39, 0.2)',
     minWidth: '100%',
     justifyContent: "center"
-  },
-  logo: {
-    height: 150,
-    width: 150,
-    margin: 20,
   },
   input: {
     marginTop: 10,
@@ -202,6 +199,15 @@ const texts = StyleSheet.create({
     paddingBottom: '2%',
     margin: '2%', 
     fontSize: 13, 
+  },
+  resource_text2: { // fix font 
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    color: '#000000',
+    paddingBottom: '2%',
+    margin: '2%', 
+    fontSize: 30, 
   }
 });
 

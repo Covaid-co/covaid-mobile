@@ -40,6 +40,32 @@ export default function RequestsScreen({ route, navigation }) {
     value: 'Completed',
   }];
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+        console.log("GETTING USER ID " + data)
+        fetchUser(data); 
+      });   
+
+      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        console.log("GETTING TOKEN " + data)
+        fetchRequests(volunteer_status.PENDING, setPendingRequests, data)
+        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
+        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+      });     
+    });
+    navigation.setOptions = {
+      title: 'Chat',
+      headerStyle: { backgroundColor: 'red' },
+      headerTitleStyle: { color: 'green' },
+    }
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  
+
   
   const fetchUser = async (id) => { 
     let params = { id: id };
@@ -118,23 +144,6 @@ export default function RequestsScreen({ route, navigation }) {
     }
   }  
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        console.log("GETTING USER ID " + data)
-        fetchUser(data); 
-      });   
-
-      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        console.log("GETTING TOKEN " + data)
-        fetchRequests(volunteer_status.PENDING, setPendingRequests, data)
-        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
-      });     
-    });
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-  }, [navigation]);
   if (pendingRequests) {
     console.log(pendingRequests.key)
     return (
@@ -189,6 +198,9 @@ export default function RequestsScreen({ route, navigation }) {
     } else {
       return (
         <>
+        {pendingModalVisible && <PendingModal modalVisible={setPendingModalVisible} item={currentItem} pendingList={pendingRequests} activeList={activeRequests} volunteer={user}/>}
+        {activeModalVisible && <ActiveModal modalVisible={setActiveModalVisible} item={currentItem} activeList={activeRequests} completeList={completedRequests} volunteer={user}/>}
+        {completedModalVisible && <CompletedModal modalVisible={setCompletedModalVisible} item={currentItem} />}
         <FlatList
             data={currentRequestList || pendingRequests}
             contentContainerStyle={styles.center}
@@ -220,10 +232,6 @@ export default function RequestsScreen({ route, navigation }) {
             }
             keyExtractor={(item, index) => index}
             /> 
-            
-            {pendingModalVisible && <PendingModal modalVisible={setPendingModalVisible} item={currentItem} pendingList={pendingRequests} activeList={activeRequests} volunteer={user}/>}
-            {activeModalVisible && <ActiveModal modalVisible={setActiveModalVisible} item={currentItem} activeList={activeRequests} completeList={completedRequests} volunteer={user}/>}
-            {completedModalVisible && <CompletedModal modalVisible={setCompletedModalVisible} item={currentItem} />}
           </>
       );
     }
