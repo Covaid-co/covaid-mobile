@@ -8,7 +8,6 @@ import {
   AsyncStorage,
   Alert,
 } from "react-native";
-import getDistance from '../../util/distance'
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, formatDate, translatePayment } from "../../Helpers";
@@ -157,7 +156,7 @@ export default function PendingModal(props) {
         <View style={styles.modal_background}>
           <View style={styles.rejected_modal_view}>
             <View style={styles.header_container}>
-              <Text style={texts.individual_req_header}>Request Rejected   <Icon name="close" size={35} color="#7F7F7F"/></Text>
+              <Text style={texts.individual_req_header}>Request Rejected</Text>
             </View>
             <Text></Text><Text></Text>
             <TouchableOpacity style={buttons.back} onPress={handleClose}>
@@ -174,6 +173,10 @@ export default function PendingModal(props) {
       <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
           <View style={styles.pending_modal_view}>
+            <TouchableOpacity onPress={handleClose}>
+              <Icon name="close" size={25} color="#7F7F7F" style={buttons.close} onPress={handleClose}/>
+            </TouchableOpacity>
+
             <View style={styles.header_container}>
               <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>
             </View>
@@ -186,7 +189,7 @@ export default function PendingModal(props) {
 
               <Text></Text>
               <Text style={texts.details_header}>Needs:</Text>
-              {/*showResourceBadges(props.item.resources.resource_request)*/}
+              {showResourceBadges(props.item.resources.resource_request)}
               
               <Text></Text>
               <Text style={texts.details_header}>Details</Text>
@@ -202,10 +205,6 @@ export default function PendingModal(props) {
               <Text style={texts.details_header}>Reimbursement</Text>
               <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
             </View>
-            
-            <TouchableOpacity onPress={handleClose}>
-              <Text style={texts.button_label_blue}>Close {"\n"}</Text>
-            </TouchableOpacity>
 
             <TouchableOpacity style={buttons.accept} onPress={() => acceptConfirm()}>
               <Text style={texts.button_label_white}>Accept</Text>
@@ -213,59 +212,10 @@ export default function PendingModal(props) {
             <TouchableOpacity style={buttons.reject} onPress={() => rejectConfirm()}> 
               <Text style={texts.button_label_red}>Decline</Text>
             </TouchableOpacity>
-            <Text></Text><Text></Text>
+            <Text></Text><Text></Text><Text></Text><Text></Text>
           </View>      
           
         </View>
-
-       {/*<View style={styles.centeredView}>
-        <Modal animationType="slide" transparent={false}>
-        <View style={styles.individual_req_container}>
-              <View style={styles.requester_name_container}>
-                <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>
-              </View>
-
-              <View style={styles.info_container}>
-                <Text style={texts.info_header}>Information</Text>
-                <Text style={texts.request_details}>Email: {props.item.requester_contact_email}</Text>
-                <Text style={texts.request_details}>Phone: {props.item.requester_contact_phone}</Text>
-                <Text style={texts.request_details}>Languages: {props.item.languages}</Text>
-      
-                <Text></Text>
-                <Text style={texts.details_header}>Needs:</Text>
-                {showResourceBadges(props.item.resources.resource_request)}
-                
-                <Text style={texts.details_header}>Details</Text>
-                <Text style={texts.request_details}>{props.item.details}</Text>
-      
-                <Text></Text>
-                <Text style={texts.details_header}>Needed by</Text>
-                <Text style={texts.request_details}>
-                  {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
-                </Text>
-      
-                <Text></Text>
-                <Text style={texts.details_header}>Reimbursement</Text>
-                <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
-              
-                <TouchableOpacity onPress={handleClose}>
-                  <Text style={texts.button_label_blue}>Close {"\n"}</Text>
-                </TouchableOpacity>
-
-                <Text></Text><Text></Text><Text></Text>
-                <TouchableOpacity style={buttons.accept} onPress={() => acceptConfirm()}>
-                  <Text style={texts.button_label_white}>Accept</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={buttons.reject} onPress={() => rejectConfirm()}> 
-                  <Text style={texts.button_label_red}>Decline</Text>
-                </TouchableOpacity>
-              
-              </View>
-            </View>
-            
-        </Modal>
-      </View>*/}
-
       </Modal>     
     );
   }
@@ -279,6 +229,7 @@ function showResourceBadges(resources) {
         horizontal={false}
         numColumns={3}
         contentContainerStyle={styles.center}
+        style={styles.list_style}
         renderItem={({item}) => 
           <>
             <View style={styles.resource_badge}>

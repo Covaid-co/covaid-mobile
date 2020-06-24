@@ -8,7 +8,6 @@ import {
   AsyncStorage,
   Alert,
 } from "react-native";
-import getDistance from '../../util/distance'
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, formatDate, translatePayment } from "../../Helpers";
@@ -39,11 +38,11 @@ export default function ActiveModal(props) {
 
   function cancelConfirm() {
     Alert.alert(
-      "Are you sure you want to cancel this request?",
+      "Are you sure you want to unmatch?",
       "This cannot be undone.",
       [  
         {  
-          text: 'Yes',  
+          text: 'Unmatch me',  
           onPress: () => {
             cancelRequest(); 
             setDone(true); 
@@ -51,7 +50,7 @@ export default function ActiveModal(props) {
           },   
         },  
         {   
-          text: 'No', 
+          text: 'Go Back', 
           onPress: () => console.log('No.')
         },  
       ]  
@@ -90,7 +89,7 @@ export default function ActiveModal(props) {
         <View style={styles.modal_background}>
           <View style={styles.done_req_modal_view}>
             <View style={styles.header_container}>
-              <Text style={texts.individual_req_header}>Request Complete!   <Icon name="check" size={35} color="#3ABD24"/></Text>
+              <Text style={texts.individual_req_header}>Request Complete!  <Icon name="check" size={35} color="#3ABD24"/></Text>
             </View>
             <Text style={texts.request_details}>Thank you for completing the request! We appreciate your help.</Text>
             <Text></Text><Text></Text>
@@ -107,7 +106,7 @@ export default function ActiveModal(props) {
         <View style={styles.modal_background}>
           <View style={styles.rejected_modal_view}>
             <View style={styles.header_container}>
-              <Text style={texts.individual_req_header}>Request Cancelled   <Icon name="close" size={35} color="#7F7F7F"/></Text>
+              <Text style={texts.individual_req_header}>Request Cancelled  <Icon name="close" size={35} color="#7F7F7F"/></Text>
             </View>
             <Text></Text><Text></Text><Text></Text>
             <TouchableOpacity style={buttons.back} onPress={handleClose}>
@@ -122,6 +121,9 @@ export default function ActiveModal(props) {
       <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
           <View style={styles.active_modal_view}>
+            <TouchableOpacity onPress={handleClose}>
+              <Icon name="close" size={25} color="#7F7F7F" style={buttons.close} onPress={handleClose}/>
+            </TouchableOpacity>
             <View style={styles.header_container}>
               <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>
             </View>
@@ -134,7 +136,7 @@ export default function ActiveModal(props) {
     
               <Text></Text>
               <Text style={texts.details_header}>Needs:</Text>
-              {/*showResourceBadges(props.item.resources.resource_request)*/}
+              {showResourceBadges(props.item.resources.resource_request)}
     
               <Text></Text>
               <Text style={texts.details_header}>Details</Text>
@@ -151,9 +153,6 @@ export default function ActiveModal(props) {
               <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
             </View>
 
-            <TouchableOpacity onPress={handleClose}>
-              <Text style={texts.button_label_blue}>Close {"\n"}</Text>
-            </TouchableOpacity>
             <TouchableOpacity style={buttons.accept} onPress={() => setConfirmModalVisible(true)}>
               <Text style={texts.button_label_white}>Mark Complete ✓</Text>
             </TouchableOpacity>
@@ -181,6 +180,7 @@ function showResourceBadges(resources) {
         horizontal={false}
         numColumns={3}
         contentContainerStyle={styles.center}
+        style={styles.list_style}
         renderItem={({item}) => 
           <>
             <View style={styles.resource_badge}>

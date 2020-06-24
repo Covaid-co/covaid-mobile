@@ -12,6 +12,7 @@ import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 /**
  * Reset Password modal
@@ -70,10 +71,15 @@ export default function ConfirmModal(props) {
     <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
         <View style={styles.confirm_modal_view}>
+            <TouchableOpacity onPress={handleClose}>
+              <Icon name="close" size={25} color="#7F7F7F" style={buttons.close} onPress={handleClose}/>
+            </TouchableOpacity>
             <View style={styles.header_container}>
                 <Text style={texts.individual_req_header}>Confirmation</Text>
             </View>
-            <Text style={texts.request_details}>How did you complete this request?</Text>
+            <Text></Text>
+            <Text style={texts.confirm_text}>How did you complete this request?</Text>
+            <Text></Text>
 
             <TextInput
                 style={styles.input}
@@ -91,11 +97,30 @@ export default function ConfirmModal(props) {
                     <Text style={texts.button_label_white}>Confirm {"\n"}</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={handleClose}>
-              <Text style={texts.button_label_blue}>Close {"\n"}</Text>
-            </TouchableOpacity>
         </View>
         </View>
     </Modal>
   );
+}
+
+function showResourceBadges(resources) {
+  return (
+    <>
+      <FlatList
+        data={resources}
+        horizontal={false}
+        numColumns={3}
+        contentContainerStyle={styles.center}
+        style={styles.list_style}
+        renderItem={({item}) => 
+          <>
+            <View style={styles.resource_badge}>
+              <Text style={texts.resource_text}>{item}</Text>
+            </View>
+          </>
+        }
+        keyExtractor={(item, index) => index}
+        /> 
+    </>
+  )
 }

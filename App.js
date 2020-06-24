@@ -20,10 +20,6 @@ import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js"
 import EditOfferScreen from "./screens/EditOfferScreen/EditOfferScreen.js";
 import EditDetailsScreen from "./screens/EditDetailsScreen/EditDetailsScreen.js";
 import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
-import ActiveRequestScreen from "./screens/IndividualRequestScreen/ActiveRequestScreen.js"
-import PendingRequestScreen from "./screens/IndividualRequestScreen/PendingRequestScreen.js"
-import CompletedRequestScreen from "./screens/IndividualRequestScreen/CompletedRequestScreen.js"
-import CompleteConfirm from "./components/CompleteConfirm/CompleteConfirm"
 
 const Stack = createStackNavigator();
 
@@ -70,10 +66,6 @@ export default function App(props) {
             }}
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-          <Stack.Screen name="Active Request" component={ActiveRequestScreen} />
-          <Stack.Screen name="Pending Request" component={PendingRequestScreen} />
-          <Stack.Screen name="Completed Request" component={CompletedRequestScreen} />
-          <Stack.Screen name="Confirm Completion" component={CompleteConfirm} />
           <Stack.Screen name="Requests Screen" component={RequestsScreen} />
         </Stack.Navigator>
       </NavigationContainer>

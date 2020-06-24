@@ -7,7 +7,7 @@ import {
   AsyncStorage,
 } from "react-native";
 import { Dropdown } from 'react-native-material-dropdown';
-import { styles, buttons, texts } from "./RequestsScreenStyles";
+import { styles, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, formatDate } from "../../Helpers";
 import fetch_a from '../../util/fetch_auth'
@@ -24,9 +24,7 @@ export default function RequestsScreen({ route, navigation }) {
   const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState(); 
   const [currentItem, setCurrentItem] = useState();  
-  const [buttonStyles, setButtonStyles] = useState([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]);
   const requestTypeList = [volunteer_status.PENDING, volunteer_status.IN_PROGRESS, volunteer_status.COMPLETE]
-  const [modalVisible, setModalVisible] = useState(false);
   const [pendingModalVisible, setPendingModalVisible] = useState(false); 
   const [activeModalVisible, setActiveModalVisible] = useState(false); 
   const [completedModalVisible, setCompletedModalVisible] = useState(false); 
@@ -134,16 +132,6 @@ export default function RequestsScreen({ route, navigation }) {
     });     
   }
 
-  function toggleButtonStyles(reqType){
-    if (reqType === volunteer_status.PENDING) {
-      setButtonStyles([buttons.pressed_tab, buttons.tabs, buttons.tabs, texts.button_label, texts.button_label_blue, texts.button_label_blue]); 
-    } else if (reqType === volunteer_status.IN_PROGRESS) {
-      setButtonStyles([buttons.tabs, buttons.pressed_tab, buttons.tabs, texts.button_label_blue, texts.button_label, texts.button_label_blue]); 
-    } else {
-      setButtonStyles([buttons.tabs, buttons.tabs, buttons.pressed_tab, texts.button_label_blue, texts.button_label_blue, texts.button_label]); 
-    }
-  }  
-
   if (pendingRequests) {
     console.log(pendingRequests.key)
     return (
@@ -165,13 +153,11 @@ export default function RequestsScreen({ route, navigation }) {
                 } else {
                   setCurrentRequestList(pendingRequests); 
                 }
-                //setCurrentRequestList(completedRequests); 
                 setCurrentRequestType(reqType);
-                toggleButtonStyles(reqType); 
               }
             }
           />
-        <View style = {styles.center}> 
+        <View style={styles.center}> 
           </View>        
           {displayAllRequests(currentRequestList)}
       </View>  
@@ -208,20 +194,14 @@ export default function RequestsScreen({ route, navigation }) {
               <TouchableOpacity style={getContainerType(currentRequestType)} onPress={() => { 
                 setCurrentItem(item); 
                 if (currentRequestType == volunteer_status.PENDING || currentRequestType == null) {
-                  //navigation.navigate("Pending Request", {navigation: route.params, item: item, pendingList: pendingRequests, activeList: activeRequests, volunteer: user}); 
-                  setModalVisible(true); 
                   setPendingModalVisible(true);
                   setActiveModalVisible(false);
                   setCompletedModalVisible(false);
                 } else if (currentRequestType == volunteer_status.IN_PROGRESS) {
-                  //navigation.navigate("Active Request", {navigation: route.params, item: item, activeList: activeRequests, completeList: completedRequests, volunteer: user});
-                  setModalVisible(true); 
                   setPendingModalVisible(false);
                   setActiveModalVisible(true);
                   setCompletedModalVisible(false);
                 } else if (currentRequestType == volunteer_status.COMPLETE) {
-                  //navigation.navigate("Completed Request", {navigation: route.params, item: item});
-                  setModalVisible(true); 
                   setPendingModalVisible(false);
                   setActiveModalVisible(false);
                   setCompletedModalVisible(true);
@@ -237,7 +217,7 @@ export default function RequestsScreen({ route, navigation }) {
     }
   }
 
-  function getContainerType(reqType) { // get rid of reqType param
+  function getContainerType(reqType) { 
     if (reqType == volunteer_status.IN_PROGRESS) {
       return styles.request_active
     } else if (reqType == volunteer_status.COMPLETE) {
