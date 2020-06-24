@@ -2,12 +2,170 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
-  entire_request_container: {
-    marginTop: "50%", 
+  modal_background: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+  },
+  completed_modal_view: {
+    backgroundColor: "white",
+    minWidth: '100%',
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    position: 'absolute',
+    bottom: '0%',   
+    textAlign: 'left',
+    borderTopColor: '#3ABD24',
+    borderWidth: 3,
+  },
+  rejected_modal_view: {
+    backgroundColor: "white",
+    minWidth: '100%',
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    position: 'absolute',
+    bottom: '0%',   
+    textAlign: 'left',
+    borderTopColor: '#7F7F7F',
+    borderWidth: 3,
+  },
+  accepted_modal_view: {
+    backgroundColor: "white",
+    minWidth: '100%',
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    position: 'absolute',
+    bottom: '0%',   
+    textAlign: 'left',
+    borderTopColor: '#2670FF',
+    borderWidth: 3,
+  },
+  pending_modal_view: {
+    backgroundColor: "white",
+    minWidth: '100%',
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    position: 'absolute',
+    bottom: '0%',   
+    textAlign: 'left',
+    borderTopColor: '#EB5757',
+    borderWidth: 3,
+  },
+  active_modal_view: {
+    backgroundColor: "white",
+    minWidth: '100%',
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    position: 'absolute',
+    bottom: '0%',   
+    textAlign: 'left',
+    borderTopColor: '#E2A952',
+    borderWidth: 3,
+  },
+  done_req_modal_view: {
+    backgroundColor: "white",
+    minWidth: '100%',
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    position: 'absolute',
+    bottom: '0%',   
+    textAlign: 'left',
+    borderTopColor: '#3ABD24',
+    borderWidth: 3,
+  },
+  header_container: {
+    minWidth: '100%',
+    borderRadius: 5,
+    borderWidth: 0.7,
+    borderColor: 'rgba(0, 0, 0, 0)',
+    borderBottomColor: "rgba(0, 0, 0, 0.2)",
+    textAlign: 'left',
+  }, /*comment out stuff below this*/
+  info_container: {
+    minWidth: '100%',
+    textAlign: 'left',
+  }, 
+  complete_date_container: {
+    minWidth: '100%',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0.7,
+    borderColor: 'rgba(0, 0, 0, 0)',
+    borderTopColor: "rgba(0, 0, 0, 0.2)",
+    margin: '5%',
+  },
+  confirm_modal_view: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    position: "absolute",
+    top: "20%",
+  },
+  
+  /*entire_request_container: {
+    position: "absolute",
+    margin: "50%", 
     backgroundColor: '#000000',
-    top: 400,
-    maxWidth: '10%', 
-    padding: '10%'
   },
   individual_req_container: {
     fontSize: 10,
@@ -64,7 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 15,
     color: Colors.blue,
-  },
+  },*/
   row: {
     margin: 10,
     display: "flex",
@@ -73,8 +231,7 @@ const styles = StyleSheet.create({
   },
   resource_list: {
     margin: '5%', 
-    height: '100%',
-    width: '100%',
+    maxHeight: '10%',
     position: 'absolute',
   },
   resource_badge: {
@@ -88,8 +245,8 @@ const styles = StyleSheet.create({
 
 const buttons = StyleSheet.create({
   accept: {
-    width: '95%',
-    height: '10%',
+    width: '105%',
+    height: '12%',
     backgroundColor: "#2670FF",
     borderColor: "#2670FF",
     borderRadius: 8,
@@ -98,17 +255,83 @@ const buttons = StyleSheet.create({
   },
   reject: {
     marginTop: '3%',
-    width: '95%',
-    height: '10%',
+    width: '105%',
+    height: '12%',
     borderColor: "#EB5757",
     borderRadius: 8,
     borderWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 15,
+    paddingBottom: 15, 
+  },
+  back: {
+    width: '105%',
+    height: '40%',
+    backgroundColor: "#FFFFFF",
+    borderWidth: 2, 
+    borderColor: "#2670FF",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  confirm: {
+    minWidth: '105%', 
+    height: '50%',
+    backgroundColor: "#2670FF",
+    borderColor: "#2670FF",
+    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
   },
 });
 
 const texts = StyleSheet.create({
+  individual_req_header: {
+    fontFamily: 'Montserrat-bold',
+    color: '#333333',
+    fontSize: 24, 
+    marginBottom: '2%',
+  },
+  info_header: {
+    fontFamily: 'Inter-bold',
+    color: '#000000',
+    fontSize: 16, 
+    marginTop: '3%'
+  },
+  details_header: {
+    fontFamily: 'Inter',
+    color: '#4F4F4F',
+    fontSize: 16, 
+    fontWeight: 'bold'
+  },
+  request_details: {
+    fontFamily: 'Inter',
+    color: '#7F7F7F',
+    fontSize: 16, 
+  },
+  completion_date: {
+    fontFamily: 'Inter',
+    color: '#7F7F7F',
+    textAlign: 'center',
+    fontSize: 14, 
+  },
+  button_label_red: {
+    fontSize: 15,
+    color: "red",
+  },
+  button_label_white: {
+    fontSize: 15,
+    color: "white",
+  },
+  button_label_blue: {
+    fontSize: 15,
+    color: "#2670FF",
+  }
+
+
+  /*
+
   header: {
     marginBottom: 10,
     fontFamily: "Montserrat",
@@ -131,33 +354,13 @@ const texts = StyleSheet.create({
     fontSize: 15,
     color: "white",
   },
-  button_label_white: { //
-    fontSize: 15,
-    color: '#FFFFFF',
-  },
-  button_label_blue: { //
-    fontSize: 15,
-    color: Colors.blue,
-  },
-  button_label_green: { //
-    fontSize: 15,
-    color: "green",
-  },
-  button_label_red: {
-    fontSize: 15,
-    color: "red",
-  },
-  button_label_gray: { //
-    fontSize: 15,
-    color: "gray",
-  },
+  
   button_accept_label: {
     fontWeight: "normal",
     fontSize: 16, 
     color: "white",
     margin: '5%',
-    padding: '1%',
-    
+    padding: '1%', 
   },
   button_reject_label: {
     fontSize: 16, 
@@ -165,32 +368,7 @@ const texts = StyleSheet.create({
     margin: '5%',
     padding: '1%'
   }, 
-  individual_req_header: {
-    fontFamily: 'Montserrat-bold',
-    color: '#333333',
-    fontSize: 24, 
-    margin: '5%'
-  },
-  info_header: {
-    color: '#000000',
-    fontSize: 16, 
-    fontWeight: 'bold',
-    marginTop: '3%'
-  },
-  details_header: {
-    color: '#4F4F4F',
-    fontSize: 16, 
-    fontWeight: 'bold'
-  },
-  request_details: {
-    color: '#7F7F7F',
-    fontSize: 16, 
-  },
-  completion_date: {
-    color: '#7F7F7F',
-    textAlign: 'center',
-    fontSize: 14, 
-  },
+  
   resource_text: { // fix font 
     fontFamily: 'Inter',
     fontStyle: 'normal',
@@ -208,7 +386,7 @@ const texts = StyleSheet.create({
     paddingBottom: '2%',
     margin: '2%', 
     fontSize: 30, 
-  }
+  }*/
 });
 
 export { styles, buttons, texts };

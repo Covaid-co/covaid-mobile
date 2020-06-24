@@ -134,39 +134,91 @@ export default function PendingModal(props) {
 
   if (done && accepted) {
     return (
-      <View style={styles.centeredView}>
-        <Modal animationType="slide" transparent={false}>
-        <View style={styles.individual_req_container}>
-          <View style={styles.requester_name_container}>
-            <Text style={texts.individual_req_header}>Request Accepted   <Icon name="check" size={35} color="#2670FF"/></Text>
+      <Modal animationType="slide" transparent={true}>
+        <View style={styles.modal_background}>
+          <View style={styles.accepted_modal_view}>
+            <View style={styles.header_container}>
+              <Text style={texts.individual_req_header}>Request Accepted   <Icon name="check" size={35} color="#2670FF"/></Text>
+            </View>
+            <Text style={texts.request_details}>Thank you for your help! We appreciate your willingness to give back.</Text>
+            <Text></Text>
+            
+            <TouchableOpacity style={buttons.back} onPress={handleClose}>
+              <Text style={texts.button_label_blue}>Back to Tasks</Text>
+            </TouchableOpacity>  
+            <Text></Text><Text></Text>
           </View>
-          <Text style={texts.info_header}></Text>
-          <Text style={texts.request_details}>Thank you for your help! We appreciate your willingness to give back.</Text>
-          <TouchableOpacity onPress={handleClose}>
-            <Text style={texts.button_label_blue}>Close {"\n"}</Text>
-          </TouchableOpacity>  
-        </View>          
+        </View>
       </Modal>
-    </View>
     ); 
   } else if (done & !accepted) {
     return (
-      <View style={styles.centeredView}>
-        <Modal animationType="slide" transparent={false}>
-        <View style={styles.individual_req_container}>
-          <View style={styles.requester_name_container}>
-            <Text style={texts.individual_req_header}>Request Rejected   <Icon name="close" size={35} color="#7F7F7F"/></Text>
+      <Modal animationType="slide" transparent={true}>
+        <View style={styles.modal_background}>
+          <View style={styles.rejected_modal_view}>
+            <View style={styles.header_container}>
+              <Text style={texts.individual_req_header}>Request Rejected   <Icon name="close" size={35} color="#7F7F7F"/></Text>
+            </View>
+            <Text></Text><Text></Text>
+            <TouchableOpacity style={buttons.back} onPress={handleClose}>
+              <Text style={texts.button_label_blue}>Back to Tasks</Text>
+            </TouchableOpacity>  
+            <Text></Text><Text></Text>
           </View>
-          <TouchableOpacity onPress={handleClose}>
-            <Text style={texts.button_label_blue}>Close {"\n"}</Text>
-          </TouchableOpacity>  
-        </View>          
+        </View>
       </Modal>
-    </View>
     ); 
   } else {
     return (
-      <View style={styles.centeredView}>
+
+      <Modal animationType="slide" transparent={true}>
+        <View style={styles.modal_background}>
+          <View style={styles.pending_modal_view}>
+            <View style={styles.header_container}>
+              <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>
+            </View>
+
+            <View style={styles.info_container}>
+              <Text style={texts.info_header}>Information</Text>
+              <Text style={texts.request_details}>Email: {props.item.requester_contact_email}</Text>
+              <Text style={texts.request_details}>Phone: {props.item.requester_contact_phone}</Text>
+              <Text style={texts.request_details}>Languages: {props.item.languages}</Text>
+
+              <Text></Text>
+              <Text style={texts.details_header}>Needs:</Text>
+              {/*showResourceBadges(props.item.resources.resource_request)*/}
+              
+              <Text></Text>
+              <Text style={texts.details_header}>Details</Text>
+              <Text style={texts.request_details}>{props.item.details}</Text>
+
+              <Text></Text>
+              <Text style={texts.details_header}>Needed by</Text>
+              <Text style={texts.request_details}>
+                {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
+              </Text>
+    
+              <Text></Text>
+              <Text style={texts.details_header}>Reimbursement</Text>
+              <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
+            </View>
+            
+            <TouchableOpacity onPress={handleClose}>
+              <Text style={texts.button_label_blue}>Close {"\n"}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={buttons.accept} onPress={() => acceptConfirm()}>
+              <Text style={texts.button_label_white}>Accept</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={buttons.reject} onPress={() => rejectConfirm()}> 
+              <Text style={texts.button_label_red}>Decline</Text>
+            </TouchableOpacity>
+            <Text></Text><Text></Text>
+          </View>      
+          
+        </View>
+
+       {/*<View style={styles.centeredView}>
         <Modal animationType="slide" transparent={false}>
         <View style={styles.individual_req_container}>
               <View style={styles.requester_name_container}>
@@ -212,7 +264,9 @@ export default function PendingModal(props) {
             </View>
             
         </Modal>
-      </View>
+      </View>*/}
+
+      </Modal>     
     );
   }
 }

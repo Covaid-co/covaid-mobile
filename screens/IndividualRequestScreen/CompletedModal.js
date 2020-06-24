@@ -7,8 +7,7 @@ import {
   FlatList,
 } from "react-native";
 
-import { styles, texts } from "./IndividualRequestScreenStyles";
-import { homeURL } from "../../constants";
+import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { formatDate, translatePayment } from "../../Helpers";
 
 export default function CompletedModal(props) {
@@ -17,48 +16,48 @@ export default function CompletedModal(props) {
   }
 
   return (
-    <View>
-      <Modal animationType="slide" transparent={false} style={styles.entire_request_container}>
-        <View>
-          <View style={styles.requester_name_container}>
-            <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>
+    <Modal animationType="slide" transparent={true}>
+      <View style={styles.modal_background}>
+          <View style={styles.completed_modal_view}>
+            <View style={styles.header_container}>
+              <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>
+            </View>
+            
+            <View style={styles.info_container}>
+              <Text></Text>
+              <Text style={texts.details_header}>Needs:</Text>
+              {/*showResourceBadges(props.item.resources.resource_request)*/}
+              
+              <Text></Text>
+              <Text style={texts.details_header}>Details</Text>
+              <Text style={texts.request_details}>{props.item.details}</Text>
+
+              <Text></Text>
+              <Text style={texts.details_header}>Needed by</Text>
+              <Text style={texts.request_details}>
+                {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
+              </Text>
+
+              <Text></Text>
+                <Text style={texts.details_header}>Reimbursement</Text>
+              <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
+            </View>
+
+            <View style={styles.complete_date_container}>
+              <Text></Text>
+              <Text style={texts.completion_date}>Request completed on</Text>
+              <Text style={texts.completion_date}>{formatDate(new Date(props.item.completed_date), "MMMMMM dd, yyyy h:mm TT", false)}</Text>
+            </View>            
+
+            <TouchableOpacity onPress={handleClose}>
+              <Text style={texts.button_label_blue}>Close {"\n"}</Text>
+            </TouchableOpacity>
           </View>
-        </View>
+    
+        
+      </View>
+    </Modal>
 
-        <View style={styles.info_container}>
-          <Text style={texts.info_header}>Information</Text>
-          <Text style={texts.request_details}>Email: {props.item.requester_contact_email}</Text>
-          <Text style={texts.request_details}>Phone: {props.item.requester_contact_phone}</Text>
-          <Text style={texts.request_details}>Languages: {props.item.languages}</Text>
-
-          <Text></Text>
-          <Text style={texts.details_header}>Needs:</Text>
-          {showResourceBadges(props.item.resources.resource_request)}
-          
-          <Text></Text>
-          <Text style={texts.details_header}>Details</Text>
-          <Text style={texts.request_details}>{props.item.details}</Text>
-
-          <Text></Text>
-          <Text style={texts.details_header}>Needed by</Text>
-          <Text style={texts.request_details}>
-            {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
-          </Text>
-
-          <Text></Text>
-            <Text style={texts.details_header}>Reimbursement</Text>
-          <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
-
-          <Text></Text>
-          <Text style={texts.completion_date}>Request completed on</Text>
-          <Text style={texts.completion_date}>{formatDate(new Date(props.item.completed_date), "MMMMMM dd, yyyy h:mm TT", false)}</Text>
-        </View>
-
-        <TouchableOpacity onPress={handleClose}>
-          <Text style={texts.button_label_blue}>Close {"\n"}</Text>
-        </TouchableOpacity>
-      </Modal>
-    </View>
   );
 }
 
