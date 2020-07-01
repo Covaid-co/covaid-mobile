@@ -153,7 +153,7 @@ export default function LoginScreen({ route, navigation }) {
         }
       })
       .catch((e) => {
-        console.log("Error");
+        console.log("Edit Profile Screen Error");
       });
   }
 

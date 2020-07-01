@@ -70,8 +70,6 @@ export default function LoginScreen({ route, navigation }) {
         storage_keys.SAVE_TOKEN_KEY
       );
       if (idHolder && tokenHolder) {
-        console.log("IDHOLDER: " + JSON.stringify(idHolder));
-        console.log("TokenHolder: " + JSON.stringify(tokenHolder));
         navigation.navigate("Covaid");
       }
     } catch (e) {

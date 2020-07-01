@@ -70,7 +70,6 @@ export default function NotificationScreen({ route, navigation }) {
   //     });
   // };
   function timeSince(date) {
-    console.log("DATE: " + date);
     var seconds = Math.floor((new Date() - date) / 1000);
 
     var interval = Math.floor(seconds / 31536000);
@@ -145,7 +144,7 @@ export default function NotificationScreen({ route, navigation }) {
             filterRequests(data);
           });
         } else {
-          console.log("Error");
+          console.log("Notification Request Fetch Error");
         }
       })
       .catch((e) => {
@@ -164,7 +163,6 @@ export default function NotificationScreen({ route, navigation }) {
   };
 
   function displayRequestInfo(item) {
-    console.log(pendingRequests);
     return (
       <View style={styles.screen}>
         <View style={styles.flexrow}>
