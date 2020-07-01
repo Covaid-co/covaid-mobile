@@ -30,6 +30,9 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
+  nonewnotifs: {
+    padding: 8,
+  },
 });
 
 const texts = StyleSheet.create({
@@ -72,6 +75,12 @@ const texts = StyleSheet.create({
     color: "#7F7F7F",
     fontSize: 14,
     textAlign: "right",
+  },
+  nonewnotifs: {
+    color: Colors.blue,
+    fontSize: 14,
+    textAlign: "center",
+    alignItems: "center",
   },
 });
 

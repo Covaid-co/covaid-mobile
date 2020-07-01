@@ -41,7 +41,12 @@ export default function PendingRequestScreen({ route, navigation }) {
           if (response.ok) {
             alert("Accepted request.");
             removeFromArray(route.params.item, route.params.pendingList);
-            route.params.activeList.push(route.params.item);
+            if (route.params.activeList) {
+              route.params.activeList.push(route.params.item);
+            }
+            // if (route.params.currScreen === "Notification") {
+            navigation.navigate("Requests");
+            // }
           } else {
             alert("Unable to accept, please email us at covaidco@gmail.com.");
           }
