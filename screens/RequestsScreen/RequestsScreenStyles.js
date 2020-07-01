@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
 
 const texts = StyleSheet.create({
   request_resource_text: {
+    fontFamily: 'Inter',
     fontSize: 15,
     color: Colors.light_grey_font,
     textAlign: "left",
@@ -88,6 +89,7 @@ const texts = StyleSheet.create({
     fontFamily: "Montserrat-bold",
   },  
   request_date_text: {
+    fontFamily: 'Inter',
     position: 'absolute', 
     right: '0%',
     top: '10%',
@@ -95,12 +97,11 @@ const texts = StyleSheet.create({
     color: Colors.light_grey_font,
     textAlign: "right",
     padding: '2%',
-    fontWeight: 'normal'
   },
   no_request_text: {
+    fontFamily: 'Inter',
     fontSize: 20,
     color: Colors.grey,
-    fontWeight: "bold",
     textAlign: "center",
     padding: '2%',
     paddingBottom: '5%',

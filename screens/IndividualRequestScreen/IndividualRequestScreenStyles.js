@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   confirm_modal_view: {
     margin: '7%',
     paddingTop: '0%',
+    width: '100%',
     backgroundColor: Colors.white,
     borderRadius: 20,
     borderColor: Colors.blue, 
@@ -204,8 +205,8 @@ const styles = StyleSheet.create({
 
 const buttons = StyleSheet.create({
   accept: {
-    width: '105%',
-    height: '10%',
+    width: 300,
+    height: 50,
     backgroundColor: Colors.blue,
     borderColor: Colors.blue,
     borderRadius: 8,
@@ -214,8 +215,8 @@ const buttons = StyleSheet.create({
   },
   reject: {
     marginTop: '3%',
-    width: '105%',
-    height: '10%',
+    width: 300,
+    height: 50,
     borderColor: Colors.red,
     borderRadius: 8,
     borderWidth: 2,
@@ -225,8 +226,8 @@ const buttons = StyleSheet.create({
     paddingBottom: 10, 
   },
   back: {
-    width: '105%',
-    height: '40%',
+    width: 300,
+    height: 50,
     backgroundColor: Colors.white,
     borderWidth: 2, 
     borderColor: Colors.blue,
@@ -235,8 +236,8 @@ const buttons = StyleSheet.create({
     alignItems: "center",
   },
   confirm: {
-    minWidth: '105%', 
-    height: '50%',
+    minWidth: 300, 
+    height: 50,
     backgroundColor: Colors.blue,
     borderColor: Colors.blue,
     borderRadius: 8,
@@ -264,10 +265,9 @@ const texts = StyleSheet.create({
     marginTop: '3%'
   },
   details_header: {
-    fontFamily: 'Inter',
+    fontFamily: 'Inter-bold',
     color: Colors.grey_font,
     fontSize: 16, 
-    fontWeight: 'bold'
   },
   request_details: {
     fontFamily: 'Inter',
@@ -281,25 +281,27 @@ const texts = StyleSheet.create({
     fontSize: 14, 
   },
   button_label_red: {
+    fontFamily: 'Inter',
     fontSize: 15,
     color: "red",
   },
   button_label_white: {
+    fontFamily: 'Inter',
     fontSize: 15,
     color: Colors.white,
   },
   button_label_blue: {
+    fontFamily: 'Inter',
     fontSize: 15,
     color: Colors.blue,
   },
   confirm_text: {
+    fontFamily: 'Inter',
     fontSize: 15, 
     color: Colors.grey_font,
-  },
-  resource_text: { // Fix font 
-    fontFamily: 'Inter',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+  }, 
+  resource_text: { 
+    fontFamily: 'Inter-bold',
     color: Colors.white,
     paddingBottom: '2%',
     margin: '2%', 
