@@ -102,4 +102,5 @@ export const sort_types = [
 export const storage_keys = {
   SAVE_ID_KEY: "@save_id_key",
   SAVE_TOKEN_KEY: "@save_token_key",
+  SAVE_ZIP: "@save_zip",
 };
