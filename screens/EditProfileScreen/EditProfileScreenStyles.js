@@ -14,33 +14,19 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   input: {
-    color: Colors.black,
-    fontFamily: "Inter",
-    fontSize: 17,
-    height: 40,
     width: 350,
-  },
-  line: {
-    borderColor: "#EEEEEE",
-    borderWidth: 1,
-  },
-  loading: {
-    alignItems: "center",
-    height: "100%",
-    justifyContent: "center",
+    height: 40,
+    fontSize: 17,
+    fontFamily: "Inter",
+    color: Colors.black,
   },
 });
 
 const texts = StyleSheet.create({
   label: {
+    fontSize: 15,
     color: Colors.grey_font,
     fontFamily: "Inter-bold",
-    fontSize: 15,
-  },
-  label_bold: {
-    color: "black",
-    fontFamily: "Montserrat-bold",
-    fontSize: 17,
   },
 });
 

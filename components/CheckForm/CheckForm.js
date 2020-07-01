@@ -16,7 +16,7 @@ export default function CheckForm(props) {
   return (
     <View style={styles.center}>
       {sortedObj.map((key) => {
-        const isTranslated = !!props.translations;
+        const isTranslated = props.translations ? true : false;
         const taskString =
           isTranslated && props.translations[props.language][key]
             ? props.translations[props.language][key]

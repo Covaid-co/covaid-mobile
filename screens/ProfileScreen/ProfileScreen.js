@@ -139,7 +139,7 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((key) => {
-            Geocode.setApiKey(key.google);
+            Geocode.setApiKey(key["google"]);
             setLatLong(data.latlong);
             setNeighborhoods(data.offer.neighborhoods);
             setFoundState(data.offer.state);
@@ -188,7 +188,7 @@ export default function ProfileScreen({ route, navigation }) {
   const setCurrentUserObject = (userList, fullList, setFunction) => {
     for (var i = 0; i < fullList.length; i++) {
       const curr = fullList[i];
-      const include = !!userList.includes(curr);
+      const include = userList.includes(curr) ? true : false;
       setFunction((prev) => ({
         ...prev,
         [curr]: include,
@@ -307,11 +307,11 @@ export default function ProfileScreen({ route, navigation }) {
       var new_neighborhoods = [];
       var foundState = [];
       for (var i = 0; i < Math.min(5, response.results.length); i++) {
-        const results = response.results[i].address_components;
+        const results = response.results[i]["address_components"];
         for (var j = 0; j < results.length; j++) {
           const types = results[j].types;
           if (types.includes("neighborhood") || types.includes("locality")) {
-            const currNeighborhoodName = results[j].long_name;
+            const currNeighborhoodName = results[j]["long_name"];
             if (new_neighborhoods.includes(currNeighborhoodName) === false) {
               new_neighborhoods.push(currNeighborhoodName);
             }
@@ -322,7 +322,7 @@ export default function ProfileScreen({ route, navigation }) {
               foundState.length === 0 &&
               type === "administrative_area_level_1"
             ) {
-              foundState = [results[j].long_name, results[j].short_name];
+              foundState = [results[j]["long_name"], results[j]["short_name"]];
             }
           }
         }
@@ -410,6 +410,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   const handleLocationUpdate = async (huh) => {
     if (!(await updateLocation())) {
+      return;
     }
   };
 

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     height: "100%",
-    alignItems: "center",
+    padding: 20,
   },
 });
 
@@ -21,9 +21,7 @@ const buttons = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.blue,
     justifyContent: "center",
-    marginBottom: 100,
-    marginTop: 15,
-    width: 350,
+    alignItems: "center",
   },
 });
 
