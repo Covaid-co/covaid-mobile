@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  CheckBox,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./CheckFormStyles";
 
 export default function CheckForm(props) {
@@ -20,7 +14,6 @@ export default function CheckForm(props) {
   sortedObj.sort();
 
   return (
-    // <>
     <View style={styles.center}>
       {sortedObj.map((key) => {
         const isTranslated = props.translations ? true : false;
@@ -33,7 +26,6 @@ export default function CheckForm(props) {
             key={key}
             disabled={props.disabled}
             style={styles.checkbox}
-            // style={props.obj[key] ? styles.selected : styles.unselected}
             onPress={() => handleObjChange(key)}
           >
             <View
@@ -44,6 +36,5 @@ export default function CheckForm(props) {
         );
       })}
     </View>
-    // </>
   );
 }
