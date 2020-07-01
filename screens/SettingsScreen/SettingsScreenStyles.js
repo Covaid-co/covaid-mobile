@@ -3,10 +3,10 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    padding: 20,
     backgroundColor: "white",
     height: "100%",
-    padding: 20,
+    alignItems: "center",
   },
 });
 
