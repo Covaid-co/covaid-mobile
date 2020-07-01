@@ -13,14 +13,15 @@ import {
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { validateEmail } from "../../Helpers";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export default function LoginScreen({ route, navigation }) {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [forgotPass, setForgotPass] = useState(false);
   const [isFocused, setFocus] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(new Animated.Value(0));
-  const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
+  const [keyboardHeight] = useState(new Animated.Value(0));
+  const [fadeAnim] = useState(new Animated.Value(0));
   const heightFactor = 1.6;
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -175,7 +176,7 @@ export default function LoginScreen({ route, navigation }) {
 
   return (
     <Animated.View
-      style={{ flex: 1, opacity: fadeAnim, backgroundColor: "#FFFFFF" }}
+      style={{ flex: 1, opacity: fadeAnim, backgroundColor: Colors.white }}
     >
       <Animated.View style={[styles.screen, { paddingBottom: keyboardHeight }]}>
         <View style={{ flex: 0.33 }} />
@@ -245,7 +246,7 @@ export default function LoginScreen({ route, navigation }) {
         <Text style={texts.footer_text}>
           Don’t have an account? To register as a new volunteer, please visit{" "}
           <Text
-            style={[texts.footer_text, { color: "#2670FF" }]}
+            style={[texts.footer_text, { color: Colors.blue }]}
             onPress={() => Linking.openURL("https://www.covaid.co")}
           >
             www.covaid.co

@@ -167,13 +167,13 @@ export default function NotificationScreen({ route, navigation }) {
     console.log(pendingRequests);
     return (
       <View style={styles.screen}>
-        <View style={{ flexDirection: "row" }}>
+        <View style={styles.flexrow}>
           <View>
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.flexrow}>
               <View style={styles.dot}></View>
               <Text style={texts.deadline}>Needed by {item.deadline_date}</Text>
             </View>
-            <View style={{ paddingLeft: 23 }}>
+            <View style={styles.pleft}>
               <Text style={texts.header}>
                 {item.requester_name.split(" ")[0]}{" "}
                 <Text style={texts.need_help}>needs your help</Text>

@@ -18,6 +18,11 @@
     "plugin:react-native/all",
     "plugin:prettier/recommended"
   ],
+  "rules": {
+    "camelcase": "off",
+    "react-native/sort-styles": "off",
+    "react-native/no-inline-styles": "off"
+  },
   "settings": {
     "react": {
       "version": "detect"

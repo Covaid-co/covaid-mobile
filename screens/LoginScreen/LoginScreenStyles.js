@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: "#eeeeee",
-    color: "#7F7F7F",
+    borderColor: Colors.standard,
+    color: Colors.light_grey_font,
     fontFamily: "Inter",
     fontSize: 16,
     marginBottom: 48,
@@ -45,7 +45,7 @@ const buttons = StyleSheet.create({
   },
   login: {
     alignItems: "center",
-    backgroundColor: "#2670FF",
+    backgroundColor: Colors.blue,
     borderRadius: 8,
     height: 60,
     justifyContent: "center",
@@ -57,31 +57,31 @@ const buttons = StyleSheet.create({
 
 const texts = StyleSheet.create({
   button_label: {
-    color: "#FFFFFF",
+    color: Colors.white,
     fontFamily: "Inter-semibold",
     fontSize: 16,
   },
   footer_text: {
-    color: "#CECECE",
+    color: Colors.grey,
     fontFamily: "Inter",
     fontSize: 14,
   },
   forgot_password: {
-    color: "#314CCE",
+    color: Colors.forgotPassBlue,
     fontFamily: "Inter",
     fontSize: 16,
     marginTop: 16,
     textAlign: "center",
   },
   header: {
-    color: "#2670ff",
+    color: Colors.blue,
     fontFamily: "Baloo Chettan 2 Medium",
     fontSize: 50,
     marginBottom: -20,
     textAlign: "center",
   },
   subheader: {
-    color: "#2670ff",
+    color: Colors.blue,
     fontFamily: "Baloo Chettan 2 Medium",
     fontSize: 29,
     textAlign: "center",
