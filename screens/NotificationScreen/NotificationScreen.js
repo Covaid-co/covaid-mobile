@@ -90,7 +90,7 @@ export default function NotificationScreen({ route, navigation }) {
       return interval + " hours";
     }
     interval = Math.floor(seconds / 60);
-    if (interval > 1) {
+    if (interval >= 1) {
       return interval + " minutes";
     }
     return Math.floor(seconds) + " seconds";
@@ -203,7 +203,7 @@ export default function NotificationScreen({ route, navigation }) {
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          data={pendingRequests}
+          data={pendingRequests.reverse()}
           renderItem={({ item }) => (
             <TouchableHighlight
               underlayColor="#F3F5F9"
