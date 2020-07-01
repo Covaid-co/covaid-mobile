@@ -109,7 +109,7 @@ export default function RequestsScreen({ route, navigation }) {
             // generateRequestList(data, requestStateChanger, reqStatus);
           });
         } else {
-          console.log("Error");
+          //console.log("Error");
         }
       })
       .catch((e) => {

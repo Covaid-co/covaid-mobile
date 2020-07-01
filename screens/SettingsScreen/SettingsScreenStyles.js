@@ -6,25 +6,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     height: "100%",
-    padding: 20,
-  },
-  info: {
-    flexDirection: "row",
-    marginTop: 20,
-  },
-  line: {
-    borderColor: Colors.grey,
-    borderWidth: 0.8,
-    margin: "1%",
+    alignItems: "center",
   },
 });
 
 const buttons = StyleSheet.create({
   logout: {
-    alignItems: "center",
-    backgroundColor: Colors.grey,
-    borderRadius: 8,
+    marginTop: 30,
+    marginBottom: 100,
+    width: "100%",
     height: 60,
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.blue,
     justifyContent: "center",
     marginBottom: 100,
     marginTop: 15,
@@ -33,33 +28,10 @@ const buttons = StyleSheet.create({
 });
 
 const texts = StyleSheet.create({
-  button_label: {
-    color: "white",
-    fontSize: 15,
-  },
-  green_text: {
-    color: "green",
-  },
-  header: {
-    color: "black",
-    fontSize: 30,
-    fontWeight: "bold",
-    margin: "1%",
-  },
-  label: {
-    color: "black",
-    flex: 1,
-    flexWrap: "wrap",
-    fontSize: 17,
-    overflow: "visible",
-  },
   label_bold: {
-    color: "black",
-    fontFamily: "Montserrat-bold",
+    fontFamily: "Inter-bold",
     fontSize: 17,
-  },
-  red_text: {
-    color: "red",
+    color: Colors.grey_font,
   },
 });
 

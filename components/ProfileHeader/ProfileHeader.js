@@ -1,14 +1,30 @@
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Image from "react-bootstrap/Image";
-import Modal from "react-bootstrap/Modal";
-import { generateURL } from "../Helpers";
-import ImageUploader from "react-images-upload";
-import fetch_a from "../util/fetch_auth";
+//import "bootstrap/dist/css/bootstrap.min.css";
+// import Button from "react-bootstrap/Button";
+// import Container from "react-bootstrap/Container";
+// import Row from "react-bootstrap/Row";
+// import Col from "react-bootstrap/Col";
+// import Image from "react-bootstrap/Image";
+// import Modal from "react-bootstrap/Modal";
+import { generateURL } from "../../Helpers";
+//import ImageUploader from "react-images-upload";
+//import ImagePicker from 'react-native-image-picker'
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  Switch,
+  ActivityIndicator,
+  AsyncStorage,
+  Image,
+  Modal,
+  TextInput,
+  Alert,
+  Keyboard,
+} from "react-native";
+import fetch_a from "../../util/fetch_auth";
+import { homeURL } from "../../constants";
 
 export default function ProfileHeader(props) {
   const [association, setAssociation] = useState("");
@@ -43,9 +59,9 @@ export default function ProfileHeader(props) {
   };
 
   const fetchProfilePic = (id) => {
-    fetch("/api/image/" + id).then((response) => {
+    fetch(homeURL + "/api/image/" + id).then((response) => {
       if (response.ok) {
-        setImageUrl("/api/image/" + props.user._id);
+        setImageUrl(homeURL + "/api/image/" + props.user._id);
       } else {
         setImageUrl(
           "https://www.csfences.com/wp-content/uploads/2016/08/profile-placeholder.jpg"
@@ -55,28 +71,29 @@ export default function ProfileHeader(props) {
   };
 
   useEffect(() => {
-    if (props.user.association_name && props.user.association_name.length > 0) {
-      setAssociation(props.user.association_name);
-    }
     fetchProfilePic(props.user._id);
   }, [props.user]);
 
   return (
     <>
-      <div style={{ marginLeft: 35, maxWidth: 2000 }}>
+      {/* <div style={{ marginLeft: 35, maxWidth: 2000 }}>
         <Row>
-          <Col>
+          <Col> */}
+          <View>
             <Image
-              src={imageUrl}
+              source= {{uri:imageUrl}}
+              //source={require("../../assets/images/C-LOGO.png")}
               id="profile-pic"
-              style={{
-                marginRight: 30,
-                boxShadow:
-                  "0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1)",
-                cursor: "pointer",
-              }}
+              style = {{height: 115, width: 115, borderRadius: 107, resizeMode : 'stretch', margin: 5 }}
+              // style={{
+              //   marginRight: 30,
+              //   boxShadow:
+              //     "0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1)",
+              //   cursor: "pointer",
+              // }}
               onClick={() => setShowUploader(true)}
             />
+            </View>
 
             {/* <Row>
               <h1
@@ -123,9 +140,9 @@ export default function ProfileHeader(props) {
                 Edit Profile
               </Button>{" "}
             </Row> */}
-          </Col>
+          {/* </Col>
         </Row>
-      </div>
+      </div> */}
       {/* <Modal
         show={showUploader}
         onHide={() => {
