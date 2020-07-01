@@ -19,7 +19,7 @@ import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 import Geocode from "react-geocode";
-import ProfileHeader from "../../components/ProfileHeader/ProfileHeader.js"
+import ProfileHeader from "../../components/ProfileHeader/ProfileHeader.js";
 
 export default function ProfileScreen({ route, navigation }) {
   const [token, setToken] = useState();
@@ -90,7 +90,7 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   const handleUpdate = async (publish) => {
-    let params = {
+    const params = {
       availability: publish,
     };
     fetch_a(route.params.token, "token", homeURL + "/api/users/update?", {
@@ -115,7 +115,7 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   const fetch_user_obj = async (id) => {
-    let params = { id: id };
+    const params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
     fetch(url)
@@ -133,7 +133,7 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   const setConstants = (data) => {
-    let params = {};
+    const params = {};
     var url = generateURL(homeURL + "/api/apikey/google", params);
     fetch(url)
       .then((response) => {
@@ -157,7 +157,7 @@ export default function ProfileScreen({ route, navigation }) {
                 );
                 return;
               }
-              let params = {
+              const params = {
                 associationID: data.association,
               };
               var url = generateURL(
@@ -241,7 +241,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   const handleCarUpdate = async (someshit) => {
     setHasCar(!hasCar);
-    let params = {
+    const params = {
       "offer.car": !hasCar,
     };
     fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
@@ -329,7 +329,7 @@ export default function ProfileScreen({ route, navigation }) {
       }
       const { lat, lng } = response.results[0].geometry.location;
       setLatLong([lng, lat]);
-      let params = { latitude: lat, longitude: lng };
+      const params = { latitude: lat, longitude: lng };
       const url = generateURL(
         homeURL + "/api/association/get_assoc/lat_long?",
         params
@@ -351,7 +351,7 @@ export default function ProfileScreen({ route, navigation }) {
         association_name = data[0].name;
       }
 
-      let form = {
+      const form = {
         "offer.neighborhoods": new_neighborhoods,
         "offer.state": foundState,
         association: association,
@@ -418,7 +418,7 @@ export default function ProfileScreen({ route, navigation }) {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.center}>
-          <ProfileHeader user = {user}/>
+          <ProfileHeader user={user} />
           <Text style={texts.name}>
             {user.first_name + " " + user.last_name}
           </Text>

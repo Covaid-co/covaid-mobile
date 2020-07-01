@@ -47,7 +47,7 @@ export default function LoginScreen({ route, navigation }) {
   }, [route.params.userID]);
 
   const fetch_user_obj = async (id) => {
-    let params = { id: id };
+    const params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
     fetch(url)
@@ -67,7 +67,7 @@ export default function LoginScreen({ route, navigation }) {
   };
 
   const setConstants = (data) => {
-    let params = {};
+    const params = {};
     var url = generateURL(homeURL + "/api/apikey/google", params);
     fetch(url)
       .then((response) => {
@@ -131,7 +131,7 @@ export default function LoginScreen({ route, navigation }) {
     }
     var selectedLanguages = extractTrueObj(languageChecked);
 
-    let params = {
+    const params = {
       first_name: firstName,
       last_name: lastName,
       email: email,
@@ -153,7 +153,7 @@ export default function LoginScreen({ route, navigation }) {
         }
       })
       .catch((e) => {
-        console.log("Error");
+        console.log("Edit Profile Screen Error");
       });
   }
 

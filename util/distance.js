@@ -12,7 +12,8 @@ function getDistance(latA, longA, latB, longB) {
       Math.sin(dLong / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c;
-  return Math.round(100 * d) / 100;
+  var meters = Math.round(100 * d) / 100;
+  return Math.ceil(meters / 1609.34);
 }
 
 const rad = function (x) {

@@ -37,6 +37,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       <BottomTab.Screen
         name="Notification"
         component={NotificationScreen}
+        initialParams={route.params}
         options={{
           title: "Notifications",
           tabBarIcon: ({ focused }) => (
@@ -73,7 +74,6 @@ export default function BottomTabNavigator({ navigation, route }) {
 function getHeaderTitle(route) {
   const routeName =
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
   switch (routeName) {
     case "Requests":
       return "Requests";

@@ -28,7 +28,7 @@ export default function PendingRequestScreen({ route, navigation }) {
   }, []);
 
   function acceptRequest() {
-    let params = {
+    const params = {
       ID: route.params.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/acceptRequest?", params);
@@ -41,13 +41,17 @@ export default function PendingRequestScreen({ route, navigation }) {
           if (response.ok) {
             alert("Accepted request.");
             removeFromArray(route.params.item, route.params.pendingList);
-            route.params.activeList.push(route.params.item);
+            if (route.params.activeList) {
+              route.params.activeList.push(route.params.item);
+            }
+            // if (route.params.currScreen === "Notification") {
+            navigation.navigate("Requests");
+            // }
           } else {
             alert("Unable to accept, please email us at covaidco@gmail.com.");
           }
         })
         .catch((e) => {
-          console.log(url);
           console.log(e);
         });
     });
@@ -61,7 +65,7 @@ export default function PendingRequestScreen({ route, navigation }) {
   }
 
   function rejectRequest() {
-    let params = {
+    const params = {
       ID: route.params.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/rejectRequest?", params);
@@ -80,7 +84,6 @@ export default function PendingRequestScreen({ route, navigation }) {
           }
         })
         .catch((e) => {
-          console.log(url);
           console.log(e);
         });
     });
