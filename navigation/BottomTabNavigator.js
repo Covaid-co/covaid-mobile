@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
   AsyncStorage,
+  Text
 } from "react-native";
 
 import TabBarIcon from "../components/TabBarIcon";
@@ -77,7 +78,8 @@ function getHeaderTitle(route) {
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
   switch (routeName) {
     case "Requests":
-      return "Requests";
+      return () => (<TouchableOpacity style={{ margin: 10 }}>
+         <Text > "HUH"</Text></TouchableOpacity>);
     case "Profile":
       return "Profile";
     case "Notification":
