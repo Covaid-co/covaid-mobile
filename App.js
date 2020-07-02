@@ -21,6 +21,8 @@ import EditOfferScreen from "./screens/EditOfferScreen/EditOfferScreen.js";
 import EditDetailsScreen from "./screens/EditDetailsScreen/EditDetailsScreen.js";
 import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
 
+import SettingsScreen from "./screens/SettingsScreen/SettingsScreen.js";
+
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -67,6 +69,7 @@ export default function App(props) {
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
           <Stack.Screen name="Requests Screen" component={RequestsScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
