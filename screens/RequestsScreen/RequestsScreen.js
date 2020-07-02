@@ -102,7 +102,7 @@ export default function RequestsScreen({ route, navigation }) {
       } 
       tempList.push(element); 
     }
-    //initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
+    // initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
     if (reqStatus == currentRequestType) {
       setCurrentRequestList(tempList)
     }

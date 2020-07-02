@@ -72,11 +72,11 @@ export default function App(props) {
     </View>
   );
 }
-//}
+// }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
+    flex: 1,
   },
 });

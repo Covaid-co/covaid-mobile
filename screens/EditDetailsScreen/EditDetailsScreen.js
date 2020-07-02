@@ -37,7 +37,7 @@ export default function EditDetailsScreen({ route, navigation }) {
       });
       return;
     }
-    let params = {
+    const params = {
       "offer.details": details,
     };
     fetch_a(route.params.token, "token", homeURL + "/api/users/update", {

@@ -41,7 +41,7 @@ export default function EditOfferScreen({ route, navigation }) {
       return;
     }
     var resourceList = extractTrueObj(resources);
-    let params = {
+    const params = {
       "offer.tasks": resourceList,
     };
     fetch_a(route.params.token, "token", homeURL + "/api/users/update", {

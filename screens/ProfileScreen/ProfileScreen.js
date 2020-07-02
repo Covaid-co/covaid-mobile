@@ -10,6 +10,7 @@ import {
   Image,
   TextInput,
   Alert,
+  Keyboard,
 } from "react-native";
 import Colors from "../../public/Colors";
 
@@ -18,14 +19,16 @@ import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 import Geocode from "react-geocode";
+import ProfileHeader from "../../components/ProfileHeader/ProfileHeader.js";
 
 export default function ProfileScreen({ route, navigation }) {
   const [token, setToken] = useState();
+  const [id, setID] = useState();
   const [publish, setPublish] = useState(false);
   const [user, setUser] = useState();
   const [zip, setZip] = useState();
   const [initialZip, setInitialZip] = useState("");
-  const [resources, setResources] = useState({});
+  const [resources, setResources] = useState(undefined);
   const [hasCar, setHasCar] = useState();
   const [details, setDetails] = useState();
 
@@ -60,25 +63,34 @@ export default function ProfileScreen({ route, navigation }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      /**
-       * Hacky fix to the params not passing quick enough
-       * should just be:
-       * fetch_user_obj(route.params.userID);
-       */
-      AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        fetch_user_obj(data);
-      });
-      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        setToken(data);
-      });
+      Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+      async function func() {
+        //prevent offer from showing resources of a previous location after a change
+        await setResources(null);
+        AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+          setID(data);
+          fetch_user_obj(data);
+        });
+        AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+          setToken(data);
+        });
+      }
+      func();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [user]);
 
+  const _keyboardDidHide = () => {
+    //hacky way of letting user know they need to press "done" to submit. If they close their keyboard, then the textinput will just go to original zipcode
+    AsyncStorage.getItem(storage_keys.SAVE_ZIP).then((data) => {
+      setZip(data);
+    });
+  };
+
   const handleUpdate = async (publish) => {
-    let params = {
+    const params = {
       availability: publish,
     };
     fetch_a(route.params.token, "token", homeURL + "/api/users/update?", {
@@ -88,7 +100,7 @@ export default function ProfileScreen({ route, navigation }) {
     })
       .then((response) => {
         if (response.ok) {
-          //Change the state to refect offer update
+          //Change the state to reflect offer update
           setTimeout(function () {
             console.log("update successful");
             fetch_user_obj(route.params.userID);
@@ -98,12 +110,12 @@ export default function ProfileScreen({ route, navigation }) {
         }
       })
       .catch((e) => {
-        console.log("Error");
+        //console.log("Error");
       });
   };
 
   const fetch_user_obj = async (id) => {
-    let params = { id: id };
+    const params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
     fetch(url)
@@ -121,7 +133,7 @@ export default function ProfileScreen({ route, navigation }) {
   };
 
   const setConstants = (data) => {
-    let params = {};
+    const params = {};
     var url = generateURL(homeURL + "/api/apikey/google", params);
     fetch(url)
       .then((response) => {
@@ -145,7 +157,7 @@ export default function ProfileScreen({ route, navigation }) {
                 );
                 return;
               }
-              let params = {
+              const params = {
                 associationID: data.association,
               };
               var url = generateURL(
@@ -155,7 +167,6 @@ export default function ProfileScreen({ route, navigation }) {
 
               const response = await fetch(url);
               response.json().then((res) => {
-                setDefaultResources(res.resources);
                 setCurrentUserObject(
                   data.offer.tasks,
                   res.resources,
@@ -185,7 +196,7 @@ export default function ProfileScreen({ route, navigation }) {
     }
   };
 
-  function getZip(location) {
+  async function getZip(location) {
     try {
       var latlng = {
         lat: parseFloat(location[1]),
@@ -206,6 +217,13 @@ export default function ProfileScreen({ route, navigation }) {
                   "postal_code"
                 ) > -1
               ) {
+                async function storeZip() {
+                  await AsyncStorage.setItem(
+                    storage_keys.SAVE_ZIP,
+                    response.results[i].address_components[j].long_name
+                  );
+                }
+                storeZip();
                 setInitialZip(
                   response.results[i].address_components[j].long_name
                 );
@@ -223,7 +241,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   const handleCarUpdate = async (someshit) => {
     setHasCar(!hasCar);
-    let params = {
+    const params = {
       "offer.car": !hasCar,
     };
     fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
@@ -257,7 +275,7 @@ export default function ProfileScreen({ route, navigation }) {
       });
   };
   const updateLocation = async (e) => {
-    if (zip.length != 5 || !/^\d+$/.test(zip)) {
+    if (!zip || zip.length != 5 || !/^\d+$/.test(zip)) {
       alert("Invalid Zipcode");
       return false;
     }
@@ -311,7 +329,7 @@ export default function ProfileScreen({ route, navigation }) {
       }
       const { lat, lng } = response.results[0].geometry.location;
       setLatLong([lng, lat]);
-      let params = { latitude: lat, longitude: lng };
+      const params = { latitude: lat, longitude: lng };
       const url = generateURL(
         homeURL + "/api/association/get_assoc/lat_long?",
         params
@@ -333,7 +351,7 @@ export default function ProfileScreen({ route, navigation }) {
         association_name = data[0].name;
       }
 
-      let form = {
+      const form = {
         "offer.neighborhoods": new_neighborhoods,
         "offer.state": foundState,
         association: association,
@@ -377,7 +395,7 @@ export default function ProfileScreen({ route, navigation }) {
           );
         });
       Alert.alert(
-        "You have edited locations, please update your categories to help!",
+        "You have edited your location, please update your categories to help!",
         "",
         [{ text: "OK" }],
         {
@@ -386,7 +404,7 @@ export default function ProfileScreen({ route, navigation }) {
       );
       return true;
     } catch (err) {
-      alert("Invaild zipcode or network error");
+      alert("Invaild zipcode");
     }
   }
 
@@ -395,10 +413,12 @@ export default function ProfileScreen({ route, navigation }) {
       return;
     }
   };
-  if (user) {
+
+  if (user && initialZip) {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.center}>
+          <ProfileHeader user={user} />
           <Text style={texts.name}>
             {user.first_name + " " + user.last_name}
           </Text>
@@ -456,6 +476,7 @@ export default function ProfileScreen({ route, navigation }) {
             <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
           </TouchableOpacity>
           <View style={styles.line} />
+
           <View style={styles.info}>
             <Text style={texts.label_bold}> Zip Code </Text>
             <TextInput
@@ -468,6 +489,7 @@ export default function ProfileScreen({ route, navigation }) {
               returnKeyType="done"
             />
           </View>
+
           <View style={styles.line} />
           <TouchableOpacity
             style={styles.info}

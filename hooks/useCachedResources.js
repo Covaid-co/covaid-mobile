@@ -15,11 +15,13 @@ export default function useCachedResources() {
         // Load fonts
         await Font.loadAsync({
           ...Ionicons.font,
+          "Baloo Chettan 2 Medium": require("../assets/fonts/Baloo_Chettan_2/BalooChettan2-Medium.ttf"),
           "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
           Montserrat: require("../assets/fonts/Montserrat/Montserrat-Regular.ttf"),
           "Montserrat-bold": require("../assets/fonts/Montserrat/Montserrat-Bold.ttf"),
           Inter: require("../assets/fonts/Inter/Inter-Regular.ttf"),
           "Inter-bold": require("../assets/fonts/Inter/Inter-Bold.ttf"),
+          "Inter-semibold": require("../assets/fonts/Inter/Inter-SemiBold.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
