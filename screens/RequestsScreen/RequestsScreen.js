@@ -51,6 +51,17 @@ export default function RequestsScreen({ route, navigation }) {
         fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
         fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
       });     
+
+      var reqType = requestTypeList[route.params.choice];
+      console.log("TYPE OF REQUEST: " + reqType)
+      if (reqType == volunteer_status.COMPLETE) {
+        setCurrentRequestList(completedRequests);
+      } else if (reqType == volunteer_status.IN_PROGRESS) {
+        setCurrentRequestList(activeRequests); 
+      } else {
+        setCurrentRequestList(pendingRequests); 
+      }
+      setCurrentRequestType(reqType);
     });
     navigation.setOptions = {
       title: 'Chat',

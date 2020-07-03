@@ -68,7 +68,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white, 
     marginLeft: "35%", 
     marginRight: "-450%",
-  }
+  }, 
+  dropdown_style2: {
+    marginLeft: "35%",
+    marginRight: "35%",
+    borderColor: "white",
+  }, 
 });
 
 const texts = StyleSheet.create({

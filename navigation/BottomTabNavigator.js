@@ -10,19 +10,23 @@ import {
   Text
 } from "react-native";
 
+import { styles, texts } from "../screens/RequestsScreen/RequestsScreenStyles";
+
 import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
-import { volunteer_status } from "../constants";
+import { volunteer_status, storage_keys } from "../constants";
+import { Dropdown } from 'react-native-material-dropdown';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Requests";
 
 export default function BottomTabNavigator({ navigation, route }) {
+  const [choice, setChoice] = useState(1); // changes here are reflected on requests screen 
 
   navigation.setOptions({
-    headerTitle: getHeaderTitle(route),
+    headerTitle: getHeaderTitle(route, setChoice),
     headerRight: () => (
       <TouchableOpacity
         style={{ margin: 10 }}
@@ -50,6 +54,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       <BottomTab.Screen
         name="Requests"
         component={RequestsScreen}
+        initialParams={{"choice": choice}}
         options={{
           title: "Requests",
           tabBarIcon: ({ focused }) => (
@@ -73,13 +78,39 @@ export default function BottomTabNavigator({ navigation, route }) {
   );
 }
 
-function getHeaderTitle(route) {
+function getHeaderTitle(route, setChoice) {
   const routeName =
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+
+    let options2 = [{
+      label: 'Requires Action',
+      value: 'Requires Action',
+    }, {
+      value: 'In Progress',
+    }, {
+      value: 'Completed',
+    }];
   switch (routeName) {
     case "Requests":
       return () => (<TouchableOpacity style={{ margin: 10 }}>
-         <Text > "HUH"</Text></TouchableOpacity>);
+         
+         <Dropdown
+            label=''
+            data={options2} 
+            style={styles.dropdown_style2}
+            textColor="#4F4F4F"
+            defaultValue="Requires Action"
+            onChangeText={(label, value) =>{
+                setChoice(value); 
+                console.log(value); 
+                
+                // setCurrentRequestType
+                // setCurrentRequestList
+              }
+            }
+          />
+         
+         </TouchableOpacity>);
     case "Profile":
       return "Profile";
     case "Notification":

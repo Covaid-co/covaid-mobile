@@ -55,8 +55,8 @@ export default function LoginScreen({ route, navigation }) {
   };
 
   async function storeKeys(data) {
-    try {
-      await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data.user._id);
+    try {await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data.user._id);
+      
       await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data.user.token);
     } catch (e) {
       alert(e);
