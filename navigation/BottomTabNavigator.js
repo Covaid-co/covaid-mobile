@@ -111,7 +111,6 @@ function getHeaderTitle(route, setChoice) {
               }
             }
           />
-          <Text>{choice}</Text>
          
          </TouchableOpacity>);
     case "Profile":

@@ -74,7 +74,27 @@ export default function RequestsScreen({ route, navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  console.log(route.params)
+  console.log(route.params.choice)
+  if (route.params.choice !== currentRequestType) {
+    if (route.params.choice == volunteer_status.COMPLETE) {
+      console.log("completed")
+      setCurrentRequestList(completedRequests);
+      // setCurrentRequestType(route.params.choice)
+    } 
+    if (route.params.choice == volunteer_status.IN_PROGRESS) {
+      console.log("in progress")
+      setCurrentRequestList(activeRequests);
+      // setCurrentRequestType(route.params.choice)
+    } 
+    if (route.params.choice == volunteer_status.PENDING) {
+      console.log("in progress")
+      setCurrentRequestList(pendingRequests);
+      // setCurrentRequestType(route.params.choice)
+    } 
+    setCurrentRequestType(route.params.choice)
+
+
+  }
 
   // if (route.params.choice == volunteer_status.COMPLETE) {
   //   setCurrentRequestList(completedRequests);
