@@ -54,7 +54,8 @@ export default function BottomTabNavigator({ navigation, route }) {
       <BottomTab.Screen
         name="Requests"
         component={RequestsScreen}
-        initialParams={{"choice": choice}}
+        initialParams={{"choice": choice, "wtf": "bitch"}}
+        //initialParams={route.params}
         options={{
           title: "Requests",
           tabBarIcon: ({ focused }) => (
@@ -76,14 +77,14 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
     </BottomTab.Navigator>
   );
-}
+
 
 function getHeaderTitle(route, setChoice) {
   const routeName =
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
     let options2 = [{
-      label: 'Requires Action',
+      // label: 'Requires Action',
       value: 'Requires Action',
     }, {
       value: 'In Progress',
@@ -97,18 +98,20 @@ function getHeaderTitle(route, setChoice) {
          <Dropdown
             label=''
             data={options2} 
+            dropdownPosition = {-4}
             style={styles.dropdown_style2}
             textColor="#4F4F4F"
             defaultValue="Requires Action"
             onChangeText={(label, value) =>{
-                setChoice(value); 
-                console.log(value); 
+                setChoice(value);
+                navigation.navigate('Requests', {choice: value})
                 
                 // setCurrentRequestType
                 // setCurrentRequestList
               }
             }
           />
+          <Text>{choice}</Text>
          
          </TouchableOpacity>);
     case "Profile":
@@ -116,4 +119,5 @@ function getHeaderTitle(route, setChoice) {
     case "Notification":
       return "Notifications";
   }
+}
 }

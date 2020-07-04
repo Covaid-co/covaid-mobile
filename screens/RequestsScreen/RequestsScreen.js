@@ -68,13 +68,24 @@ export default function RequestsScreen({ route, navigation }) {
       headerStyle: { backgroundColor: 'red' },
       headerTitleStyle: { color: 'green' },
     }
+    console.log("useeffects ran")
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
-  
+  console.log(route.params)
 
+  // if (route.params.choice == volunteer_status.COMPLETE) {
+  //   setCurrentRequestList(completedRequests);
+  //   setCurrentRequestType(route.params.choice)
+  // } 
+  // else if (reqType == volunteer_status.IN_PROGRESS) {
+  //   setCurrentRequestList(activeRequests); 
+  // } else {
+  //   setCurrentRequestList(pendingRequests); 
+  // }
+  // setCurrentRequestType(reqType);
   
   const fetchUser = async (id) => { 
     let params = { id: id };
@@ -144,7 +155,6 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   if (pendingRequests) {
-    console.log(pendingRequests.key)
     return (
         <View style={styles.req_container}>
           <Dropdown
