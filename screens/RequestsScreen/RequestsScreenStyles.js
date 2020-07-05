@@ -9,6 +9,12 @@ const styles = StyleSheet.create({
   },
   req_container: {
     padding: 0,
+    marginTop: '3%',
+    height: "100%",
+    backgroundColor: Colors.white,
+  },
+  req_container_original: {
+    padding: 0,
     height: "100%",
     backgroundColor: Colors.white,
   },
@@ -30,7 +36,7 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
   },
   request_pending: {
-    margin: 5,
+    margin: '2%',
     padding: 5,
     minWidth: '90%',
     maxWidth: '90%',
@@ -41,7 +47,7 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.red_orange,
   },
   request_active: {
-    margin: 5,
+    margin: '2%',
     padding: 5,
     minWidth: '90%',
     maxWidth: '90%',
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.orange2,
   },
   request_completed: {
-    margin: 5,
+    margin: '2%',
     padding: 5,
     minWidth: '90%',
     maxWidth: '90%',
@@ -70,10 +76,26 @@ const styles = StyleSheet.create({
     marginRight: "-450%",
   }, 
   dropdown_style2: {
-    marginLeft: "35%",
-    marginRight: "35%",
+    minWidth: '-10%',
+    paddingLeft: '20%',
+    paddingRight: '20%',
     borderColor: "white",
   }, 
+  dropdown_container: {
+    marginBottom: '3%',
+    alignItems: 'center',
+    minWidth: '100%',
+    maxWidth: '100%',
+  },
+  dropdown_old_style: {
+    minWidth: '90%',
+    borderColor: "white",
+  },
+  dropdown_old_container: {
+    marginBottom: '3%',
+    minWidth: '90%',
+    maxWidth: '90%',
+  }
 });
 
 const texts = StyleSheet.create({
@@ -111,6 +133,11 @@ const texts = StyleSheet.create({
     padding: '2%',
     paddingBottom: '5%',
   },
+  dropdown_font: {
+    fontFamily: 'Inter',
+    fontSize: 16,
+    color: Colors.green,
+  }
 });
 
 export { styles, texts };

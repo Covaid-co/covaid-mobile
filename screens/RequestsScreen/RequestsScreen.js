@@ -6,7 +6,6 @@ import {
   FlatList, 
   AsyncStorage,
 } from "react-native";
-import { Dropdown } from 'react-native-material-dropdown';
 import { styles, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, formatDate } from "../../Helpers";
@@ -41,27 +40,14 @@ export default function RequestsScreen({ route, navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        console.log("GETTING USER ID " + data)
         fetchUser(data); 
       });   
 
       AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        console.log("GETTING TOKEN " + data)
         fetchRequests(volunteer_status.PENDING, setPendingRequests, data)
         fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
         fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
       });     
-
-      var reqType = requestTypeList[route.params.choice];
-      console.log("TYPE OF REQUEST: " + reqType)
-      if (reqType == volunteer_status.COMPLETE) {
-        setCurrentRequestList(completedRequests);
-      } else if (reqType == volunteer_status.IN_PROGRESS) {
-        setCurrentRequestList(activeRequests); 
-      } else {
-        setCurrentRequestList(pendingRequests); 
-      }
-      setCurrentRequestType(reqType);
     });
     navigation.setOptions = {
       title: 'Chat',
@@ -79,33 +65,19 @@ export default function RequestsScreen({ route, navigation }) {
     if (route.params.choice == volunteer_status.COMPLETE) {
       console.log("completed")
       setCurrentRequestList(completedRequests);
-      // setCurrentRequestType(route.params.choice)
     } 
     if (route.params.choice == volunteer_status.IN_PROGRESS) {
       console.log("in progress")
       setCurrentRequestList(activeRequests);
-      // setCurrentRequestType(route.params.choice)
     } 
     if (route.params.choice == volunteer_status.PENDING) {
       console.log("in progress")
       setCurrentRequestList(pendingRequests);
-      // setCurrentRequestType(route.params.choice)
     } 
     setCurrentRequestType(route.params.choice)
 
 
   }
-
-  // if (route.params.choice == volunteer_status.COMPLETE) {
-  //   setCurrentRequestList(completedRequests);
-  //   setCurrentRequestType(route.params.choice)
-  // } 
-  // else if (reqType == volunteer_status.IN_PROGRESS) {
-  //   setCurrentRequestList(activeRequests); 
-  // } else {
-  //   setCurrentRequestList(pendingRequests); 
-  // }
-  // setCurrentRequestType(reqType);
   
   const fetchUser = async (id) => { 
     let params = { id: id };
@@ -164,7 +136,6 @@ export default function RequestsScreen({ route, navigation }) {
                   setTimeout(function () {
                     generateRequestList(data, requestStateChanger, reqStatus); 
                   }, 750);
-                  // generateRequestList(data, requestStateChanger, reqStatus); 
                 });
             } else {
                 console.log("Error")
@@ -176,31 +147,8 @@ export default function RequestsScreen({ route, navigation }) {
 
   if (pendingRequests) {
     return (
-        <View style={styles.req_container}>
-          <Dropdown
-            label=''
-            data={options} 
-            style={styles.dropdown_style}
-            textColor="#4F4F4F"
-            defaultValue="Requires Action"
-            
-            
-            onChangeText={(label, value) =>{
-                var reqType = requestTypeList[value];
-                if (reqType == volunteer_status.COMPLETE) {
-                  setCurrentRequestList(completedRequests);
-                } else if (reqType == volunteer_status.IN_PROGRESS) {
-                  setCurrentRequestList(activeRequests); 
-                } else {
-                  setCurrentRequestList(pendingRequests); 
-                }
-                setCurrentRequestType(reqType);
-              }
-            }
-          />
-        <View style={styles.center}> 
-          </View>        
-          {displayAllRequests(currentRequestList)}
+      <View style={styles.req_container_original}>       
+        {displayAllRequests(currentRequestList)}
       </View>  
     );
    } 
@@ -225,6 +173,7 @@ export default function RequestsScreen({ route, navigation }) {
     } else {
       return (
         <>
+        <View style={styles.req_container}>   
         {pendingModalVisible && <PendingModal modalVisible={setPendingModalVisible} item={currentItem} pendingList={pendingRequests} activeList={activeRequests} volunteer={user}/>}
         {activeModalVisible && <ActiveModal modalVisible={setActiveModalVisible} item={currentItem} activeList={activeRequests} completeList={completedRequests} volunteer={user}/>}
         {completedModalVisible && <CompletedModal modalVisible={setCompletedModalVisible} item={currentItem} />}
@@ -253,6 +202,7 @@ export default function RequestsScreen({ route, navigation }) {
             }
             keyExtractor={(item, index) => index}
             /> 
+            </View>
           </>
       );
     }

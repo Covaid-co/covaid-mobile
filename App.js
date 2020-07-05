@@ -69,6 +69,8 @@ export default function App(props) {
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
           <Stack.Screen name="Requests Screen" component={RequestsScreen} />
+          <Stack.Screen name="Edit Offer" component={EditOfferScreen} />
+          <Stack.Screen name="Edit Details" component={EditDetailsScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>

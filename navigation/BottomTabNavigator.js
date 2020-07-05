@@ -16,17 +16,17 @@ import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
-import { volunteer_status, storage_keys } from "../constants";
 import { Dropdown } from 'react-native-material-dropdown';
+import Colors from "../public/Colors";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Requests";
 
 export default function BottomTabNavigator({ navigation, route }) {
-  const [choice, setChoice] = useState(1); // changes here are reflected on requests screen 
+  const [choice, setChoice] = useState(0); // changes here are reflected on requests screen 
 
   navigation.setOptions({
-    headerTitle: getHeaderTitle(route, setChoice),
+    headerTitle: getHeaderTitle(route, setChoice, choice),
     headerRight: () => (
       <TouchableOpacity
         style={{ margin: 10 }}
@@ -79,44 +79,47 @@ export default function BottomTabNavigator({ navigation, route }) {
   );
 
 
-function getHeaderTitle(route, setChoice) {
-  const routeName =
-    route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+  function getHeaderTitle(route, setChoice, choice) {
+    const routeName =
+      route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
-    let options2 = [{
-      // label: 'Requires Action',
-      value: 'Requires Action',
-    }, {
-      value: 'In Progress',
-    }, {
-      value: 'Completed',
-    }];
-  switch (routeName) {
-    case "Requests":
-      return () => (<TouchableOpacity style={{ margin: 10 }}>
-         
-         <Dropdown
-            label=''
-            data={options2} 
-            dropdownPosition = {-4}
-            style={styles.dropdown_style2}
-            textColor="#4F4F4F"
-            defaultValue="Requires Action"
-            onChangeText={(label, value) =>{
-                setChoice(value);
-                navigation.navigate('Requests', {choice: value})
-                
-                // setCurrentRequestType
-                // setCurrentRequestList
-              }
-            }
-          />
-         
-         </TouchableOpacity>);
-    case "Profile":
-      return "Profile";
-    case "Notification":
-      return "Notifications";
+      let options2 = [{
+        // label: 'Requires Action',
+        value: 'Requires Action',
+      }, {
+        value: 'In Progress',
+      }, {
+        value: 'Completed',
+      }];
+    switch (routeName) {
+      case "Requests":
+        return () => (
+          <View style={styles.dropdown_container}>
+            
+            <Dropdown
+                label=' '
+                data={options2} 
+                dropdownPosition = {-4}
+                style={styles.dropdown_style2}
+                textColor="#4F4F4F"
+                defaultValue={'Requires Action'}
+                labelFontSize={16}
+                fontSize={16}
+                baseColor={Colors.grey}
+                textColor={Colors.grey_font}
+                onChangeText={(label, value) =>{
+                    setChoice(value);
+                    navigation.navigate('Requests', {choice: value})
+                  }
+                }
+              />
+              
+          </View>
+      );
+      case "Profile":
+        return "Profile";
+      case "Notification":
+        return "Notifications";
+    }
   }
-}
 }
