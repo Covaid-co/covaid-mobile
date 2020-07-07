@@ -153,6 +153,7 @@ export default function ActiveModal(props) {
               <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
             </View>
 
+            <Text></Text>
             <TouchableOpacity style={buttons.accept} onPress={() => setConfirmModalVisible(true)}>
               <Text style={texts.button_label_white}>Mark Complete ✓</Text>
             </TouchableOpacity>
@@ -175,21 +176,15 @@ export default function ActiveModal(props) {
 function showResourceBadges(resources) {
   return (
     <>
-      <FlatList
-        data={resources}
-        horizontal={false}
-        numColumns={3}
-        contentContainerStyle={styles.center}
-        style={styles.list_style}
-        renderItem={({item}) => 
-          <>
+      <View style={styles.flex_container}>
+        {resources.map((prop, key) => {
+            return (
             <View style={styles.resource_badge}>
-              <Text style={texts.resource_text}>{item}</Text>
+              <Text key={key} style={texts.resource_text}>{prop}</Text>
             </View>
-          </>
-        }
-        keyExtractor={(item, index) => index}
-        /> 
+            );
+        })}
+      </View>
     </>
   )
 }

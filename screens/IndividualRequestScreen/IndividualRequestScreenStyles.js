@@ -177,11 +177,6 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     alignItems: "center",
   },
-  resource_list: {
-    margin: '5%', 
-    maxHeight: '10%',
-    position: 'absolute',
-  },
   resource_badge: {
     backgroundColor: Colors.blue,
     borderRadius: 20,
@@ -189,17 +184,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  list_style: {
-    minWidth: '9%',
-    maxHeight: '12%',
-    maxWidth: '100%',
-    marginBottom: '2%', 
-  }, 
   input: {
     borderBottomColor: Colors.grey,
     borderWidth: 1, 
     borderColor: Colors.white,
     minWidth: '100%',
+  },
+  flex_container: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
@@ -245,10 +239,9 @@ const buttons = StyleSheet.create({
     alignItems: "center",
   },
   close: {
-    //top: '0%',
     left: '50%',
     bottom: '-50%',
-  }
+  },
 });
 
 const texts = StyleSheet.create({
