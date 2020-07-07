@@ -68,18 +68,17 @@ const styles = StyleSheet.create({
     borderColor: Colors.grey,
     borderTopColor: Colors.green,
   },
-  dropdown_style: {
+  /*dropdown_style: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.white, 
     marginLeft: "35%", 
     marginRight: "-450%",
-  }, 
+  }, */
   dropdown_style2: {
     minWidth: '-10%',
     paddingLeft: '20%',
     paddingRight: '20%',
-    borderColor: "white",
   }, 
   dropdown_container: {
     marginBottom: '3%',
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     minWidth: '100%',
     maxWidth: '100%',
   },
-  dropdown_old_style: {
+  /*dropdown_old_style: {
     minWidth: '90%',
     borderColor: "white",
   },
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
     marginBottom: '3%',
     minWidth: '90%',
     maxWidth: '90%',
-  }
+  }*/
 });
 
 const texts = StyleSheet.create({

@@ -102,14 +102,22 @@ export default function BottomTabNavigator({ navigation, route }) {
                 dropdownPosition = {-4}
                 style={styles.dropdown_style2}
                 textColor="#4F4F4F"
+                value={'Requires Action'}
                 defaultValue={'Requires Action'}
                 labelFontSize={16}
                 fontSize={16}
-                baseColor={Colors.grey}
+                inputContainerStyle={{ borderBottomColor: 'transparent' }}
                 textColor={Colors.grey_font}
                 onChangeText={(label, value) =>{
-                    setChoice(value);
-                    navigation.navigate('Requests', {choice: value})
+                    if (value == 'Requires Action') {
+                      setChoice(0); 
+                      navigation.navigate('Requests', {choice: 0});
+                    } else {
+                      setChoice(value);
+                      navigation.navigate('Requests', {choice: value});
+                    }
+                    
+                    
                   }
                 }
               />

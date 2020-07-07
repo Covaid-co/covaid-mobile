@@ -66,11 +66,11 @@ export default function RequestsScreen({ route, navigation }) {
       console.log("completed")
       setCurrentRequestList(completedRequests);
     } 
-    if (route.params.choice == volunteer_status.IN_PROGRESS) {
+    else if (route.params.choice == volunteer_status.IN_PROGRESS) {
       console.log("in progress")
       setCurrentRequestList(activeRequests);
     } 
-    if (route.params.choice == volunteer_status.PENDING) {
+    else {
       console.log("in progress")
       setCurrentRequestList(pendingRequests);
     } 
