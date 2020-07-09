@@ -67,7 +67,17 @@ export const convertTime = (date) => {
   }
 };
 
-const formatDate = (date, format, utc) => {
+export const translatePayment = (num) => {
+  if (num == 0) {
+    return "Call Ahead";
+  } else if (num == 1) {
+    return "Reimburse Volunteer";
+  } else {
+    return "N/A";
+  }
+}
+
+export const formatDate = (date, format, utc) => {
   var MMMM = [
     "\x00",
     "January",

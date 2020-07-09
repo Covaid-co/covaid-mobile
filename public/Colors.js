@@ -12,6 +12,8 @@ export default {
   warningText: "#666804",
   noticeBackground: tintColor,
   noticeText: "#fff",
+  shadowColor: "#000",
+
   deadlineRed: "#EB5757",
   blue: "#2670FF",
   grey: "#CECECE",
@@ -21,4 +23,10 @@ export default {
   light_grey_font: "#7F7F7F",
   white: "#FFFFFF",
   black: "#000000",
+  green: "#3ABD24",
+  red: "#EB5757",
+  orange: "#E2A952",
+  gray1: "#333333",
+  red_orange: "#FF5924",
+  orange2: "#DB9327",
 };

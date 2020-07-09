@@ -1,148 +1,142 @@
-import { StyleSheet, Image, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
     height: "100%",
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
+  },
+  req_container: {
+    padding: 0,
+    marginTop: '3%',
+    height: "100%",
+    backgroundColor: Colors.white,
+  },
+  req_container_original: {
+    padding: 0,
+    height: "100%",
+    backgroundColor: Colors.white,
   },
   center: {
     justifyContent: "center",
     alignItems: "center",
   },
-  logo: {
-    height: 150,
-    width: 150,
-    margin: 20,
-  },
-  input: {
-    marginTop: 10,
-    marginBottom: 10,
-    paddingLeft: 10,
-    width: 350,
-    height: 49,
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    fontSize: 15,
-    color: Colors.blue,
-  },
-  request: {
-    marginTop: 10,
-    padding: 20,
-    backgroundColor: Colors.grey,
-    borderRadius: 20,
-    width: 330,
-  },
-  requestContainer: {
-    position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  row: {
-    margin: 10,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});
-
-const buttons = StyleSheet.create({
-  tabs: {
+  no_request: {
     margin: 5,
-    width: "32%",
-    height: 30,
-    borderRadius: 8,
+    padding: 5,
+    minWidth: '100%',
+    minHeight: '20%',
     backgroundColor: Colors.white,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.grey,
     justifyContent: "center",
     alignItems: "center",
+    borderStyle: "dashed",
   },
-  pressed_tab: {
-    margin: 5,
-    width: "32%",
-    height: 30,
-    borderRadius: 8,
-    backgroundColor: Colors.blue,
-    borderColor: Colors.blue,
+  request_pending: {
+    margin: '2%',
+    padding: 5,
+    minWidth: '90%',
+    maxWidth: '90%',
+    backgroundColor: Colors.white,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.grey,
+    borderTopColor: Colors.red_orange,
+  },
+  request_active: {
+    margin: '2%',
+    padding: 5,
+    minWidth: '90%',
+    maxWidth: '90%',
+    backgroundColor: Colors.white,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.grey,
+    borderTopColor: Colors.orange2,
+  },
+  request_completed: {
+    margin: '2%',
+    padding: 5,
+    minWidth: '90%',
+    maxWidth: '90%',
+    backgroundColor: Colors.white,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.grey,
+    borderTopColor: Colors.green,
+  },
+  /*dropdown_style: {
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Colors.white, 
+    marginLeft: "35%", 
+    marginRight: "-450%",
+  }, */
+  dropdown_style2: {
+    minWidth: '-10%',
+    paddingLeft: '20%',
+    paddingRight: '20%',
+  }, 
+  dropdown_container: {
+    marginBottom: '3%',
+    alignItems: 'center',
+    minWidth: '100%',
+    maxWidth: '100%',
   },
-  login: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
+  /*dropdown_old_style: {
+    minWidth: '90%',
+    borderColor: "white",
   },
-  signup: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: "white",
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  disabled: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: Colors.grey,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  dropdown_old_container: {
+    marginBottom: '3%',
+    minWidth: '90%',
+    maxWidth: '90%',
+  }*/
 });
 
 const texts = StyleSheet.create({
-  header: {
-    // marginBottom: 10,
-    fontSize: 40,
-    color: "black",
-    textAlign: "center",
-  },
-  button_label: {
+  request_resource_text: {
+    fontFamily: 'Inter',
     fontSize: 15,
-    color: "white",
+    color: Colors.light_grey_font,
+    textAlign: "left",
+    padding: '2%',
+    paddingBottom: '5%',
   },
-  button_label_blue: {
-    fontSize: 15,
-    color: Colors.blue,
-  },
-  request_header: {
-    marginBottom: 10,
+  request_name_text: {
     fontSize: 20,
-    color: "black",
-    textAlign: "center",
-  },
-  request_title: {
-    fontSize: 20,
-    color: "black",
+    color: Colors.grey_font,
     textAlign: "left",
     fontWeight: "bold",
-  },
-  no_request: {
+    padding: '2%',
+    fontFamily: "Montserrat-bold",
+  },  
+  request_date_text: {
+    fontFamily: 'Inter',
+    position: 'absolute', 
+    right: '0%',
+    top: '10%',
     fontSize: 15,
-    color: "grey",
-    textAlign: "left",
+    color: Colors.light_grey_font,
+    textAlign: "right",
+    padding: '2%',
   },
-  request_text: {
-    fontSize: 15,
-    margin: "2%",
+  no_request_text: {
+    fontFamily: 'Inter',
+    fontSize: 20,
+    color: Colors.grey,
+    textAlign: "center",
+    padding: '2%',
+    paddingBottom: '5%',
   },
-  request_label: {
-    fontSize: 15,
-    fontWeight: "bold",
-    margin: "2%",
-  },
+  dropdown_font: {
+    fontFamily: 'Inter',
+    fontSize: 16,
+    color: Colors.green,
+  }
 });
 
-export { styles, buttons, texts };
+export { styles, texts };

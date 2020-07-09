@@ -7,20 +7,26 @@ import {
   View,
   TouchableOpacity,
   AsyncStorage,
+  Text
 } from "react-native";
+
+import { styles, texts } from "../screens/RequestsScreen/RequestsScreenStyles";
 
 import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
-import { volunteer_status } from "../constants";
+import { Dropdown } from 'react-native-material-dropdown';
+import Colors from "../public/Colors";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Requests";
 
 export default function BottomTabNavigator({ navigation, route }) {
+  const [choice, setChoice] = useState(0); // changes here are reflected on requests screen 
+
   navigation.setOptions({
-    headerTitle: getHeaderTitle(route),
+    headerTitle: getHeaderTitle(route, setChoice, choice),
     headerRight: () => (
       <TouchableOpacity
         style={{ margin: 10 }}
@@ -48,6 +54,8 @@ export default function BottomTabNavigator({ navigation, route }) {
       <BottomTab.Screen
         name="Requests"
         component={RequestsScreen}
+        initialParams={{"choice": choice, "wtf": "bitch"}}
+        //initialParams={route.params}
         options={{
           title: "Requests",
           tabBarIcon: ({ focused }) => (
@@ -69,17 +77,57 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
     </BottomTab.Navigator>
   );
-}
 
-function getHeaderTitle(route) {
-  const routeName =
-    route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-  switch (routeName) {
-    case "Requests":
-      return "Requests";
-    case "Profile":
-      return "Profile";
-    case "Notification":
-      return "Notifications";
+
+  function getHeaderTitle(route, setChoice, choice) {
+    const routeName =
+      route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+
+      let options2 = [{
+        // label: 'Requires Action',
+        value: 'Requires Action',
+      }, {
+        value: 'In Progress',
+      }, {
+        value: 'Completed',
+      }];
+    switch (routeName) {
+      case "Requests":
+        return () => (
+          <View style={styles.dropdown_container}>
+            
+            <Dropdown
+                label=' '
+                data={options2} 
+                dropdownPosition = {-4}
+                style={styles.dropdown_style2}
+                textColor="#4F4F4F"
+                value={'Requires Action'}
+                defaultValue={'Requires Action'}
+                labelFontSize={16}
+                fontSize={16}
+                inputContainerStyle={{ borderBottomColor: 'transparent' }}
+                textColor={Colors.grey_font}
+                onChangeText={(label, value) =>{
+                    if (value == 'Requires Action') {
+                      setChoice(0); 
+                      navigation.navigate('Requests', {choice: 0});
+                    } else {
+                      setChoice(value);
+                      navigation.navigate('Requests', {choice: value});
+                    }
+                    
+                    
+                  }
+                }
+              />
+              
+          </View>
+      );
+      case "Profile":
+        return "Profile";
+      case "Notification":
+        return "Notifications";
+    }
   }
 }
