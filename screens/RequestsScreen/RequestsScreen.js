@@ -54,24 +54,19 @@ export default function RequestsScreen({ route, navigation }) {
       headerStyle: { backgroundColor: 'red' },
       headerTitleStyle: { color: 'green' },
     }
-    console.log("useeffects ran")
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
-  console.log(route.params.choice)
   if (route.params.choice !== currentRequestType) {
     if (route.params.choice == volunteer_status.COMPLETE) {
-      console.log("completed")
       setCurrentRequestList(completedRequests);
     } 
     else if (route.params.choice == volunteer_status.IN_PROGRESS) {
-      console.log("in progress")
       setCurrentRequestList(activeRequests);
     } 
     else {
-      console.log("in progress")
       setCurrentRequestList(pendingRequests);
     } 
     setCurrentRequestType(route.params.choice)
@@ -113,6 +108,7 @@ export default function RequestsScreen({ route, navigation }) {
         request_id: requestData[i]._id,  
         languages: requestData[i].personal_info.languages, 
         payment: requestData[i].request_info.payment, 
+        admin_msg: requestData[i].status.volunteers[0].adminMessage, 
       } 
       tempList.push(element); 
     }
@@ -229,16 +225,29 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function displayRequestInfo(reqType, item) {
-    return (
-      <>
-      <View style={{flexDirection:'col'}}>
-        <Text style={texts.request_name_text}>{item.requester_name}</Text>
-        <Text style={texts.request_date_text}>Due {formatDate(new Date(item.needed_by.split(" ")[0]), "MMM d", true)}  {displayRequestIcon(reqType)}</Text>
-      </View>
-      
-    <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
-      </>
-    );
+    if (reqType == volunteer_status.PENDING) {
+      return (
+        <>
+        <View style={{flexDirection:'col'}}>
+          <Text style={texts.request_name_text}>New Request</Text>
+          <Text style={texts.request_date_text}>Due {formatDate(new Date(item.needed_by.split(" ")[0]), "MMM d", true)}  {displayRequestIcon(reqType)}</Text>
+        </View>
+        
+      <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
+        </>
+      );
+    } else {
+      return (
+        <>
+        <View style={{flexDirection:'col'}}>
+          <Text style={texts.request_name_text}>{item.requester_name}</Text>
+          <Text style={texts.request_date_text}>Due {formatDate(new Date(item.needed_by.split(" ")[0]), "MMM d", true)}  {displayRequestIcon(reqType)}</Text>
+        </View>
+        
+      <Text style={texts.request_resource_text}>{item.resources.resource_request.join(", ")}</Text>
+        </>
+      );
+    }    
   };
 
   function displayRequestIcon(reqType) {

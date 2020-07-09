@@ -5,6 +5,7 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
+  ScrollView
 } from "react-native";
 
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
@@ -29,30 +30,35 @@ export default function CompletedModal(props) {
             </View>
             
             <View style={styles.info_container}>
-              <Text></Text>
-              <Text style={texts.details_header}>Needs:</Text>
-              {showResourceBadges(props.item.resources.resource_request)}
-              
-              <Text></Text>
-              <Text style={texts.details_header}>Details</Text>
-              <Text style={texts.request_details}>{props.item.details}</Text>
+              <ScrollView style={styles.info_container}>  
+                <Text></Text>
+                <Text style={texts.details_header}>Needs:</Text>
+                {showResourceBadges(props.item.resources.resource_request)}
+                
+                <Text></Text>
+                <Text style={texts.details_header}>Details</Text>
+                <Text style={texts.request_details}>{props.item.details}</Text>
 
-              <Text></Text>
-              <Text style={texts.details_header}>Needed by</Text>
-              <Text style={texts.request_details}>
-                {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
-              </Text>
+                <Text></Text>
+                <Text style={texts.details_header}>Message from your mutual aid group</Text>
+                <Text style={texts.request_details}>{props.item.admin_msg || "None"}</Text>
 
-              <Text></Text>
-                <Text style={texts.details_header}>Reimbursement</Text>
-              <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
-            </View>
+                <Text></Text>
+                <Text style={texts.details_header}>Needed by</Text>
+                <Text style={texts.request_details}>
+                  {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
+                </Text>
 
+                <Text></Text>
+                  <Text style={texts.details_header}>Reimbursement</Text>
+                <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>         
+              </ScrollView>    
+            </View>   
             <View style={styles.complete_date_container}>
               <Text></Text>
               <Text style={texts.completion_date}>Request completed on</Text>
               <Text style={texts.completion_date}>{formatDate(new Date(props.item.completed_date), "MMMMMM dd, yyyy h:mm TT", false)}</Text>
-            </View>            
+            </View>        
           </View>        
       </View>
     </Modal>

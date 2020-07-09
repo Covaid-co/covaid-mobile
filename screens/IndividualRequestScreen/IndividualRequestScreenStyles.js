@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
   completed_modal_view: {
     backgroundColor: Colors.white,
     minWidth: '100%',
+    maxWidth: '100%',
+    maxHeight: '90%',
     padding: '10%',
     paddingTop: '0%', 
     alignItems: "center",
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
   rejected_modal_view: {
     backgroundColor: Colors.white,
     minWidth: '100%',
+    maxWidth: '100%',
     padding: '10%',
     paddingTop: '5%',
     alignItems: "center",
@@ -51,8 +54,11 @@ const styles = StyleSheet.create({
   accepted_modal_view: {
     backgroundColor: Colors.white,
     minWidth: '100%',
+    maxWidth: '100%',
+    maxHeight: '90%',
     padding: '10%',
-    paddingTop: '5%',
+    paddingTop: '0%',
+    paddingBottom: '0%',
     alignItems: "center",
     shadowColor: Colors.shadowColor,
     shadowOffset: {
@@ -71,7 +77,10 @@ const styles = StyleSheet.create({
   pending_modal_view: {
     backgroundColor: Colors.white,
     minWidth: '100%',
+    maxWidth: '100%',
+    maxHeight: '90%',
     padding: '10%',
+    paddingBottom: '0%',
     paddingTop: '0%', 
     alignItems: "center",
     shadowColor: Colors.shadowColor,
@@ -91,8 +100,11 @@ const styles = StyleSheet.create({
   active_modal_view: {
     backgroundColor: Colors.white,
     minWidth: '100%',
+    maxWidth: '100%',
+    maxHeight: '90%',
     padding: '10%',
     paddingTop: '0%', 
+    paddingBottom: '0%',
     alignItems: "center",
     shadowColor: Colors.shadowColor,
     shadowOffset: {
@@ -138,7 +150,14 @@ const styles = StyleSheet.create({
   }, 
   info_container: {
     minWidth: '100%',
+    maxWidth: '100%',
+    maxHeight: '100%',
     textAlign: 'left',
+  }, 
+  info_scroll_container: {
+    minWidth: '100%',
+    maxWidth: '100%',
+    maxHeight: '60%',
   }, 
   complete_date_container: {
     minWidth: '100%',

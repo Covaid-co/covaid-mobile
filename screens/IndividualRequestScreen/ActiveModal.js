@@ -7,6 +7,7 @@ import {
   FlatList,
   AsyncStorage,
   Alert,
+  ScrollView
 } from "react-native";
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
@@ -128,29 +129,35 @@ export default function ActiveModal(props) {
               <Text style={texts.individual_req_header}>{props.item.requester_name}</Text>
             </View>
 
-            <View style={styles.info_container}>
-              <Text style={texts.info_header}>Information</Text>
-              <Text style={texts.request_details}>Email: {props.item.requester_contact_email}</Text>
-              <Text style={texts.request_details}>Phone: {props.item.requester_contact_phone}</Text>
-              <Text style={texts.request_details}>Languages: {props.item.languages}</Text>
-    
-              <Text></Text>
-              <Text style={texts.details_header}>Needs:</Text>
-              {showResourceBadges(props.item.resources.resource_request)}
-    
-              <Text></Text>
-              <Text style={texts.details_header}>Details</Text>
-              <Text style={texts.request_details}>{props.item.details}</Text>
-    
-              <Text></Text>
-              <Text style={texts.details_header}>Needed by</Text>
-              <Text style={texts.request_details}>
-                {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
-              </Text>
-    
-              <Text></Text>
-              <Text style={texts.details_header}>Reimbursement</Text>
-              <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
+            <View style={styles.info_scroll_container}>
+              <ScrollView style={styles.info_container}>  
+                <Text style={texts.info_header}>Information</Text>
+                <Text style={texts.request_details}>Email: {props.item.requester_contact_email}</Text>
+                <Text style={texts.request_details}>Phone: {props.item.requester_contact_phone}</Text>
+                <Text style={texts.request_details}>Languages: {props.item.languages}</Text>
+      
+                <Text></Text>
+                <Text style={texts.details_header}>Needs:</Text>
+                {showResourceBadges(props.item.resources.resource_request)}
+      
+                <Text></Text>
+                <Text style={texts.details_header}>Details</Text>
+                <Text style={texts.request_details}>{props.item.details}</Text>
+
+                <Text></Text>
+                <Text style={texts.details_header}>Message from your mutual aid group</Text>
+                <Text style={texts.request_details}>{props.item.admin_msg || "None"}</Text>
+      
+                <Text></Text>
+                <Text style={texts.details_header}>Needed by</Text>
+                <Text style={texts.request_details}>
+                  {props.item.needed_by.split(" ")[1]} of {formatDate(new Date(props.item.needed_by.split(" ")[0]), "MMMMMMMMMM dd, yyyy", false)}
+                </Text>
+      
+                <Text></Text>
+                <Text style={texts.details_header}>Reimbursement</Text>
+                <Text style={texts.request_details}>{translatePayment(props.item.payment)}</Text>
+              </ScrollView>
             </View>
 
             <Text></Text>
@@ -160,7 +167,6 @@ export default function ActiveModal(props) {
             <TouchableOpacity style={buttons.reject} onPress={() => cancelConfirm()}> 
               <Text style={texts.button_label_red}>Unmatch Request</Text>
             </TouchableOpacity>
-            <Text></Text><Text></Text>
             
             {confirmModalVisible && <ConfirmModal modalVisible={setConfirmModalVisible} item={props.item} setDone={setDone} activeList={props.activeList} completeList={props.completeList}/>}
     
