@@ -3,7 +3,7 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingTop: "5%",
     backgroundColor: "white",
   },
   center: {
@@ -11,71 +11,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   line: {
-    borderWidth: 0.8,
-    borderColor: Colors.grey,
-    margin: "1%",
+    borderWidth: 1,
+    borderColor: "#EEEEEE",
   },
   form: {
     margin: 5,
   },
   input: {
     width: 350,
-    height: 50,
-    paddingLeft: 10,
+    height: 40,
     fontSize: 17,
-    borderWidth: 2,
-    borderColor: Colors.grey,
-    borderRadius: 8,
-    fontSize: 15,
-  },
-  row: {
-    margin: 10,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});
-
-const buttons = StyleSheet.create({
-  edit: {
-    marginTop: 15,
-    width: 350,
-    height: 60,
-    backgroundColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    fontFamily: "Inter",
+    color: Colors.black,
   },
 });
 
 const texts = StyleSheet.create({
-  header: {
-    margin: "1%",
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black",
-  },
-  label_bold: {
-    fontFamily: "Montserrat-bold",
-    fontSize: 17,
-    color: "black",
-  },
   label: {
-    fontSize: 17,
-    color: "black",
-  },
-  button_label: {
     fontSize: 15,
-    color: "white",
-  },
-  green_text: {
-    fontSize: 17,
-    color: "green",
-  },
-  red_text: {
-    fontSize: 17,
-    color: "red",
+    color: Colors.grey_font,
+    fontFamily: "Inter-bold",
   },
 });
 
-export { styles, buttons, texts };
+export { styles, texts };
