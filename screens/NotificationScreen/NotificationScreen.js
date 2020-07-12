@@ -9,11 +9,15 @@ import {
 import { styles, texts } from "./NotificationStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
-import getDistance from "../../util/distance";
 import fetch_a from "../../util/fetch_auth";
+import PendingModal from '../IndividualRequestScreen/PendingModal'
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [activeRequests, setActiveRequests] = useState([]);
+  const [currentItem, setCurrentItem] = useState(); 
+  const [modalVisible, setModalVisible] = useState(false); 
+  const [user, setUser] = useState(); 
   // const [user, setUser] = useState({});
   // const [userLoc, setUserLoc] = useState([]);
 
@@ -41,10 +45,29 @@ export default function NotificationScreen({ route, navigation }) {
       const tokenHolder = await AsyncStorage.getItem(
         storage_keys.SAVE_TOKEN_KEY
       );
-      fetchRequests(tokenHolder);
+      fetchUser(tokenHolder); 
+      fetchRequests(tokenHolder, volunteer_status.PENDING);
+      fetchRequests(tokenHolder, volunteer_status.IN_PROGRESS);
     } catch (e) {
       alert(e);
     }
+  };
+
+  const fetchUser = async (id) => { 
+    let params = { id: id };
+    var url = generateURL(homeURL + "/api/users/user?", params);
+
+    fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setUser(data[0]);
+          });
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
   };
 
   // const fetchUser = async (id) => {
@@ -96,43 +119,43 @@ export default function NotificationScreen({ route, navigation }) {
     return Math.floor(seconds) + " seconds";
   }
 
-  async function filterRequests(requests) {
-    const pending = [];
+  async function filterRequests(requests, type) {
+    const arr = [];
     // const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
     // if (idHolder) {
     //   console.log("IDHOLDERNOTIF: " + JSON.stringify(idHolder));
     //   fetchUser(idHolder);
     //   console.log("USERLOC: " + userLoc);
     // }
+
     requests.map((request) => {
-      pending.push({
-        request_id: request._id,
-        details: request.request_info.details,
-        requester_name: request.personal_info.requester_name,
-        requester_contact:
-          request.personal_info.requester_email ||
-          request.personal_info.requester_phone,
-        resources: request.request_info,
-        deadline_date: getDate(request.request_info.date),
-        deadline_time: request.request_info.time,
-        distance:
-          getDistance(
-            // userLoc[0],
-            // userLoc[1],
-            0,
-            0,
-            request.location_info.coordinates[0],
-            request.location_info.coordinates[1]
-          ) + " miles away",
-        needed_by: request.request_info.date + " " + request.request_info.time,
+      arr.push({
+        key: 1, 
+        requester_name: request.personal_info.requester_name, 
+        resources: request.request_info, 
+        needed_by: request.request_info.date + " " + request.request_info.time, 
+        lat: parseFloat(request.location_info.coordinates[0]), 
+        long: parseFloat(request.location_info.coordinates[1]), 
+        requester_contact_email: request.personal_info.requester_email,
+        requester_contact_phone: request.personal_info.requester_phone, 
+        details: request.request_info.details, 
+        completed_date: request.status.completed_date || "",
+        request_id: request._id,  
+        languages: request.personal_info.languages, 
+        payment: request.request_info.payment, 
+        admin_msg: request.status.volunteers[0].adminMessage, 
         timestamp: request.time_posted,
       });
     });
-    setPendingRequests(pending);
+    if (type == volunteer_status.PENDING) {
+      setPendingRequests(arr);
+    } else {
+      setActiveRequests(arr)
+    }    
   }
 
-  function fetchRequests(token) {
-    const params = { status: volunteer_status.PENDING };
+  function fetchRequests(token, type) {
+    const params = { status: type };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
 
     fetch_a(token, "token", url, {
@@ -141,7 +164,7 @@ export default function NotificationScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            filterRequests(data);
+            filterRequests(data, type);
           });
         } else {
           console.log("Notification Request Fetch Error");
@@ -196,6 +219,7 @@ export default function NotificationScreen({ route, navigation }) {
 
   return (
     <View style={styles.screen}>
+      {modalVisible && <PendingModal modalVisible={setModalVisible} item={currentItem} pendingList={pendingRequests} activeList={activeRequests} volunteer={user}/>}
       {/* {user ? ( */}
       {pendingRequests[0] ? (
         <FlatList
@@ -208,14 +232,8 @@ export default function NotificationScreen({ route, navigation }) {
               underlayColor="#F3F5F9"
               style={styles.container}
               onPress={() => {
-                navigation.navigate("RequestsScreen", {
-                  navigation: route.params,
-                  currentItem: item,
-                  pendingRequests: pendingRequests,
-                  currScreen: "Notification",
-                  currentRequestType: volunteer_status.PENDING, 
-                  pendingModalVisible: true, 
-                });
+                setCurrentItem(item); 
+                setModalVisible(true);
               }}
             >
               {displayRequestInfo(item)}
