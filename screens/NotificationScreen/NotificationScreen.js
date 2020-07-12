@@ -10,14 +10,9 @@ import { styles, texts } from "./NotificationStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
-import PendingModal from '../IndividualRequestScreen/PendingModal'
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
-  const [activeRequests, setActiveRequests] = useState([]);
-  const [currentItem, setCurrentItem] = useState(); 
-  const [modalVisible, setModalVisible] = useState(false); 
-  const [user, setUser] = useState(); 
   // const [user, setUser] = useState({});
   // const [userLoc, setUserLoc] = useState([]);
 
@@ -45,29 +40,10 @@ export default function NotificationScreen({ route, navigation }) {
       const tokenHolder = await AsyncStorage.getItem(
         storage_keys.SAVE_TOKEN_KEY
       );
-      fetchUser(tokenHolder); 
-      fetchRequests(tokenHolder, volunteer_status.PENDING);
-      fetchRequests(tokenHolder, volunteer_status.IN_PROGRESS);
+      fetchRequests(tokenHolder);
     } catch (e) {
       alert(e);
     }
-  };
-
-  const fetchUser = async (id) => { 
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-          });
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
   };
 
   // const fetchUser = async (id) => {
@@ -119,8 +95,8 @@ export default function NotificationScreen({ route, navigation }) {
     return Math.floor(seconds) + " seconds";
   }
 
-  async function filterRequests(requests, type) {
-    const arr = [];
+  async function filterRequests(requests) {
+    const pending = [];
     // const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
     // if (idHolder) {
     //   console.log("IDHOLDERNOTIF: " + JSON.stringify(idHolder));
@@ -129,9 +105,9 @@ export default function NotificationScreen({ route, navigation }) {
     // }
 
     requests.map((request) => {
-      arr.push({
+      pending.push({
         key: 1, 
-        requester_name: request.personal_info.requester_name, 
+        requester_name: "New Request", 
         resources: request.request_info, 
         needed_by: request.request_info.date + " " + request.request_info.time, 
         lat: parseFloat(request.location_info.coordinates[0]), 
@@ -147,15 +123,11 @@ export default function NotificationScreen({ route, navigation }) {
         timestamp: request.time_posted,
       });
     });
-    if (type == volunteer_status.PENDING) {
-      setPendingRequests(arr);
-    } else {
-      setActiveRequests(arr)
-    }    
+    setPendingRequests(pending);
   }
 
-  function fetchRequests(token, type) {
-    const params = { status: type };
+  function fetchRequests(token) {
+    const params = { status: volunteer_status.PENDING };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
 
     fetch_a(token, "token", url, {
@@ -164,7 +136,7 @@ export default function NotificationScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            filterRequests(data, type);
+            filterRequests(data);
           });
         } else {
           console.log("Notification Request Fetch Error");
@@ -219,7 +191,6 @@ export default function NotificationScreen({ route, navigation }) {
 
   return (
     <View style={styles.screen}>
-      {modalVisible && <PendingModal modalVisible={setModalVisible} item={currentItem} pendingList={pendingRequests} activeList={activeRequests} volunteer={user}/>}
       {/* {user ? ( */}
       {pendingRequests[0] ? (
         <FlatList
@@ -232,8 +203,14 @@ export default function NotificationScreen({ route, navigation }) {
               underlayColor="#F3F5F9"
               style={styles.container}
               onPress={() => {
-                setCurrentItem(item); 
-                setModalVisible(true);
+                navigation.navigate("RequestsScreen", {
+                  navigation: route.params,
+                  currentItem: item,
+                  pendingRequests: pendingRequests,
+                  currScreen: "Notification",
+                  currentRequestType: volunteer_status.PENDING, 
+                  pendingModalVisible: true, 
+                });
               }}
             >
               {displayRequestInfo(item)}

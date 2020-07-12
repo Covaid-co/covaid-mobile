@@ -40,7 +40,7 @@ export default function RequestsScreen({ route, navigation }) {
   useEffect(() => {
     setPendingModalVisible(route.params.pendingModalVisible)
     setCurrentItem(route.params.currentItem)
-    console.log("route params "+route.params.pendingModalVisible)
+    setCurrentRequestList(route.params.currentRequestType);
     const unsubscribe = navigation.addListener('focus', () => {
       AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
         fetchUser(data); 
