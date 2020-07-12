@@ -20,7 +20,6 @@ import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js"
 import EditOfferScreen from "./screens/EditOfferScreen/EditOfferScreen.js";
 import EditDetailsScreen from "./screens/EditDetailsScreen/EditDetailsScreen.js";
 import RequestsScreen from "./screens/RequestsScreen/RequestsScreen.js";
-
 import SettingsScreen from "./screens/SettingsScreen/SettingsScreen.js";
 
 const Stack = createStackNavigator();
@@ -68,10 +67,10 @@ export default function App(props) {
             }}
           />
           <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-          <Stack.Screen name="Requests Screen" component={RequestsScreen} />
           <Stack.Screen name="Edit Offer" component={EditOfferScreen} />
           <Stack.Screen name="Edit Details" component={EditDetailsScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="RequestsScreen" component={RequestsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

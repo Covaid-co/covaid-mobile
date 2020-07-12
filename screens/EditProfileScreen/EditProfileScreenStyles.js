@@ -6,6 +6,10 @@ const styles = StyleSheet.create({
     paddingTop: "5%",
     backgroundColor: "white",
   },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   line: {
     borderWidth: 1,
     borderColor: "#EEEEEE",

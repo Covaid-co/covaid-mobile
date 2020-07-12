@@ -9,7 +9,6 @@ import {
 import { styles, texts } from "./NotificationStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
-import getDistance from "../../util/distance";
 import fetch_a from "../../util/fetch_auth";
 
 export default function NotificationScreen({ route, navigation }) {
@@ -104,27 +103,23 @@ export default function NotificationScreen({ route, navigation }) {
     //   fetchUser(idHolder);
     //   console.log("USERLOC: " + userLoc);
     // }
+
     requests.map((request) => {
       pending.push({
-        request_id: request._id,
-        details: request.request_info.details,
-        requester_name: request.personal_info.requester_name,
-        requester_contact:
-          request.personal_info.requester_email ||
-          request.personal_info.requester_phone,
-        resources: request.request_info,
-        deadline_date: getDate(request.request_info.date),
-        deadline_time: request.request_info.time,
-        distance:
-          getDistance(
-            // userLoc[0],
-            // userLoc[1],
-            0,
-            0,
-            request.location_info.coordinates[0],
-            request.location_info.coordinates[1]
-          ) + " miles away",
-        needed_by: request.request_info.date + " " + request.request_info.time,
+        key: 1, 
+        requester_name: "New Request", 
+        resources: request.request_info, 
+        needed_by: request.request_info.date + " " + request.request_info.time, 
+        lat: parseFloat(request.location_info.coordinates[0]), 
+        long: parseFloat(request.location_info.coordinates[1]), 
+        requester_contact_email: request.personal_info.requester_email,
+        requester_contact_phone: request.personal_info.requester_phone, 
+        details: request.request_info.details, 
+        completed_date: request.status.completed_date || "",
+        request_id: request._id,  
+        languages: request.personal_info.languages, 
+        payment: request.request_info.payment, 
+        admin_msg: request.status.volunteers[0].adminMessage, 
         timestamp: request.time_posted,
       });
     });
@@ -173,8 +168,7 @@ export default function NotificationScreen({ route, navigation }) {
             </View>
             <View style={styles.pleft}>
               <Text style={texts.header}>
-                {item.requester_name.split(" ")[0]}{" "}
-                <Text style={texts.need_help}>needs your help</Text>
+                <Text style={texts.need_help}>You have a new request!</Text>
               </Text>
               <View style={styles.resources}>
                 <Text style={texts.tasks}>
@@ -209,11 +203,13 @@ export default function NotificationScreen({ route, navigation }) {
               underlayColor="#F3F5F9"
               style={styles.container}
               onPress={() => {
-                navigation.navigate("Pending Request", {
+                navigation.navigate("RequestsScreen", {
                   navigation: route.params,
-                  item: item,
-                  pendingList: pendingRequests,
+                  currentItem: item,
+                  pendingRequests: pendingRequests,
                   currScreen: "Notification",
+                  currentRequestType: volunteer_status.PENDING, 
+                  pendingModalVisible: true, 
                 });
               }}
             >
