@@ -2,81 +2,89 @@ import { StyleSheet } from "react-native";
 import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: "50%",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: 10,
+  content_container: {
+    flex: 0.62,
   },
-  logo: {
-    height: 150,
-    width: 150,
-    margin: 20,
+  footer: {
+    flex: 0.1,
+    justifyContent: "flex-start",
+    marginLeft: "12.5%",
+    marginRight: "12.5%",
+    textAlign: "left",
   },
   input: {
-    marginTop: 10,
-    marginBottom: 10,
-    paddingLeft: 10,
-    width: 350,
-    height: 49,
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    fontSize: 15,
-    color: Colors.blue,
+    borderBottomWidth: 1,
+    borderColor: Colors.standard,
+    color: Colors.light_grey_font,
+    fontFamily: "Inter",
+    fontSize: 16,
+    marginBottom: 48,
+    paddingBottom: 10,
+  },
+  input_container: {
+    marginLeft: "5%",
+    marginRight: "5%",
+    marginTop: "30%",
+  },
+  screen: {
+    flex: 1,
+    paddingBottom: 0,
   },
 });
 
 const buttons = StyleSheet.create({
-  login: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  signup: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
-    backgroundColor: "white",
-    borderWidth: 3,
-    borderColor: Colors.blue,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   disabled: {
-    marginBottom: 10,
-    marginTop: 10,
-    width: 350,
-    height: 60,
+    alignItems: "center",
     backgroundColor: Colors.grey,
     borderRadius: 8,
+    height: 60,
     justifyContent: "center",
+    marginTop: -5,
+    paddingBottom: 15,
+    paddingTop: 15,
+  },
+  login: {
     alignItems: "center",
+    backgroundColor: Colors.blue,
+    borderRadius: 8,
+    height: 60,
+    justifyContent: "center",
+    marginTop: -5,
+    paddingBottom: 15,
+    paddingTop: 15,
   },
 });
 
 const texts = StyleSheet.create({
-  header: {
-    marginBottom: 10,
-    fontFamily: "Montserrat",
-    fontSize: 40,
-    color: "black",
+  button_label: {
+    color: Colors.white,
+    fontFamily: "Inter-semibold",
+    fontSize: 16,
+  },
+  footer_text: {
+    color: Colors.grey,
+    fontFamily: "Inter",
+    fontSize: 14,
+  },
+  forgot_password: {
+    color: Colors.forgotPassBlue,
+    fontFamily: "Inter",
+    fontSize: 16,
+    marginTop: 16,
     textAlign: "center",
   },
-  button_label: {
-    fontSize: 15,
-    color: "white",
-  },
-  button_label_blue: {
-    fontSize: 15,
+  header: {
     color: Colors.blue,
+    fontFamily: "Baloo Chettan 2 Medium",
+    fontSize: 50,
+    marginBottom: -20,
+    textAlign: "center",
+  },
+  subheader: {
+    color: Colors.blue,
+    fontFamily: "Baloo Chettan 2 Medium",
+    fontSize: 29,
+    textAlign: "center",
   },
 });
 
