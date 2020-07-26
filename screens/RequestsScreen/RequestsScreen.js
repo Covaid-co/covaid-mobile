@@ -54,7 +54,6 @@ export default function RequestsScreen({ route, navigation }) {
   }];
 
   useEffect(() => {
-    console.log("hi");
     setPendingModalVisible(route.params.pendingModalVisible)
     setCurrentItem(route.params.currentItem)
     setCurrentRequestList(route.params.currentRequestType);

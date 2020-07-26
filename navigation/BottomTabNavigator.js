@@ -16,7 +16,7 @@ import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
-import { Dropdown } from 'react-native-material-dropdown';
+import { Dropdown } from 'react-native-material-dropdown-v2';
 import Colors from "../public/Colors";
 
 const BottomTab = createBottomTabNavigator();
