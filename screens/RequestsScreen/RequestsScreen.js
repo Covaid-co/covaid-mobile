@@ -91,9 +91,6 @@ export default function RequestsScreen({ route, navigation }) {
       Notifications.removeNotificationSubscription(responseListener);
       unsubscribe();
     };
-
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    // return unsubscribe;
   }, [navigation]);
 
   async function registerForPushNotificationsAsync() {
