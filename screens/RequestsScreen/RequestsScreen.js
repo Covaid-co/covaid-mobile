@@ -79,11 +79,22 @@ export default function RequestsScreen({ route, navigation }) {
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
+      // For now, fetch all requests again
+      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
+        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
+        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+      });
     });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      // For now, fetch all requests again
+      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
+        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
+        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+      });
     });
 
     return () => {
@@ -107,7 +118,11 @@ export default function RequestsScreen({ route, navigation }) {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
+
+      if (!user.pushToken || user.pushToken.length === 0) {
+        updateUserPushToken(token);
+      }
+
     } else {
       alert('Must use physical device for Push Notifications');
     }
@@ -135,6 +150,30 @@ export default function RequestsScreen({ route, navigation }) {
       setCurrentRequestList(pendingRequests);
     } 
     setCurrentRequestType(route.params.choice)
+  }
+
+  const updateUserPushToken = async (pushToken) => {
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((token) => {
+      const params = {
+        pushToken: pushToken,
+      };
+
+      fetch_a(token, "token", homeURL + "/api/users/update", {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Token set!");
+          } else {
+            console.log("Token not set");
+          }
+        })
+        .catch((e) => {
+          console.log("Error");
+        });
+    });
   }
   
   const fetchUser = async (id) => { 
