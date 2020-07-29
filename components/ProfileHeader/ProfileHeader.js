@@ -1,33 +1,14 @@
 import React, { useEffect, useState } from "react";
-//import "bootstrap/dist/css/bootstrap.min.css";
-// import Button from "react-bootstrap/Button";
-// import Container from "react-bootstrap/Container";
-// import Row from "react-bootstrap/Row";
-// import Col from "react-bootstrap/Col";
-// import Image from "react-bootstrap/Image";
-// import Modal from "react-bootstrap/Modal";
-import { generateURL } from "../../Helpers";
-//import ImageUploader from "react-images-upload";
-//import ImagePicker from 'react-native-image-picker'
 import {
-  Text,
   TouchableOpacity,
   View,
-  ScrollView,
-  Switch,
-  ActivityIndicator,
   AsyncStorage,
   Image,
-  Modal,
-  TextInput,
   Alert,
-  Keyboard,
-  Button,
 } from "react-native";
 import * as Permissions from 'expo-permissions';
 import fetch_a from "../../util/fetch_auth";
 import { homeURL, storage_keys } from "../../constants";
-import {styles, buttons, texts} from '../../screens/ProfileScreen/ProfileScreenStyles'
 import ProfilePicturePicker from './ProfilePicturePicker.js';
 
 export default function ProfileHeader(props) {
@@ -42,28 +23,6 @@ export default function ProfileHeader(props) {
   const [showImagePicker, setShowImagePicker] = useState(false); 
   const [openCameraRoll, setOpenCameraRoll] = useState(); 
 
-  /*const onDrop = (pictureFiles, pictureDataURLs) => {
-    setUploadingImage(pictureFiles[0]);
-    setIsUploaded(true);
-  };
-
-  const upload = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("file", uploadingImage);
-
-    fetch_a("token", "/api/image", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        response.json().then((data) => {
-          window.location.reload(false);
-        });
-      })
-      .catch((err) => alert("Error: " + err));
-  };*/
-
   const fetchProfilePic = (id) => {
     fetch(homeURL + "/api/image/" + id).then((response) => {
       if (response.ok) {
@@ -77,10 +36,7 @@ export default function ProfileHeader(props) {
   };
 
   function uploadProfilePic(uri) {
-    // const formData = new FormData(); 
-    // console.log("It's supposed to upload " + uri + " to their profile here");
-
-    let formData = new FormData(); //change the below to this_uri later
+    let formData = new FormData(); 
     formData.append('file', {
       uri: uri.replace('file://', ''), 
       name: 'file',
@@ -93,9 +49,7 @@ export default function ProfileHeader(props) {
       body: formData,
     }).then((response) => {
         response.json().then((data) => {
-          // window.location.reload(false);
           setImageUrl(uri); 
-          console.log("success")
         });
       })
       .catch((err) => alert("Error: " + err));
@@ -104,7 +58,7 @@ export default function ProfileHeader(props) {
 
   function handleUpdatePicture() {
     Alert.alert(
-      "Would you like to take a new photo or upload an existing photo from camera roll?",
+      "Would you like to upload an existing photo from camera roll?",
       "",
       [  
         /*{  
@@ -147,15 +101,8 @@ export default function ProfileHeader(props) {
           >
             <Image
               source= {{uri:imageUrl}}
-              //source={require("../../assets/images/C-LOGO.png")}
               id="profile-pic"
               style = {{height: 115, width: 115, borderRadius: 107, resizeMode : 'stretch', margin: 5 }}
-              // style={{
-              //   marginRight: 30,
-              //   boxShadow:
-              //     "0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1)",
-              //   cursor: "pointer",
-              // }}
               onClick={() => {handleUpdatePicture()}}
             />
           </TouchableOpacity>
