@@ -55,14 +55,16 @@ export default class ProfilePicturePicker extends React.Component {
         quality: 1,
       });
       if (!result.cancelled) {
-        this.setState({ image: result.uri });
-        this.props.setImageUrl(result.uri); 
-        this.props.uploadProfilePic(results.uri); 
+        console.log(result);
+      
+        //this.props.setImageUrl(result.uri); 
+        this.props.setShowImagePicker(false); 
+        this.props.uploadProfilePic(result.uri); 
       }
       //this.setState({ select: false });
       this.props.setShowImagePicker(false); 
 
-      console.log(result);
+      // console.log(result);
     } catch (E) {
       console.log(E);
     }

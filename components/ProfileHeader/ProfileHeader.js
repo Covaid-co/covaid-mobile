@@ -26,7 +26,7 @@ import {
 } from "react-native";
 import * as Permissions from 'expo-permissions';
 import fetch_a from "../../util/fetch_auth";
-import { homeURL } from "../../constants";
+import { homeURL, storage_keys } from "../../constants";
 import {styles, buttons, texts} from '../../screens/ProfileScreen/ProfileScreenStyles'
 import ProfilePicturePicker from './ProfilePicturePicker.js';
 
@@ -42,7 +42,7 @@ export default function ProfileHeader(props) {
   const [showImagePicker, setShowImagePicker] = useState(false); 
   const [openCameraRoll, setOpenCameraRoll] = useState(); 
 
-  const onDrop = (pictureFiles, pictureDataURLs) => {
+  /*const onDrop = (pictureFiles, pictureDataURLs) => {
     setUploadingImage(pictureFiles[0]);
     setIsUploaded(true);
   };
@@ -62,7 +62,7 @@ export default function ProfileHeader(props) {
         });
       })
       .catch((err) => alert("Error: " + err));
-  };
+  };*/
 
   const fetchProfilePic = (id) => {
     fetch(homeURL + "/api/image/" + id).then((response) => {
@@ -77,8 +77,29 @@ export default function ProfileHeader(props) {
   };
 
   function uploadProfilePic(uri) {
-    const formData = new FormData(); 
-    console.log("It's supposed to upload " + uri + " to their profile here");
+    // const formData = new FormData(); 
+    // console.log("It's supposed to upload " + uri + " to their profile here");
+
+    let formData = new FormData(); //change the below to this_uri later
+    formData.append('file', {
+      uri: uri.replace('file://', ''), 
+      name: 'file',
+      type: 'image/jpg'
+    })
+
+   AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((token) => {   
+    fetch_a(token, 'token', homeURL + "/api/image", {
+      method: "POST",
+      body: formData,
+    }).then((response) => {
+        response.json().then((data) => {
+          // window.location.reload(false);
+          setImageUrl(uri); 
+          console.log("success")
+        });
+      })
+      .catch((err) => alert("Error: " + err));
+   }); 
   }
 
   function handleUpdatePicture() {
