@@ -114,6 +114,7 @@ export default function LoginScreen({ route, navigation }) {
       })
       .catch((e) => {
         console.log("Error: " + e);
+        throw e;
       });
   }
 

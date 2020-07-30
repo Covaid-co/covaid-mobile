@@ -61,28 +61,32 @@ export default function ProfileScreen({ route, navigation }) {
     setPublish(!publish);
   };
 
+  async function func() {
+    //prevent offer from showing resources of a previous location after a change
+    await setResources(null);
+    AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
+      setID(data);
+      fetch_user_obj(data);
+    });
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+      setToken(data);
+    });
+  }
+
   useEffect(() => {
+    Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
     const unsubscribe = navigation.addListener("focus", () => {
-      Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
-      async function func() {
-        //prevent offer from showing resources of a previous location after a change
-        await setResources(null);
-        AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-          setID(data);
-          fetch_user_obj(data);
-        });
-        AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-          setToken(data);
-        });
-      }
       func();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
+    return () => {
+      Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
+      unsubscribe;
+    };
   }, [user]);
 
-  const _keyboardDidHide = () => {
+  const _keyboardWillHide = () => {
     //hacky way of letting user know they need to press "done" to submit. If they close their keyboard, then the textinput will just go to original zipcode
     AsyncStorage.getItem(storage_keys.SAVE_ZIP).then((data) => {
       setZip(data);

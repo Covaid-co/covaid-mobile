@@ -182,12 +182,14 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   const updateUserPushToken = async (pushToken) => {
-    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((token) => {
+    try {
+      const tokenHolder = await AsyncStorage.getItem(
+        storage_keys.SAVE_TOKEN_KEY
+      );
       const params = {
         pushToken: pushToken,
       };
-
-      fetch_a(token, "token", homeURL + "/api/users/update", {
+      fetch_a(tokenHolder, "token", homeURL + "/api/users/update", {
         method: "put",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
@@ -202,7 +204,9 @@ export default function RequestsScreen({ route, navigation }) {
         .catch((e) => {
           console.log("Error");
         });
-    });
+    } catch (e) {
+      throw e;
+    }
   };
 
   const fetchUser = async (id) => {
