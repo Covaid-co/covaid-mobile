@@ -19,7 +19,7 @@ import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import jwtDecode from "jwt-decode";
 export default function RequestsScreen({ route, navigation }) {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState();
   const [pendingRequests, setPendingRequests] = useState([]);
   const [activeRequests, setActiveRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
@@ -64,16 +64,15 @@ export default function RequestsScreen({ route, navigation }) {
     AsyncStorage.clear();
     navigation.navigate("Login", route.params);
   }
-  useEffect(() => {
-    setPendingModalVisible(route.params.pendingModalVisible);
-    setCurrentItem(route.params.currentItem);
-    setCurrentRequestList(route.params.currentRequestType);
-    const unsubscribe = navigation.addListener("focus", () => {
-      AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        fetchUser(data);
-      });
-      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        const { exp } = jwtDecode(data);
+  async function handleAuth() {
+    try {
+      const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
+      console.log("potential user token id: " + idHolder);
+      const tokenHolder = await AsyncStorage.getItem(
+        storage_keys.SAVE_TOKEN_KEY
+      );
+      if (tokenHolder) {
+        const { exp } = jwtDecode(tokenHolder);
         // Refresh the token a minute early to avoid latency issues
         const expirationTime = exp * 1000 - 60000;
         // console.log("EXPIRATION TIME: " + expirationTime);
@@ -85,11 +84,38 @@ export default function RequestsScreen({ route, navigation }) {
           // token = await refreshToken();
           handleLogout();
         }
-        fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
-        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
-      });
-    });
+        // fetchUser(tokenHolder);
+        fetchRequests(
+          volunteer_status.PENDING,
+          setPendingRequests,
+          tokenHolder
+        );
+        fetchRequests(
+          volunteer_status.IN_PROGRESS,
+          setActiveRequests,
+          tokenHolder
+        );
+        fetchRequests(
+          volunteer_status.COMPLETE,
+          setCompletedRequests,
+          tokenHolder
+        );
+      } else {
+        console.log("BAD data (rs)");
+      }
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+  useEffect(() => {
+    console.log(
+      "USE EFFECT FOR REQUESTS SCREEN ---------------------------------------"
+    );
+    setPendingModalVisible(route.params.pendingModalVisible);
+    setCurrentItem(route.params.currentItem);
+    setCurrentRequestList(route.params.currentRequestType);
+    const unsubscribe = navigation.addListener("focus", () => handleAuth());
     navigation.setOptions = {
       title: "Chat",
       headerStyle: { backgroundColor: "red" },
@@ -151,9 +177,9 @@ export default function RequestsScreen({ route, navigation }) {
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
 
-      if (!user.pushToken || user.pushToken.length === 0) {
-        updateUserPushToken(token);
-      }
+      // if (!user.pushToken || user.pushToken.length === 0) {
+      updateUserPushToken(token);
+      // }
     } else {
       alert("Must use physical device for Push Notifications");
     }
@@ -183,6 +209,7 @@ export default function RequestsScreen({ route, navigation }) {
 
   const updateUserPushToken = async (pushToken) => {
     try {
+      console.log("START UPDATE USER PUSHTOKEN");
       const tokenHolder = await AsyncStorage.getItem(
         storage_keys.SAVE_TOKEN_KEY
       );
@@ -205,26 +232,50 @@ export default function RequestsScreen({ route, navigation }) {
           console.log("Error");
         });
     } catch (e) {
+      console.log("CAUGHT UPDATE USER PUSHTOKEN");
+      throw e;
+    }
+    console.log("END UPDATE USER PUSHTOKEN");
+  };
+
+  const fetchUser = (token) => {
+    console.log("START fETCH USER");
+    var url = homeURL + "/api/users/current";
+    try {
+      fetch_a(token, "token", url, {
+        method: "get",
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => response.text())
+        .then((user) => {
+          setUser(user);
+        })
+        .catch((e) => {
+          throw e;
+        });
+      console.log("END fETCH USER");
+    } catch (e) {
+      console.log("CAUGHT FETCH USER");
       throw e;
     }
   };
 
-  const fetchUser = async (id) => {
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
+  // const fetchUser = async (id) => {
+  //   let params = { id: id };
+  //   var url = generateURL(homeURL + "/api/users/user?", params);
 
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-          });
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  };
+  //   fetch(url)
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         response.json().then((data) => {
+  //           setUser(data[0]);
+  //         });
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       alert(e);
+  //     });
+  // };
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
     let tempList = [];
@@ -261,6 +312,7 @@ export default function RequestsScreen({ route, navigation }) {
   function fetchRequests(reqStatus, requestStateChanger, token) {
     let params = { status: reqStatus };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
+    console.log("START fETCH REQUESTS");
 
     fetch_a(token, "token", url, {
       method: "get",
@@ -277,8 +329,10 @@ export default function RequestsScreen({ route, navigation }) {
         }
       })
       .catch((e) => {
+        console.log("CAUGHT fETCH REQUESTS");
         console.log(e);
       });
+    console.log("END fETCH REQUESTS");
   }
 
   if (pendingRequests) {
@@ -315,7 +369,7 @@ export default function RequestsScreen({ route, navigation }) {
                 item={currentItem}
                 pendingList={pendingRequests}
                 activeList={activeRequests}
-                volunteer={user}
+                // volunteer={user}
               />
             )}
             {activeModalVisible && (
@@ -324,7 +378,7 @@ export default function RequestsScreen({ route, navigation }) {
                 item={currentItem}
                 activeList={activeRequests}
                 completeList={completedRequests}
-                volunteer={user}
+                // volunteer={user}
               />
             )}
             {completedModalVisible && (
