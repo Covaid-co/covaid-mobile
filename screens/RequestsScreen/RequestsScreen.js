@@ -332,6 +332,7 @@ export default function RequestsScreen({ route, navigation }) {
             <FlatList
               data={currentRequestList || pendingRequests}
               contentContainerStyle={styles.center}
+              keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={getContainerType(currentRequestType)}
@@ -362,7 +363,6 @@ export default function RequestsScreen({ route, navigation }) {
                   {displayRequestInfo(currentRequestType, item)}
                 </TouchableOpacity>
               )}
-              keyExtractor={(item, index) => index.toString()}
             />
           </View>
         </>

@@ -27,7 +27,7 @@ export default function LoginScreen({ route, navigation }) {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 400,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
     checkPreviousLogin();
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);

@@ -110,6 +110,7 @@ export default function BottomTabNavigator({ navigation, route }) {
               fontSize={16}
               inputContainerStyle={{ borderBottomColor: "transparent" }}
               textColor={Colors.grey_font}
+              useNativeDriver={true}
               onChangeText={(label, value) => {
                 if (value == "Requires Action") {
                   setChoice(0);
