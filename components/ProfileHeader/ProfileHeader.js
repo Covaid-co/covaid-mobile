@@ -24,11 +24,15 @@ import {
   Keyboard,
   Button,
 } from "react-native";
-import * as Permissions from 'expo-permissions';
+import * as Permissions from "expo-permissions";
 import fetch_a from "../../util/fetch_auth";
 import { homeURL } from "../../constants";
-import {styles, buttons, texts} from '../../screens/ProfileScreen/ProfileScreenStyles'
-import ProfilePicturePicker from './ProfilePicturePicker.js';
+import {
+  styles,
+  buttons,
+  texts,
+} from "../../screens/ProfileScreen/ProfileScreenStyles";
+import ProfilePicturePicker from "./ProfilePicturePicker.js";
 
 export default function ProfileHeader(props) {
   const [association, setAssociation] = useState("");
@@ -39,8 +43,8 @@ export default function ProfileHeader(props) {
   //const [isUploaded, setIsUploaded] = useState(false);
   //const [showUploader, setShowUploader] = useState(false);
   const [imageUrl, setImageUrl] = useState("/api/image/" + props.user._id);
-  const [showImagePicker, setShowImagePicker] = useState(false); 
-  const [openCameraRoll, setOpenCameraRoll] = useState(); 
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const [openCameraRoll, setOpenCameraRoll] = useState();
 
   const onDrop = (pictureFiles, pictureDataURLs) => {
     setUploadingImage(pictureFiles[0]);
@@ -77,7 +81,7 @@ export default function ProfileHeader(props) {
   };
 
   function uploadProfilePic(uri) {
-    const formData = new FormData(); 
+    const formData = new FormData();
     console.log("It's supposed to upload " + uri + " to their profile here");
   }
 
@@ -85,7 +89,7 @@ export default function ProfileHeader(props) {
     Alert.alert(
       "Would you like to take a new photo or upload an existing photo from camera roll?",
       "",
-      [  
+      [
         /*{  
           text: 'Take Photo',  
           onPress: () => {
@@ -93,52 +97,71 @@ export default function ProfileHeader(props) {
             setShowImagePicker(true);
           },   
         },  */
-        {   
-          text: 'Upload', 
+        {
+          text: "Upload",
           onPress: () => {
             setOpenCameraRoll(true);
             setShowImagePicker(true);
-          }
-        },  
-        {   
-          text: 'Cancel', 
+          },
+        },
+        {
+          text: "Cancel",
           onPress: () => {
             setOpenCameraRoll(false);
             setShowImagePicker(false);
-          }
-        }, 
-      ]  
-    ); 
+          },
+        },
+      ]
+    );
   }
 
   useEffect(() => {
-    setShowImagePicker(false); 
+    setShowImagePicker(false);
     fetchProfilePic(props.user._id);
   }, [props.user]);
 
   return (
     <>
-        <View>
-          {showImagePicker && <ProfilePicturePicker setImageUrl={setImageUrl} setShowImagePicker={setShowImagePicker} uploadProfilePic={uploadProfilePic} openCameraRoll={openCameraRoll} setOpenCameraRoll={setOpenCameraRoll}/>}
-          
-          <TouchableOpacity
-            onPress={() => {console.log("bring up edit options!!!"); handleUpdatePicture()}}
-          >
-            <Image
-              source= {{uri:imageUrl}}
-              //source={require("../../assets/images/C-LOGO.png")}
-              id="profile-pic"
-              style = {{height: 115, width: 115, borderRadius: 107, resizeMode : 'stretch', margin: 5 }}
-              // style={{
-              //   marginRight: 30,
-              //   boxShadow:
-              //     "0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1)",
-              //   cursor: "pointer",
-              // }}
-              onClick={() => {handleUpdatePicture()}}
-            />
-          </TouchableOpacity>
-        </View>     
+      <View>
+        {showImagePicker && (
+          <ProfilePicturePicker
+            setImageUrl={setImageUrl}
+            setShowImagePicker={setShowImagePicker}
+            uploadProfilePic={uploadProfilePic}
+            openCameraRoll={openCameraRoll}
+            setOpenCameraRoll={setOpenCameraRoll}
+          />
+        )}
+
+        <TouchableOpacity
+          onPress={() => {
+            console.log("bring up edit options!!!");
+            handleUpdatePicture();
+          }}
+        >
+          <Image
+            source={{ uri: imageUrl }}
+            //source={require("../../assets/images/C-LOGO.png")}
+            id="profile-pic"
+            style={{
+              height: 115,
+              width: 115,
+              borderRadius: 107,
+              resizeMode: "stretch",
+              margin: 5,
+            }}
+            // style={{
+            //   marginRight: 30,
+            //   boxShadow:
+            //     "0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1)",
+            //   cursor: "pointer",
+            // }}
+            onClick={() => {
+              handleUpdatePicture();
+            }}
+          />
+        </TouchableOpacity>
+      </View>
     </>
   );
 }

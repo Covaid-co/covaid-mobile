@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,9 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import PendingModal from '../IndividualRequestScreen/PendingModal'
 import ActiveModal from '../IndividualRequestScreen/ActiveModal'
 import CompletedModal from '../IndividualRequestScreen/CompletedModal'
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 
 export default function RequestsScreen({ route, navigation }) {
   const [user, setUser] = useState("");
@@ -27,6 +30,19 @@ export default function RequestsScreen({ route, navigation }) {
   const [pendingModalVisible, setPendingModalVisible] = useState(false); 
   const [activeModalVisible, setActiveModalVisible] = useState(false); 
   const [completedModalVisible, setCompletedModalVisible] = useState(false); 
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   let options = [{
     label: 'Requires Action',
@@ -58,9 +74,70 @@ export default function RequestsScreen({ route, navigation }) {
       headerTitleStyle: { color: 'green' },
     }
 
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+      // For now, fetch all requests again
+      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
+        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
+        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+      });
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      // For now, fetch all requests again
+      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
+        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
+        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+      });
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+      unsubscribe();
+    };
   }, [navigation]);
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+
+      if (!user.pushToken || user.pushToken.length === 0) {
+        updateUserPushToken(token);
+      }
+
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    return token;
+  }
 
   if (route.params.choice !== currentRequestType) {
     if (route.params.choice == volunteer_status.COMPLETE) {
@@ -73,6 +150,30 @@ export default function RequestsScreen({ route, navigation }) {
       setCurrentRequestList(pendingRequests);
     } 
     setCurrentRequestType(route.params.choice)
+  }
+
+  const updateUserPushToken = async (pushToken) => {
+    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((token) => {
+      const params = {
+        pushToken: pushToken,
+      };
+
+      fetch_a(token, "token", homeURL + "/api/users/update", {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Token set!");
+          } else {
+            console.log("Token not set");
+          }
+        })
+        .catch((e) => {
+          console.log("Error");
+        });
+    });
   }
   
   const fetchUser = async (id) => { 
