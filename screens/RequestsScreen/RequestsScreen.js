@@ -17,7 +17,7 @@ import CompletedModal from "../IndividualRequestScreen/CompletedModal";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
-
+import jwtDecode from "jwt-decode";
 export default function RequestsScreen({ route, navigation }) {
   const [user, setUser] = useState("");
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -60,7 +60,10 @@ export default function RequestsScreen({ route, navigation }) {
       value: "Completed",
     },
   ];
-
+  function handleLogout() {
+    AsyncStorage.clear();
+    navigation.navigate("Login", route.params);
+  }
   useEffect(() => {
     setPendingModalVisible(route.params.pendingModalVisible);
     setCurrentItem(route.params.currentItem);
@@ -69,8 +72,19 @@ export default function RequestsScreen({ route, navigation }) {
       AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
         fetchUser(data);
       });
-
       AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
+        const { exp } = jwtDecode(data);
+        // Refresh the token a minute early to avoid latency issues
+        const expirationTime = exp * 1000 - 60000;
+        // console.log("EXPIRATION TIME: " + expirationTime);
+        // console.log("DATE NOW: " + Date.now());
+        // console.log(
+        //   "TIME LEFT: " + new Date(expirationTime - Date.now()).getMinutes()
+        // );
+        if (Date.now() >= expirationTime) {
+          // token = await refreshToken();
+          handleLogout();
+        }
         fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
         fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
         fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
