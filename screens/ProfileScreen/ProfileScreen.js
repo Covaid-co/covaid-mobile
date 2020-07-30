@@ -65,7 +65,7 @@ export default function ProfileScreen({ route, navigation }) {
     const unsubscribe = navigation.addListener("focus", () => {
       Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
       async function func() {
-        //prevent offer from showing resources of a previous location after a change
+        // prevent offer from showing resources of a previous location after a change
         await setResources(null);
         AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
           setID(data);
@@ -83,7 +83,7 @@ export default function ProfileScreen({ route, navigation }) {
   }, [user]);
 
   const _keyboardDidHide = () => {
-    //hacky way of letting user know they need to press "done" to submit. If they close their keyboard, then the textinput will just go to original zipcode
+    // hacky way of letting user know they need to press "done" to submit. If they close their keyboard, then the textinput will just go to original zipcode
     AsyncStorage.getItem(storage_keys.SAVE_ZIP).then((data) => {
       setZip(data);
     });
@@ -100,7 +100,7 @@ export default function ProfileScreen({ route, navigation }) {
     })
       .then((response) => {
         if (response.ok) {
-          //Change the state to reflect offer update
+          // Change the state to reflect offer update
           setTimeout(function () {
             console.log("update successful");
             fetch_user_obj(route.params.userID);
@@ -110,7 +110,7 @@ export default function ProfileScreen({ route, navigation }) {
         }
       })
       .catch((e) => {
-        //console.log("Error");
+        // console.log("Error");
       });
   };
 
@@ -139,7 +139,7 @@ export default function ProfileScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((key) => {
-            Geocode.setApiKey(key["google"]);
+            Geocode.setApiKey(key.google);
             setLatLong(data.latlong);
             setNeighborhoods(data.offer.neighborhoods);
             setFoundState(data.offer.state);
@@ -188,13 +188,20 @@ export default function ProfileScreen({ route, navigation }) {
   const setCurrentUserObject = (userList, fullList, setFunction) => {
     for (var i = 0; i < fullList.length; i++) {
       const curr = fullList[i];
-      const include = userList.includes(curr) ? true : false;
+      const include = userList.includes(curr);
       setFunction((prev) => ({
         ...prev,
         [curr]: include,
       }));
     }
   };
+
+  async function storeZip() {
+    await AsyncStorage.setItem(
+      storage_keys.SAVE_ZIP,
+      response.results[i].address_components[j].long_name
+    );
+  }
 
   async function getZip(location) {
     try {
@@ -217,12 +224,6 @@ export default function ProfileScreen({ route, navigation }) {
                   "postal_code"
                 ) > -1
               ) {
-                async function storeZip() {
-                  await AsyncStorage.setItem(
-                    storage_keys.SAVE_ZIP,
-                    response.results[i].address_components[j].long_name
-                  );
-                }
                 storeZip();
                 setInitialZip(
                   response.results[i].address_components[j].long_name
@@ -307,11 +308,11 @@ export default function ProfileScreen({ route, navigation }) {
       var new_neighborhoods = [];
       var foundState = [];
       for (var i = 0; i < Math.min(5, response.results.length); i++) {
-        const results = response.results[i]["address_components"];
+        const results = response.results[i].address_components;
         for (var j = 0; j < results.length; j++) {
           const types = results[j].types;
           if (types.includes("neighborhood") || types.includes("locality")) {
-            const currNeighborhoodName = results[j]["long_name"];
+            const currNeighborhoodName = results[j].long_name;
             if (new_neighborhoods.includes(currNeighborhoodName) === false) {
               new_neighborhoods.push(currNeighborhoodName);
             }
@@ -322,7 +323,7 @@ export default function ProfileScreen({ route, navigation }) {
               foundState.length === 0 &&
               type === "administrative_area_level_1"
             ) {
-              foundState = [results[j]["long_name"], results[j]["short_name"]];
+              foundState = [results[j].long_name, results[j].short_name];
             }
           }
         }
@@ -340,12 +341,12 @@ export default function ProfileScreen({ route, navigation }) {
       var association_name = "";
       var association = "";
       if (data.length === 0) {
-        for (var i = 0; i < defaultTaskList.length; i++) {
-          temp_resources[defaultTaskList[i]] = false;
+        for (var j = 0; j < defaultTaskList.length; j++) {
+          temp_resources[defaultTaskList[j]] = false;
         }
       } else {
-        for (var i = 0; i < data[0].resources.length; i++) {
-          temp_resources[data[0].resources[i]] = false;
+        for (var k = 0; k < data[0].resources.length; k++) {
+          temp_resources[data[0].resources[k]] = false;
         }
         association = data[0]._id;
         association_name = data[0].name;
@@ -410,7 +411,9 @@ export default function ProfileScreen({ route, navigation }) {
 
   const handleLocationUpdate = async (huh) => {
     if (!(await updateLocation())) {
-      return;
+      alert(
+        "Location not updating :/ Please try again later or contact Covaid support."
+      );
     }
   };
 

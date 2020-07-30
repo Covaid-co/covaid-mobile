@@ -4,7 +4,7 @@ import Colors from "../../public/Colors";
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     height: "100%",
     alignItems: "center",
   },

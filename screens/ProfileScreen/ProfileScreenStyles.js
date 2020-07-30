@@ -3,7 +3,7 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
   center: {
     marginTop: "5%",
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   line: {
     borderWidth: 1,
-    borderColor: "#EEEEEE",
+    borderColor: Colors.standard,
     marginTop: "5%",
   },
   info: {

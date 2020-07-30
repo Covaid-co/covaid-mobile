@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -6,7 +6,6 @@ import {
   Alert,
   AsyncStorage,
 } from "react-native";
-import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./SettingsScreenStyles";
 

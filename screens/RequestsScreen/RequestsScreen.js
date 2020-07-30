@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   AsyncStorage,
+  Platform,
 } from "react-native";
 import { styles, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
@@ -26,11 +27,11 @@ export default function RequestsScreen({ route, navigation }) {
   const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState();
   const [currentItem, setCurrentItem] = useState();
-  const requestTypeList = [
-    volunteer_status.PENDING,
-    volunteer_status.IN_PROGRESS,
-    volunteer_status.COMPLETE,
-  ];
+  // const requestTypeList = [
+  //   volunteer_status.PENDING,
+  //   volunteer_status.IN_PROGRESS,
+  //   volunteer_status.COMPLETE,
+  // ];
   const [pendingModalVisible, setPendingModalVisible] = useState(false);
   const [activeModalVisible, setActiveModalVisible] = useState(false);
   const [completedModalVisible, setCompletedModalVisible] = useState(false);
@@ -48,18 +49,18 @@ export default function RequestsScreen({ route, navigation }) {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  let options = [
-    {
-      label: "Requires Action",
-      value: "Requires Action",
-    },
-    {
-      value: "In Progress",
-    },
-    {
-      value: "Completed",
-    },
-  ];
+  // const options = [
+  //   {
+  //     label: "Requires Action",
+  //     value: "Requires Action",
+  //   },
+  //   {
+  //     value: "In Progress",
+  //   },
+  //   {
+  //     value: "Completed",
+  //   },
+  // ];
   function handleLogout() {
     AsyncStorage.clear();
     navigation.navigate("Login", route.params);
@@ -171,9 +172,9 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   if (route.params.choice !== currentRequestType) {
-    if (route.params.choice == volunteer_status.COMPLETE) {
+    if (route.params.choice === volunteer_status.COMPLETE) {
       setCurrentRequestList(completedRequests);
-    } else if (route.params.choice == volunteer_status.IN_PROGRESS) {
+    } else if (route.params.choice === volunteer_status.IN_PROGRESS) {
       setCurrentRequestList(activeRequests);
     } else {
       setCurrentRequestList(pendingRequests);
@@ -206,7 +207,7 @@ export default function RequestsScreen({ route, navigation }) {
   };
 
   const fetchUser = async (id) => {
-    let params = { id: id };
+    const params = { id: id };
     var url = generateURL(homeURL + "/api/users/user?", params);
 
     fetch(url)
@@ -223,7 +224,7 @@ export default function RequestsScreen({ route, navigation }) {
   };
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
-    let tempList = [];
+    const tempList = [];
     for (var i = 0; i < requestData.length; i++) {
       var element = {
         key: i,
@@ -247,7 +248,7 @@ export default function RequestsScreen({ route, navigation }) {
       tempList.push(element);
     }
     // initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
-    if (reqStatus == currentRequestType) {
+    if (reqStatus === currentRequestType) {
       setCurrentRequestList(tempList);
     }
     requestStateChanger(tempList);
@@ -255,7 +256,7 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function fetchRequests(reqStatus, requestStateChanger, token) {
-    let params = { status: reqStatus };
+    const params = { status: reqStatus };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
 
     fetch_a(token, "token", url, {
@@ -287,7 +288,7 @@ export default function RequestsScreen({ route, navigation }) {
     return <Text>Loading...</Text>;
   }
   function displayAllRequests(reqList) {
-    if (reqList && reqList.length == 0) {
+    if (reqList && reqList.length === 0) {
       return (
         <>
           <View style={styles.container}>
@@ -339,20 +340,20 @@ export default function RequestsScreen({ route, navigation }) {
                   onPress={() => {
                     setCurrentItem(item);
                     if (
-                      currentRequestType == volunteer_status.PENDING ||
-                      currentRequestType == null
+                      currentRequestType === volunteer_status.PENDING ||
+                      currentRequestType === null
                     ) {
                       setPendingModalVisible(true);
                       setActiveModalVisible(false);
                       setCompletedModalVisible(false);
                     } else if (
-                      currentRequestType == volunteer_status.IN_PROGRESS
+                      currentRequestType === volunteer_status.IN_PROGRESS
                     ) {
                       setPendingModalVisible(false);
                       setActiveModalVisible(true);
                       setCompletedModalVisible(false);
                     } else if (
-                      currentRequestType == volunteer_status.COMPLETE
+                      currentRequestType === volunteer_status.COMPLETE
                     ) {
                       setPendingModalVisible(false);
                       setActiveModalVisible(false);
@@ -371,9 +372,9 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function getContainerType(reqType) {
-    if (reqType == volunteer_status.IN_PROGRESS) {
+    if (reqType === volunteer_status.IN_PROGRESS) {
       return styles.request_active;
-    } else if (reqType == volunteer_status.COMPLETE) {
+    } else if (reqType === volunteer_status.COMPLETE) {
       return styles.request_completed;
     } else {
       return styles.request_pending;
@@ -381,9 +382,9 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function getEmptyMessage(reqType) {
-    if (reqType == volunteer_status.IN_PROGRESS) {
+    if (reqType === volunteer_status.IN_PROGRESS) {
       return "No tasks in-progress";
-    } else if (reqType == volunteer_status.COMPLETE) {
+    } else if (reqType === volunteer_status.COMPLETE) {
       return "No completed tasks";
     } else {
       return "No tasks requiring action";
@@ -391,7 +392,7 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function displayRequestInfo(reqType, item) {
-    if (reqType == volunteer_status.PENDING) {
+    if (reqType === volunteer_status.PENDING) {
       return (
         <>
           <View style={{ flexDirection: "col" }}>
@@ -437,9 +438,9 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   function displayRequestIcon(reqType) {
-    if (reqType == volunteer_status.IN_PROGRESS) {
+    if (reqType === volunteer_status.IN_PROGRESS) {
       return <Icon name="clock" size={15} color="#DB9327" />;
-    } else if (reqType == volunteer_status.COMPLETE) {
+    } else if (reqType === volunteer_status.COMPLETE) {
       return <Icon name="check" size={15} color="#3ABD24" />;
     } else {
       return <Icon name="exclamation" size={15} color="#FF5924" />;

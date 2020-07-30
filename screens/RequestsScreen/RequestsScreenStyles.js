@@ -68,13 +68,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.grey,
     borderTopColor: Colors.green,
   },
-  /*dropdown_style: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Colors.white, 
-    marginLeft: "35%", 
-    marginRight: "-450%",
-  }, */
+  // dropdown_style: {
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   backgroundColor: Colors.white,
+  //   marginLeft: "35%",
+  //   marginRight: "-450%",
+  // },
   dropdown_style2: {
     minWidth: "-10%",
     paddingLeft: "20%",
@@ -86,15 +86,15 @@ const styles = StyleSheet.create({
     minWidth: "100%",
     maxWidth: "100%",
   },
-  /*dropdown_old_style: {
-    minWidth: '90%',
-    borderColor: "white",
-  },
-  dropdown_old_container: {
-    marginBottom: '3%',
-    minWidth: '90%',
-    maxWidth: '90%',
-  }*/
+  // dropdown_old_style: {
+  //   minWidth: '90%',
+  //   borderColor: "white",
+  // },
+  // dropdown_old_container: {
+  //   marginBottom: '3%',
+  //   minWidth: '90%',
+  //   maxWidth: '90%',
+  // }
 });
 
 const texts = StyleSheet.create({
