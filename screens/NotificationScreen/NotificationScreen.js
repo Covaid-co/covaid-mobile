@@ -209,6 +209,7 @@ export default function NotificationScreen({ route, navigation }) {
                   pendingRequests: pendingRequests,
                   currScreen: "Notification",
                   currentRequestType: volunteer_status.PENDING,
+                  choice: volunteer_status.PENDING,
                   pendingModalVisible: true,
                 });
               }}
