@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-//import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 // import Button from "react-bootstrap/Button";
 // import Container from "react-bootstrap/Container";
 // import Row from "react-bootstrap/Row";
@@ -7,22 +7,9 @@ import React, { useEffect, useState } from "react";
 // import Image from "react-bootstrap/Image";
 // import Modal from "react-bootstrap/Modal";
 import { generateURL } from "../../Helpers";
-//import ImageUploader from "react-images-upload";
-//import ImagePicker from 'react-native-image-picker'
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  ScrollView,
-  Switch,
-  ActivityIndicator,
-  AsyncStorage,
-  Image,
-  Modal,
-  TextInput,
-  Alert,
-  Keyboard,
-} from "react-native";
+// import ImageUploader from "react-images-upload";
+// import ImagePicker from 'react-native-image-picker'
+import { View, Image } from "react-native";
 import fetch_a from "../../util/fetch_auth";
 import { homeURL } from "../../constants";
 
@@ -82,7 +69,7 @@ export default function ProfileHeader(props) {
       <View>
         <Image
           source={{ uri: imageUrl }}
-          //source={require("../../assets/images/C-LOGO.png")}
+          // source={require("../../assets/images/C-LOGO.png")}
           id="profile-pic"
           style={{
             height: 115,

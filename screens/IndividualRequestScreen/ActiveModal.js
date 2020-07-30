@@ -4,7 +4,6 @@ import {
   Text,
   Modal,
   TouchableOpacity,
-  FlatList,
   AsyncStorage,
   Alert,
   ScrollView,
@@ -64,7 +63,7 @@ export default function ActiveModal(props) {
 
   function cancelRequest() {
     console.log("Cancelling this ");
-    let params = {
+    const params = {
       ID: props.item.request_id,
     };
 
@@ -237,10 +236,8 @@ function showResourceBadges(resources) {
       <View style={styles.flex_container}>
         {resources.map((prop, key) => {
           return (
-            <View style={styles.resource_badge}>
-              <Text key={key} style={texts.resource_text}>
-                {prop}
-              </Text>
+            <View key={key} style={styles.resource_badge}>
+              <Text style={texts.resource_text}>{prop}</Text>
             </View>
           );
         })}

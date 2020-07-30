@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import Colors from "../public/Colors";
 import * as WebBrowser from "expo-web-browser";
 import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -55,7 +56,7 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fafafa",
+    backgroundColor: Colors.lsContainerWhite,
   },
   contentContainer: {
     paddingTop: 15,
@@ -64,12 +65,12 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   option: {
-    backgroundColor: "#fdfdfd",
+    backgroundColor: Colors.lsOptionWhite,
     paddingHorizontal: 15,
     paddingVertical: 15,
     borderWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: 0,
-    borderColor: "#ededed",
+    borderColor: Colors.lsOptionGrey,
   },
   lastOption: {
     borderBottomWidth: StyleSheet.hairlineWidth,

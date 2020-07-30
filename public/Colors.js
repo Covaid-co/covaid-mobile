@@ -13,7 +13,9 @@ export default {
   noticeBackground: tintColor,
   noticeText: "#fff",
   shadowColor: "#000",
-
+  lsContainerWhite: "#fafafa",
+  lsOptionGrey: "#ededed",
+  lsOptionWhite: "#fdfdfd",
   deadlineRed: "#EB5757",
   blue: "#2670FF",
   grey: "#CECECE",

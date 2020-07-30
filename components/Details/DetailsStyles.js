@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 20,
     minHeight: 100,
-    fontSize: 17,
     fontSize: 16,
     color: Colors.light_grey_font,
     fontFamily: "Inter",

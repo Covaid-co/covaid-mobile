@@ -15,7 +15,6 @@ export default function Details(props) {
         style={styles.input}
         multiline
         numberOfLines={3}
-        style={styles.input}
         onChangeText={(text) => props.setDetails(text.trim())}
         defaultValue={props.details}
         placeholder="I am a college student, and am happy to deliver food from stores or food banks in St. Louis County!"

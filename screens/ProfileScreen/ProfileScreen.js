@@ -196,10 +196,10 @@ export default function ProfileScreen({ route, navigation }) {
     }
   };
 
-  async function storeZip() {
+  async function storeZip(response, res_num, ac_num) {
     await AsyncStorage.setItem(
       storage_keys.SAVE_ZIP,
-      response.results[i].address_components[j].long_name
+      response.results[res_num].address_components[ac_num].long_name
     );
   }
 
@@ -224,7 +224,7 @@ export default function ProfileScreen({ route, navigation }) {
                   "postal_code"
                 ) > -1
               ) {
-                storeZip();
+                storeZip(response, i, j);
                 setInitialZip(
                   response.results[i].address_components[j].long_name
                 );
@@ -276,7 +276,7 @@ export default function ProfileScreen({ route, navigation }) {
       });
   };
   const updateLocation = async (e) => {
-    if (!zip || zip.length != 5 || !/^\d+$/.test(zip)) {
+    if (!zip || zip.length !== 5 || !/^\d+$/.test(zip)) {
       alert("Invalid Zipcode");
       return false;
     }
@@ -301,7 +301,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   async function getLatLng(zip) {
     try {
-      if (zip.length != 5 || !/^\d+$/.test(zip)) {
+      if (zip.length !== 5 || !/^\d+$/.test(zip)) {
         throw Error("Invalid zipcode");
       }
       var response = await Geocode.fromAddress(zip);
@@ -341,12 +341,12 @@ export default function ProfileScreen({ route, navigation }) {
       var association_name = "";
       var association = "";
       if (data.length === 0) {
-        for (var j = 0; j < defaultTaskList.length; j++) {
-          temp_resources[defaultTaskList[j]] = false;
+        for (var x = 0; x < defaultTaskList.length; x++) {
+          temp_resources[defaultTaskList[x]] = false;
         }
       } else {
-        for (var k = 0; k < data[0].resources.length; k++) {
-          temp_resources[data[0].resources[k]] = false;
+        for (var y = 0; y < data[0].resources.length; y++) {
+          temp_resources[data[0].resources[y]] = false;
         }
         association = data[0]._id;
         association_name = data[0].name;

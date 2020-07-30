@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: Colors.white,
   },
   completed_modal_view: {
     backgroundColor: Colors.white,
@@ -144,7 +144,6 @@ const styles = StyleSheet.create({
     minWidth: "100%",
     borderRadius: 5,
     borderWidth: 0.7,
-    borderColor: "rgba(0, 0, 0, 0)",
     borderBottomColor: Colors.grey,
     textAlign: "left",
   },
@@ -165,7 +164,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 0.7,
-    borderColor: "rgba(0, 0, 0, 0)",
     borderTopColor: Colors.grey,
     margin: "5%",
   },
@@ -295,7 +293,7 @@ const texts = StyleSheet.create({
   button_label_red: {
     fontFamily: "Inter",
     fontSize: 15,
-    color: "red",
+    color: Colors.red,
   },
   button_label_white: {
     fontFamily: "Inter",

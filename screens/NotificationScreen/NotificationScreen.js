@@ -147,15 +147,15 @@ export default function NotificationScreen({ route, navigation }) {
       });
   }
 
-  const getDate = (date) => {
-    var d = new Date(date);
-    const arr = d.toDateString().split(" ");
-    let s = "";
-    s += arr[1];
-    s += " ";
-    s += arr[2];
-    return s;
-  };
+  // const getDate = (date) => {
+  //   var d = new Date(date);
+  //   const arr = d.toDateString().split(" ");
+  //   let s = "";
+  //   s += arr[1];
+  //   s += " ";
+  //   s += arr[2];
+  //   return s;
+  // };
 
   function displayRequestInfo(item) {
     return (

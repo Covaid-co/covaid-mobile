@@ -4,7 +4,7 @@ import Colors from "../../public/Colors";
 const styles = StyleSheet.create({
   container: {
     paddingTop: "5%",
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
   center: {
     justifyContent: "center",
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   line: {
     borderWidth: 1,
-    borderColor: "#EEEEEE",
+    borderColor: Colors.standard,
   },
   form: {
     margin: 5,

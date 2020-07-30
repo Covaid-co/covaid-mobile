@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from "react-native";
+import React from "react";
+import { View, Text, Modal, TouchableOpacity, ScrollView } from "react-native";
 
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { formatDate, translatePayment } from "../../Helpers";
@@ -96,10 +89,8 @@ function showResourceBadges(resources) {
       <View style={styles.flex_container}>
         {resources.map((prop, key) => {
           return (
-            <View style={styles.resource_badge}>
-              <Text key={key} style={texts.resource_text}>
-                {prop}
-              </Text>
+            <View key={key} style={styles.resource_badge}>
+              <Text style={texts.resource_text}>{prop}</Text>
             </View>
           );
         })}

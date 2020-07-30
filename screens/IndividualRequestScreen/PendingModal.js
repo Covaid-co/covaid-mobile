@@ -4,7 +4,6 @@ import {
   Text,
   Modal,
   TouchableOpacity,
-  FlatList,
   AsyncStorage,
   Alert,
   ScrollView,
@@ -54,7 +53,7 @@ export default function PendingModal(props) {
   }
 
   function acceptRequest() {
-    let params = {
+    const params = {
       ID: props.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/acceptRequest?", params);
@@ -66,7 +65,7 @@ export default function PendingModal(props) {
       })
         .then((response) => {
           if (response.ok) {
-            //alert("Accepted request.")
+            // alert("Accepted request.")
             removeFromArray(props.item, props.pendingList);
             props.activeList.push(props.item);
           } else {
@@ -108,7 +107,7 @@ export default function PendingModal(props) {
   }
 
   function rejectRequest() {
-    let params = {
+    const params = {
       ID: props.item.request_id,
     };
     var url = generateURL(homeURL + "/api/request/rejectRequest?", params);
@@ -121,7 +120,7 @@ export default function PendingModal(props) {
           if (response.ok) {
             // TODO: Move it from pending to active on RequestsScreen
             removeFromArray(props.item, props.pendingList);
-            //alert("Rejected request.")
+            // alert("Rejected request.")
           } else {
             alert("Unable to reject, please email us at covaidco@gmail.com.");
           }

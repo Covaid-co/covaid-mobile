@@ -1,5 +1,6 @@
 import * as WebBrowser from "expo-web-browser";
 import * as React from "react";
+import Colors from "../public/Colors";
 import {
   Image,
   Platform,
@@ -117,7 +118,7 @@ function handleHelpPress() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
   },
   developmentModeText: {
     marginBottom: 20,

@@ -68,9 +68,9 @@ export const convertTime = (date) => {
 };
 
 export const translatePayment = (num) => {
-  if (num == 0) {
+  if (num === 0) {
     return "Call Ahead";
-  } else if (num == 1) {
+  } else if (num === 1) {
     return "Reimburse Volunteer";
   } else {
     return "N/A";

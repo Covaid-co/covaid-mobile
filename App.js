@@ -14,6 +14,7 @@ import useCachedResources from "./hooks/useCachedResources";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 import { homeURL, storage_keys } from "./constants";
+import Colors from "./public/Colors";
 
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js";
@@ -80,7 +81,7 @@ export default function App(props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     flex: 1,
   },
 });

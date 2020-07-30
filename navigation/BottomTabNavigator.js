@@ -1,16 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  AsyncStorage,
-  Text,
-} from "react-native";
+import { View, TouchableOpacity } from "react-native";
 
-import { styles, texts } from "../screens/RequestsScreen/RequestsScreenStyles";
+import { styles } from "../screens/RequestsScreen/RequestsScreenStyles";
 
 import TabBarIcon from "../components/TabBarIcon";
 import RequestsScreen from "../screens/RequestsScreen/RequestsScreen";
@@ -55,7 +47,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Requests"
         component={RequestsScreen}
         initialParams={{ choice: choice, wtf: "bitch" }}
-        //initialParams={route.params}
+        // initialParams={route.params}
         options={{
           title: "Requests",
           tabBarIcon: ({ focused }) => (
@@ -82,7 +74,7 @@ export default function BottomTabNavigator({ navigation, route }) {
     const routeName =
       route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
-    let options2 = [
+    const options2 = [
       {
         // label: 'Requires Action',
         value: "Requires Action",
@@ -103,7 +95,6 @@ export default function BottomTabNavigator({ navigation, route }) {
               data={options2}
               dropdownPosition={-4}
               style={styles.dropdown_style2}
-              textColor="#4F4F4F"
               value={"Requires Action"}
               defaultValue={"Requires Action"}
               labelFontSize={16}
@@ -112,7 +103,7 @@ export default function BottomTabNavigator({ navigation, route }) {
               textColor={Colors.grey_font}
               useNativeDriver={true}
               onChangeText={(label, value) => {
-                if (value == "Requires Action") {
+                if (value === "Requires Action") {
                   setChoice(0);
                   navigation.navigate("Requests", { choice: 0 });
                 } else {

@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  FlatList,
   AsyncStorage,
   Modal,
 } from "react-native";
@@ -34,11 +35,11 @@ export default function ConfirmModal(props) {
   }
 
   function completeRequest() {
-    let form = {
-      reason: message.trim(),
-      adminMode: true,
-    };
-    let params = {
+    // const form = {
+    //   reason: message.trim(),
+    //   adminMode: true,
+    // };
+    const params = {
       ID: props.item.request_id,
     };
 

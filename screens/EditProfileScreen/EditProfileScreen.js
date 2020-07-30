@@ -73,7 +73,7 @@ export default function LoginScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((key) => {
-            Geocode.setApiKey(key["google"]);
+            Geocode.setApiKey(key.google);
             setFirstName(data.first_name);
             setLastName(data.last_name);
             setEmail(data.email);
@@ -81,7 +81,7 @@ export default function LoginScreen({ route, navigation }) {
             setCurrentUserObject(data.languages, languages, setLanguageChecked);
           });
         } else {
-          //console.log("Error");
+          // console.log("Error");
         }
       })
       .catch((e) => {
@@ -91,7 +91,7 @@ export default function LoginScreen({ route, navigation }) {
   const setCurrentUserObject = (userList, fullList, setFunction) => {
     for (var i = 0; i < fullList.length; i++) {
       const curr = fullList[i];
-      const include = userList.includes(curr) ? true : false;
+      const include = userList.includes(curr);
       setFunction((prev) => ({
         ...prev,
         [curr]: include,
