@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Button, Image, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -55,14 +54,10 @@ export default class ProfilePicturePicker extends React.Component {
         quality: 1,
       });
       if (!result.cancelled) {
-        this.setState({ image: result.uri });
-        this.props.setImageUrl(result.uri); 
-        this.props.uploadProfilePic(results.uri); 
+        this.props.setShowImagePicker(false); 
+        this.props.uploadProfilePic(result.uri); 
       }
-      //this.setState({ select: false });
       this.props.setShowImagePicker(false); 
-
-      console.log(result);
     } catch (E) {
       console.log(E);
     }
