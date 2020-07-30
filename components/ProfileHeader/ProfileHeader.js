@@ -79,23 +79,29 @@ export default function ProfileHeader(props) {
       {/* <div style={{ marginLeft: 35, maxWidth: 2000 }}>
         <Row>
           <Col> */}
-          <View>
-            <Image
-              source= {{uri:imageUrl}}
-              //source={require("../../assets/images/C-LOGO.png")}
-              id="profile-pic"
-              style = {{height: 115, width: 115, borderRadius: 107, resizeMode : 'stretch', margin: 5 }}
-              // style={{
-              //   marginRight: 30,
-              //   boxShadow:
-              //     "0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1)",
-              //   cursor: "pointer",
-              // }}
-              onClick={() => setShowUploader(true)}
-            />
-            </View>
+      <View>
+        <Image
+          source={{ uri: imageUrl }}
+          //source={require("../../assets/images/C-LOGO.png")}
+          id="profile-pic"
+          style={{
+            height: 115,
+            width: 115,
+            borderRadius: 107,
+            resizeMode: "stretch",
+            margin: 5,
+          }}
+          // style={{
+          //   marginRight: 30,
+          //   boxShadow:
+          //     "0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1)",
+          //   cursor: "pointer",
+          // }}
+          onClick={() => setShowUploader(true)}
+        />
+      </View>
 
-            {/* <Row>
+      {/* <Row>
               <h1
                 id="home-heading"
                 style={{
@@ -109,7 +115,7 @@ export default function ProfileHeader(props) {
                 {props.user.first_name} {props.user.last_name}
               </h1>
             </Row> */}
-            {/* <Row>
+      {/* <Row>
               <p
                 id="regular-text"
                 style={{
@@ -124,7 +130,7 @@ export default function ProfileHeader(props) {
                   : "Covaid Volunteer"}{" "}
               </p>
             </Row> */}
-            {/* <Row>
+      {/* <Row>
               <Button
                 id="medium-button"
                 style={{
@@ -140,7 +146,7 @@ export default function ProfileHeader(props) {
                 Edit Profile
               </Button>{" "}
             </Row> */}
-          {/* </Col>
+      {/* </Col>
         </Row>
       </div> */}
       {/* <Modal

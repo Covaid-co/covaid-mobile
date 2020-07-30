@@ -75,7 +75,7 @@ export const translatePayment = (num) => {
   } else {
     return "N/A";
   }
-}
+};
 
 export const formatDate = (date, format, utc) => {
   var MMMM = [
