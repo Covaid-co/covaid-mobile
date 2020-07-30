@@ -27,6 +27,7 @@ export default function LoginScreen({ route, navigation }) {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 400,
+      useNativeDriver: true,
     }).start();
     checkPreviousLogin();
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
@@ -43,6 +44,7 @@ export default function LoginScreen({ route, navigation }) {
     Animated.timing(keyboardHeight, {
       duration: event.duration * 0.8,
       toValue: event.endCoordinates.height * heightFactor,
+      useNativeDriver: false,
     }).start();
   };
 
@@ -51,6 +53,7 @@ export default function LoginScreen({ route, navigation }) {
     Animated.timing(keyboardHeight, {
       duration: event.duration * 0.9,
       toValue: 0,
+      useNativeDriver: false,
     }).start();
   };
 
