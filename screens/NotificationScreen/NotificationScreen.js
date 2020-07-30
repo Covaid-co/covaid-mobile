@@ -106,20 +106,20 @@ export default function NotificationScreen({ route, navigation }) {
 
     requests.map((request) => {
       pending.push({
-        key: 1, 
-        requester_name: "New Request", 
-        resources: request.request_info, 
-        needed_by: request.request_info.date + " " + request.request_info.time, 
-        lat: parseFloat(request.location_info.coordinates[0]), 
-        long: parseFloat(request.location_info.coordinates[1]), 
+        key: 1,
+        requester_name: "New Request",
+        resources: request.request_info,
+        needed_by: request.request_info.date + " " + request.request_info.time,
+        lat: parseFloat(request.location_info.coordinates[0]),
+        long: parseFloat(request.location_info.coordinates[1]),
         requester_contact_email: request.personal_info.requester_email,
-        requester_contact_phone: request.personal_info.requester_phone, 
-        details: request.request_info.details, 
+        requester_contact_phone: request.personal_info.requester_phone,
+        details: request.request_info.details,
         completed_date: request.status.completed_date || "",
-        request_id: request._id,  
-        languages: request.personal_info.languages, 
-        payment: request.request_info.payment, 
-        admin_msg: request.status.volunteers[0].adminMessage, 
+        request_id: request._id,
+        languages: request.personal_info.languages,
+        payment: request.request_info.payment,
+        admin_msg: request.status.volunteers[0].adminMessage,
         timestamp: request.time_posted,
       });
     });
@@ -208,8 +208,8 @@ export default function NotificationScreen({ route, navigation }) {
                   currentItem: item,
                   pendingRequests: pendingRequests,
                   currScreen: "Notification",
-                  currentRequestType: volunteer_status.PENDING, 
-                  pendingModalVisible: true, 
+                  currentRequestType: volunteer_status.PENDING,
+                  pendingModalVisible: true,
                 });
               }}
             >
