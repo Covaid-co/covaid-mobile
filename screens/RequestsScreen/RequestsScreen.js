@@ -348,7 +348,7 @@ export default function RequestsScreen({ route, navigation }) {
                   {displayRequestInfo(currentRequestType, item)}
                 </TouchableOpacity>
               )}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item, index) => index.toString()}
             />
           </View>
         </>
