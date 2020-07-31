@@ -67,7 +67,7 @@ export default function RequestsScreen({ route, navigation }) {
   async function handleAuth() {
     try {
       const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-      console.log("potential user token id: " + idHolder);
+      // console.log("potential user token id: " + idHolder);
       const tokenHolder = await AsyncStorage.getItem(
         storage_keys.SAVE_TOKEN_KEY
       );
@@ -101,7 +101,7 @@ export default function RequestsScreen({ route, navigation }) {
           tokenHolder
         );
       } else {
-        console.log("BAD data (rs)");
+        console.log("BAD data (requestScreen)");
       }
     } catch (err) {
       console.log(err);
@@ -109,9 +109,6 @@ export default function RequestsScreen({ route, navigation }) {
     }
   }
   useEffect(() => {
-    console.log(
-      "USE EFFECT FOR REQUESTS SCREEN ---------------------------------------"
-    );
     setPendingModalVisible(route.params.pendingModalVisible);
     setCurrentItem(route.params.currentItem);
     setCurrentRequestList(route.params.currentRequestType);
@@ -209,7 +206,6 @@ export default function RequestsScreen({ route, navigation }) {
 
   const updateUserPushToken = async (pushToken) => {
     try {
-      console.log("START UPDATE USER PUSHTOKEN");
       const tokenHolder = await AsyncStorage.getItem(
         storage_keys.SAVE_TOKEN_KEY
       );
@@ -232,14 +228,11 @@ export default function RequestsScreen({ route, navigation }) {
           console.log("Error");
         });
     } catch (e) {
-      console.log("CAUGHT UPDATE USER PUSHTOKEN");
       throw e;
     }
-    console.log("END UPDATE USER PUSHTOKEN");
   };
 
   const fetchUser = (token) => {
-    console.log("START fETCH USER");
     var url = homeURL + "/api/users/current";
     try {
       fetch_a(token, "token", url, {
@@ -253,9 +246,7 @@ export default function RequestsScreen({ route, navigation }) {
         .catch((e) => {
           throw e;
         });
-      console.log("END fETCH USER");
     } catch (e) {
-      console.log("CAUGHT FETCH USER");
       throw e;
     }
   };
@@ -312,7 +303,6 @@ export default function RequestsScreen({ route, navigation }) {
   function fetchRequests(reqStatus, requestStateChanger, token) {
     let params = { status: reqStatus };
     var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
-    console.log("START fETCH REQUESTS");
 
     fetch_a(token, "token", url, {
       method: "get",
@@ -329,10 +319,8 @@ export default function RequestsScreen({ route, navigation }) {
         }
       })
       .catch((e) => {
-        console.log("CAUGHT fETCH REQUESTS");
         console.log(e);
       });
-    console.log("END fETCH REQUESTS");
   }
 
   if (pendingRequests) {
