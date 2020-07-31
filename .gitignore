@@ -11,6 +11,7 @@ web-build/
 .env
 constants.js
 package-lock.json
+yarn.lock
 .idea/
 
 # macOS

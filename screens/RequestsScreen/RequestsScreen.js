@@ -17,23 +17,25 @@ import CompletedModal from "../IndividualRequestScreen/CompletedModal";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
-
 export default function RequestsScreen({ route, navigation }) {
-  const [user, setUser] = useState("");
+  // const [user, setUser] = useState();
   const [pendingRequests, setPendingRequests] = useState([]);
   const [activeRequests, setActiveRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
   const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState();
   const [currentItem, setCurrentItem] = useState();
+
   const requestTypeList = [
     volunteer_status.PENDING,
     volunteer_status.IN_PROGRESS,
     volunteer_status.COMPLETE,
   ];
+
   const [pendingModalVisible, setPendingModalVisible] = useState(false);
   const [activeModalVisible, setActiveModalVisible] = useState(false);
   const [completedModalVisible, setCompletedModalVisible] = useState(false);
+  const [token, setToken] = useState();
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -60,22 +62,46 @@ export default function RequestsScreen({ route, navigation }) {
       value: "Completed",
     },
   ];
-
+  // function handleLogout() {
+  //   AsyncStorage.clear();
+  //   navigation.navigate("Login", route.params);
+  // }
+  async function handleAuth() {
+    try {
+      // const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
+      // console.log("potential user token id: " + idHolder);
+      const tokenHolder = await AsyncStorage.getItem(
+        storage_keys.SAVE_TOKEN_KEY
+      );
+      if (tokenHolder) {
+        setToken(tokenHolder);
+        fetchRequests(
+          volunteer_status.PENDING,
+          setPendingRequests,
+          tokenHolder
+        );
+        fetchRequests(
+          volunteer_status.IN_PROGRESS,
+          setActiveRequests,
+          tokenHolder
+        );
+        fetchRequests(
+          volunteer_status.COMPLETE,
+          setCompletedRequests,
+          tokenHolder
+        );
+      } else {
+        console.log("***REQUEST SCREEN*** BAD token");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
   useEffect(() => {
     setPendingModalVisible(route.params.pendingModalVisible);
     setCurrentItem(route.params.currentItem);
     setCurrentRequestList(route.params.currentRequestType);
-    const unsubscribe = navigation.addListener("focus", () => {
-      AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-        fetchUser(data);
-      });
-
-      AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-        fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
-        fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-        fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
-      });
-    });
+    const unsubscribe = navigation.addListener("focus", () => handleAuth());
     navigation.setOptions = {
       title: "Chat",
       headerStyle: { backgroundColor: "red" },
@@ -137,7 +163,8 @@ export default function RequestsScreen({ route, navigation }) {
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
 
-      if (!user.pushToken || user.pushToken.length === 0) {
+      if (!token || token.length === 0) {
+        console.log("\nupdating user push token...\n\n");
         updateUserPushToken(token);
       }
     } else {
@@ -168,12 +195,14 @@ export default function RequestsScreen({ route, navigation }) {
   }
 
   const updateUserPushToken = async (pushToken) => {
-    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((token) => {
+    try {
+      const tokenHolder = await AsyncStorage.getItem(
+        storage_keys.SAVE_TOKEN_KEY
+      );
       const params = {
         pushToken: pushToken,
       };
-
-      fetch_a(token, "token", homeURL + "/api/users/update", {
+      fetch_a(tokenHolder, "token", homeURL + "/api/users/update", {
         method: "put",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
@@ -188,25 +217,34 @@ export default function RequestsScreen({ route, navigation }) {
         .catch((e) => {
           console.log("Error");
         });
-    });
+    } catch (e) {
+      throw e;
+    }
   };
-
-  const fetchUser = async (id) => {
-    let params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-          });
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  };
+  // const fetchUser = async (token) => {
+  //   var url = homeURL + "/api/users/current";
+  //   try {
+  //     const res = await fetch_a(token, "token", url, {
+  //       method: "get",
+  //     });
+  //     if (res.ok) {
+  //       let user = await res.json();
+  //       if (user._id && user._id.length !== 0) {
+  //         console.log(
+  //           "\nRequest Screen user fetched successfully. User Name: " +
+  //             user.first_name +
+  //             "\n"
+  //         );
+  //         setUser(user);
+  //         return true;
+  //       }
+  //       return false;
+  //     }
+  //     return false;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // };
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
     let tempList = [];
@@ -297,7 +335,7 @@ export default function RequestsScreen({ route, navigation }) {
                 item={currentItem}
                 pendingList={pendingRequests}
                 activeList={activeRequests}
-                volunteer={user}
+                // volunteer={user}
               />
             )}
             {activeModalVisible && (
@@ -306,7 +344,7 @@ export default function RequestsScreen({ route, navigation }) {
                 item={currentItem}
                 activeList={activeRequests}
                 completeList={completedRequests}
-                volunteer={user}
+                // volunteer={user}
               />
             )}
             {completedModalVisible && (
@@ -318,6 +356,7 @@ export default function RequestsScreen({ route, navigation }) {
             <FlatList
               data={currentRequestList || pendingRequests}
               contentContainerStyle={styles.center}
+              keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={getContainerType(currentRequestType)}
@@ -348,7 +387,6 @@ export default function RequestsScreen({ route, navigation }) {
                   {displayRequestInfo(currentRequestType, item)}
                 </TouchableOpacity>
               )}
-              keyExtractor={(item, index) => index}
             />
           </View>
         </>

@@ -237,10 +237,8 @@ function showResourceBadges(resources) {
       <View style={styles.flex_container}>
         {resources.map((prop, key) => {
           return (
-            <View style={styles.resource_badge}>
-              <Text key={key} style={texts.resource_text}>
-                {prop}
-              </Text>
+            <View key={key} style={styles.resource_badge}>
+              <Text style={texts.resource_text}>{prop}</Text>
             </View>
           );
         })}

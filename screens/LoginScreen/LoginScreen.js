@@ -10,6 +10,7 @@ import {
   Keyboard,
   Linking,
 } from "react-native";
+import fetch_a from "../../util/fetch_auth";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { validateEmail } from "../../Helpers";
@@ -23,12 +24,40 @@ export default function LoginScreen({ route, navigation }) {
   const [keyboardHeight] = useState(new Animated.Value(0));
   const [fadeAnim] = useState(new Animated.Value(0));
   const heightFactor = 1.6;
+
+  const _keyboardWillShow = (event) => {
+    setFocus(true);
+    Animated.timing(keyboardHeight, {
+      duration: event.duration * 0.8,
+      toValue: event.endCoordinates.height * heightFactor,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const _keyboardWillHide = (event) => {
+    setFocus(false);
+    Animated.timing(keyboardHeight, {
+      duration: event.duration * 0.9,
+      toValue: 0,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  async function storeKeys(data) {
+    try {
+      await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data.user._id);
+      await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data.user.token);
+    } catch (e) {
+      alert(e);
+    }
+  }
+
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 400,
+      useNativeDriver: false,
     }).start();
-    checkPreviousLogin();
     Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
 
@@ -38,43 +67,34 @@ export default function LoginScreen({ route, navigation }) {
     };
   }, []);
 
-  const _keyboardWillShow = (event) => {
-    setFocus(true);
-    Animated.timing(keyboardHeight, {
-      duration: event.duration * 0.8,
-      toValue: event.endCoordinates.height * heightFactor,
-    }).start();
-  };
-
-  const _keyboardWillHide = (event) => {
-    setFocus(false);
-    Animated.timing(keyboardHeight, {
-      duration: event.duration * 0.9,
-      toValue: 0,
-    }).start();
-  };
-
-  async function storeKeys(data) {
+  async function fetchUser(token) {
+    var url = homeURL + "/api/users/current";
     try {
-      await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data.user._id);
-
-      await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data.user.token);
-    } catch (e) {
-      alert(e);
-    }
-  }
-
-  async function checkPreviousLogin() {
-    try {
-      const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-      const tokenHolder = await AsyncStorage.getItem(
-        storage_keys.SAVE_TOKEN_KEY
-      );
-      if (idHolder && tokenHolder) {
-        navigation.navigate("Covaid");
+      const res = await fetch_a(token, "token", url, {
+        method: "get",
+      });
+      if (res.ok) {
+        let user = await res.json();
+        if (user._id && user._id.length !== 0) {
+          console.log(
+            "\n***ON LOGIN SUBMIT*** User Name: " + user.first_name + "\n"
+          );
+          console.log(
+            "---- ***ON LOGIN SUBMIT*** User successfully fetched. Token is active. User is authorized ----\n"
+          );
+          navigation.navigate("Covaid", { user: user });
+        } else {
+          console.log(
+            "---- ***ON LOGIN SUBMIT*** Fetch ok, but user ID could not be found. Token is expired. User is unauthorized ----\n"
+          );
+        }
+      } else {
+        console.log(
+          "---- ***LOGIN SCREEN*** User could not be fetched. Token is expired. User is unauthorized ----\n"
+        );
       }
     } catch (e) {
-      alert(e);
+      throw e;
     }
   }
 
@@ -111,6 +131,7 @@ export default function LoginScreen({ route, navigation }) {
       })
       .catch((e) => {
         console.log("Error: " + e);
+        throw e;
       });
   }
 
@@ -131,7 +152,7 @@ export default function LoginScreen({ route, navigation }) {
         if (response.ok) {
           response.json().then((data) => {
             storeKeys(data);
-            navigation.navigate("Covaid");
+            fetchUser(data.user.token);
           });
         } else {
           if (response.status === 403) {

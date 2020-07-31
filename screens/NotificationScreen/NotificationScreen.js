@@ -8,11 +8,15 @@ import {
 } from "react-native";
 import { styles, texts } from "./NotificationStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
+import PendingModal from "../IndividualRequestScreen/PendingModal";
 import { generateURL } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [isPendingModal, setPendingModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState();
+  const [loading, setLoading] = useState(true);
   // const [user, setUser] = useState({});
   // const [userLoc, setUserLoc] = useState([]);
 
@@ -103,9 +107,10 @@ export default function NotificationScreen({ route, navigation }) {
     //   fetchUser(idHolder);
     //   console.log("USERLOC: " + userLoc);
     // }
-
     requests.map((request) => {
       pending.push({
+        deadline:
+          getDate(request.request_info.date) + " " + request.request_info.time,
         key: 1,
         requester_name: "New Request",
         resources: request.request_info,
@@ -123,7 +128,8 @@ export default function NotificationScreen({ route, navigation }) {
         timestamp: request.time_posted,
       });
     });
-    setPendingRequests(pending);
+    setPendingRequests(pending.reverse());
+    setLoading(false);
   }
 
   function fetchRequests(token) {
@@ -164,7 +170,7 @@ export default function NotificationScreen({ route, navigation }) {
           <View>
             <View style={styles.flexrow}>
               <View style={styles.dot}></View>
-              <Text style={texts.deadline}>Needed by {item.deadline_date}</Text>
+              <Text style={texts.deadline}>Needed by {item.deadline}</Text>
             </View>
             <View style={styles.pleft}>
               <Text style={texts.header}>
@@ -172,7 +178,7 @@ export default function NotificationScreen({ route, navigation }) {
               </Text>
               <View style={styles.resources}>
                 <Text style={texts.tasks}>
-                  {item.resources.resource_request.join(", ")}
+                  {item.resources.resource_request.slice(0, 2).join(", ")}
                 </Text>
               </View>
             </View>
@@ -191,26 +197,37 @@ export default function NotificationScreen({ route, navigation }) {
 
   return (
     <View style={styles.screen}>
-      {/* {user ? ( */}
-      {pendingRequests[0] ? (
+      {isPendingModal && (
+        <PendingModal
+          modalVisible={setPendingModal}
+          item={currentItem}
+          pendingList={pendingRequests}
+        />
+      )}
+      {loading ? (
+        <></>
+      ) : pendingRequests[0] ? (
         <FlatList
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          data={pendingRequests.reverse()}
+          data={pendingRequests}
           renderItem={({ item }) => (
             <TouchableHighlight
               underlayColor="#F3F5F9"
               style={styles.container}
               onPress={() => {
-                navigation.navigate("RequestsScreen", {
-                  navigation: route.params,
-                  currentItem: item,
-                  pendingRequests: pendingRequests,
-                  currScreen: "Notification",
-                  currentRequestType: volunteer_status.PENDING,
-                  pendingModalVisible: true,
-                });
+                setCurrentItem(item);
+                setPendingModal(true);
+                // navigation.navigate("RequestsScreen", {
+                //   navigation: route.params,
+                //   currentItem: item,
+                //   pendingRequests: pendingRequests,
+                //   currScreen: "Notification",
+                //   currentRequestType: volunteer_status.PENDING,
+                //   choice: volunteer_status.PENDING,
+                //   pendingModalVisible: true,
+                // });
               }}
             >
               {displayRequestInfo(item)}
@@ -220,14 +237,13 @@ export default function NotificationScreen({ route, navigation }) {
       ) : (
         <View style={styles.nonewnotifs}>
           <Text style={texts.nonewnotifs}>
-            When you receive new requests, messages from your organization, or
-            updates from Covaid, you will see them here!
+            When you receive new requests
+            {/* , messages from your organization, or
+            updates from Covaid */}
+            , you will see them here!
           </Text>
         </View>
       )}
-      {/* ) : (
-        <Text>Loading...</Text>
-      )} */}
     </View>
   );
 }
