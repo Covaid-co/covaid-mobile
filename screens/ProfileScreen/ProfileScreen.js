@@ -82,7 +82,7 @@ export default function ProfileScreen({ route, navigation }) {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return () => {
       Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
-      unsubscribe;
+      unsubscribe();
     };
   }, [user]);
 
