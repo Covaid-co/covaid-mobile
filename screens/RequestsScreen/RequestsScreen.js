@@ -17,7 +17,6 @@ import CompletedModal from "../IndividualRequestScreen/CompletedModal";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
-import jwtDecode from "jwt-decode";
 export default function RequestsScreen({ route, navigation }) {
   // const [user, setUser] = useState();
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -26,14 +25,17 @@ export default function RequestsScreen({ route, navigation }) {
   const [currentRequestList, setCurrentRequestList] = useState();
   const [currentRequestType, setCurrentRequestType] = useState();
   const [currentItem, setCurrentItem] = useState();
+
   const requestTypeList = [
     volunteer_status.PENDING,
     volunteer_status.IN_PROGRESS,
     volunteer_status.COMPLETE,
   ];
+
   const [pendingModalVisible, setPendingModalVisible] = useState(false);
   const [activeModalVisible, setActiveModalVisible] = useState(false);
   const [completedModalVisible, setCompletedModalVisible] = useState(false);
+  const [token, setToken] = useState();
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -60,31 +62,19 @@ export default function RequestsScreen({ route, navigation }) {
       value: "Completed",
     },
   ];
-  function handleLogout() {
-    AsyncStorage.clear();
-    navigation.navigate("Login", route.params);
-  }
+  // function handleLogout() {
+  //   AsyncStorage.clear();
+  //   navigation.navigate("Login", route.params);
+  // }
   async function handleAuth() {
     try {
-      const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
+      // const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
       // console.log("potential user token id: " + idHolder);
       const tokenHolder = await AsyncStorage.getItem(
         storage_keys.SAVE_TOKEN_KEY
       );
       if (tokenHolder) {
-        const { exp } = jwtDecode(tokenHolder);
-        // Refresh the token a minute early to avoid latency issues
-        const expirationTime = exp * 1000 - 60000;
-        // console.log("EXPIRATION TIME: " + expirationTime);
-        // console.log("DATE NOW: " + Date.now());
-        // console.log(
-        //   "TIME LEFT: " + new Date(expirationTime - Date.now()).getMinutes()
-        // );
-        if (Date.now() >= expirationTime) {
-          // token = await refreshToken();
-          handleLogout();
-        }
-        // fetchUser(tokenHolder);
+        setToken(tokenHolder);
         fetchRequests(
           volunteer_status.PENDING,
           setPendingRequests,
@@ -101,10 +91,9 @@ export default function RequestsScreen({ route, navigation }) {
           tokenHolder
         );
       } else {
-        console.log("BAD data (requestScreen)");
+        console.log("***REQUEST SCREEN*** BAD token");
       }
     } catch (err) {
-      console.log(err);
       throw err;
     }
   }

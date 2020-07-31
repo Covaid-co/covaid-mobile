@@ -56,26 +56,6 @@ export default function LoginScreen({ route, navigation }) {
     }
   }, []);
 
-  // const fetch_user_obj = async (id) => {
-  //   const params = { id: id };
-  //   var url = generateURL(homeURL + "/api/users/user?", params);
-
-  //   fetch(url)
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         response.json().then((data) => {
-  //           setUser(data[0]);
-  //           setConstants(data[0]);
-  //         });
-  //       } else {
-  //         // alert("Error obtaining user object");
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       alert(e);
-  //     });
-  // };
-
   const setConstants = (data) => {
     const params = {};
     var url = generateURL(homeURL + "/api/apikey/google", params);
@@ -162,7 +142,7 @@ export default function LoginScreen({ route, navigation }) {
         } else {
           console.log("Offer not successful");
         }
-      }) 
+      })
       .catch((e) => {
         console.log("Edit Profile Screen Error");
       });
