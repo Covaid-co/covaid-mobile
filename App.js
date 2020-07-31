@@ -70,7 +70,8 @@ export default function App(props) {
         navigationRef.current.navigate("Login");
       }
     } catch (e) {
-      throw e;
+      console.log("***APP.js*** fetchUserAndNavigate error: " + e);
+      navigationRef.current.navigate("Login");
     }
   }
 
