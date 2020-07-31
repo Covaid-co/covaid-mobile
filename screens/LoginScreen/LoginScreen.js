@@ -10,7 +10,7 @@ import {
   Keyboard,
   Linking,
 } from "react-native";
-// import fetch_a from "../../util/fetch_auth";
+import fetch_a from "../../util/fetch_auth";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { validateEmail } from "../../Helpers";
@@ -67,27 +67,25 @@ export default function LoginScreen({ route, navigation }) {
     }
   }
 
-  // const fetchUser = (token) => {
-  //   var url = homeURL + "/api/users/current";
-  //   try {
-  //     fetch_a(token, "token", url, {
-  //       method: "get",
-  //     })
-  //       .then((user) => {
-  //         if (user._id) {
-  //           console.log("user: ", user);
-  //           return true;
-  //         }
-  //         return false;
-  //       })
-  //       .catch((e) => {
-  //         throw e;
-  //       });
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  //   return false;
-  // };
+  const fetchUser = async (token) => {
+    var url = homeURL + "/api/users/current";
+    try {
+      const res = await fetch_a(token, "token", url, {
+        method: "get",
+      });
+      if (res.ok) {
+        let user = await res.json();
+        if (user._id && user._id.length !== 0) {
+          console.log("\nUser Name: " + user.first_name + "\n");
+          return true;
+        }
+        return false;
+      }
+      return false;
+    } catch (e) {
+      throw e;
+    }
+  };
 
   async function checkPreviousLogin() {
     try {
@@ -96,12 +94,17 @@ export default function LoginScreen({ route, navigation }) {
         storage_keys.SAVE_TOKEN_KEY
       );
       if (idHolder && tokenHolder) {
-        // if (fetchUser(tokenHolder)) {
-        //   console.log("\nauthorized\n\n");
-        navigation.navigate("Covaid");
-        // } else {
-        //   console.log("\nnot authorized\n\n");
-        // }
+        const ans = await fetchUser(tokenHolder);
+        if (ans === true) {
+          console.log(
+            "---- User successfully fetched. Token is active. User is authorized ----\n"
+          );
+          navigation.navigate("Covaid");
+        } else {
+          console.log(
+            "---- User could not be fetched. Token is expired. User is unauthorized ----\n"
+          );
+        }
       }
     } catch (e) {
       alert(e);

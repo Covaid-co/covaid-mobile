@@ -232,24 +232,52 @@ export default function RequestsScreen({ route, navigation }) {
       throw e;
     }
   };
-
-  const fetchUser = (token) => {
+  const fetchUser = async (token) => {
     var url = homeURL + "/api/users/current";
     try {
-      fetch_a(token, "token", url, {
+      const res = await fetch_a(token, "token", url, {
         method: "get",
-      })
-        .then((response) => response.text())
-        .then((user) => {
+      });
+      if (res.ok) {
+        let user = await res.json();
+        if (user._id && user._id.length !== 0) {
+          console.log(
+            "\nRequest Screen user fetched successfully. User Name: " +
+              user.first_name +
+              "\n"
+          );
           setUser(user);
-        })
-        .catch((e) => {
-          throw e;
-        });
+          return true;
+        }
+        return false;
+      }
+      return false;
     } catch (e) {
       throw e;
     }
   };
+
+  // const fetchUser = (token) => {
+  //   var url = homeURL + "/api/users/current";
+  //   try {
+  //     fetch_a(token, "token", url, {
+  //       method: "get",
+  //     })
+  //       .then((response) => response.text())
+  //       .then((user) => {
+  //         setUser(user);
+  //         console.log(
+  //           "Request Screen fetched user successfully. User name: " +
+  //             user.first_name
+  //         );
+  //       })
+  //       .catch((e) => {
+  //         throw e;
+  //       });
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // };
 
   // const fetchUser = async (id) => {
   //   let params = { id: id };
