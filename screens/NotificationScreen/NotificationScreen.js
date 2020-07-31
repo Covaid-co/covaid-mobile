@@ -206,7 +206,7 @@ export default function NotificationScreen({ route, navigation }) {
       )}
       {loading ? (
         <></>
-      ) : !pendingRequests[0] ? (
+      ) : pendingRequests[0] ? (
         <FlatList
           keyExtractor={(item, index) => {
             return index.toString();
