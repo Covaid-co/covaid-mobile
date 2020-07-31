@@ -186,12 +186,14 @@ export default function RequestsScreen({ route, navigation }) {
   if (route.params.choice !== currentRequestType) {
     if (route.params.choice == volunteer_status.COMPLETE) {
       setCurrentRequestList(completedRequests);
+      setCurrentRequestType(volunteer_status.COMPLETE);
     } else if (route.params.choice == volunteer_status.IN_PROGRESS) {
       setCurrentRequestList(activeRequests);
+      setCurrentRequestType(volunteer_status.IN_PROGRESS);
     } else {
       setCurrentRequestList(pendingRequests);
+      setCurrentRequestType(volunteer_status.PENDING);
     }
-    setCurrentRequestType(route.params.choice);
   }
 
   const updateUserPushToken = async (pushToken) => {
@@ -250,6 +252,7 @@ export default function RequestsScreen({ route, navigation }) {
     let tempList = [];
     for (var i = 0; i < requestData.length; i++) {
       var element = {
+        status: requestData[i].status.currentStatus,
         key: i,
         requester_name: requestData[i].personal_info.requester_name,
         resources: requestData[i].request_info,
@@ -270,9 +273,10 @@ export default function RequestsScreen({ route, navigation }) {
       };
       tempList.push(element);
     }
-    // initializes the current request list to "pending". Otherwise the list of requests dont pop up initially
-    if (reqStatus == currentRequestType) {
+
+    if (tempList[0] && tempList[0].status === currentRequestType) {
       setCurrentRequestList(tempList);
+      setCurrentRequestType(tempList[0].status);
     }
     requestStateChanger(tempList);
     return tempList;
