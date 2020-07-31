@@ -16,6 +16,7 @@ export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [isPendingModal, setPendingModal] = useState(false);
   const [currentItem, setCurrentItem] = useState();
+  const [loading, setLoading] = useState(true);
   // const [user, setUser] = useState({});
   // const [userLoc, setUserLoc] = useState([]);
 
@@ -128,6 +129,7 @@ export default function NotificationScreen({ route, navigation }) {
       });
     });
     setPendingRequests(pending.reverse());
+    setLoading(false);
   }
 
   function fetchRequests(token) {
@@ -200,12 +202,11 @@ export default function NotificationScreen({ route, navigation }) {
           modalVisible={setPendingModal}
           item={currentItem}
           pendingList={pendingRequests}
-          // activeList={activeRequests}
-          // volunteer={user}
         />
       )}
-      {/* {user ? ( */}
-      {pendingRequests[0] ? (
+      {loading ? (
+        <></>
+      ) : pendingRequests[0] ? (
         <FlatList
           keyExtractor={(item, index) => {
             return index.toString();
@@ -236,14 +237,13 @@ export default function NotificationScreen({ route, navigation }) {
       ) : (
         <View style={styles.nonewnotifs}>
           <Text style={texts.nonewnotifs}>
-            When you receive new requests, messages from your organization, or
-            updates from Covaid, you will see them here!
+            When you receive new requests
+            {/* , messages from your organization, or
+            updates from Covaid */}
+            , you will see them here!
           </Text>
         </View>
       )}
-      {/* ) : (
-        <Text>Loading...</Text>
-      )} */}
     </View>
   );
 }

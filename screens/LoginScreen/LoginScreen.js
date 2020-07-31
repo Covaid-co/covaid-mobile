@@ -24,21 +24,6 @@ export default function LoginScreen({ route, navigation }) {
   const [keyboardHeight] = useState(new Animated.Value(0));
   const [fadeAnim] = useState(new Animated.Value(0));
   const heightFactor = 1.6;
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: false,
-    }).start();
-    checkPreviousLogin();
-    Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
-    Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
-
-    return () => {
-      Keyboard.removeListener("keyboardWillShow", _keyboardWillShow);
-      Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
-    };
-  }, []);
 
   const _keyboardWillShow = (event) => {
     setFocus(true);
@@ -67,7 +52,22 @@ export default function LoginScreen({ route, navigation }) {
     }
   }
 
-  const fetchUser = async (token) => {
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 400,
+      useNativeDriver: false,
+    }).start();
+    Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
+    Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardWillShow", _keyboardWillShow);
+      Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
+    };
+  }, []);
+
+  async function fetchUser(token) {
     var url = homeURL + "/api/users/current";
     try {
       const res = await fetch_a(token, "token", url, {
@@ -76,38 +76,25 @@ export default function LoginScreen({ route, navigation }) {
       if (res.ok) {
         let user = await res.json();
         if (user._id && user._id.length !== 0) {
-          console.log("\nUser Name: " + user.first_name + "\n");
-          return true;
-        }
-        return false;
-      }
-      return false;
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  async function checkPreviousLogin() {
-    try {
-      const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-      const tokenHolder = await AsyncStorage.getItem(
-        storage_keys.SAVE_TOKEN_KEY
-      );
-      if (idHolder && tokenHolder) {
-        const ans = await fetchUser(tokenHolder);
-        if (ans === true) {
           console.log(
-            "---- User successfully fetched. Token is active. User is authorized ----\n"
+            "\n***ON LOGIN SUBMIT*** User Name: " + user.first_name + "\n"
           );
-          navigation.navigate("Covaid");
+          console.log(
+            "---- ***ON LOGIN SUBMIT*** User successfully fetched. Token is active. User is authorized ----\n"
+          );
+          navigation.navigate("Covaid", { user: user });
         } else {
           console.log(
-            "---- User could not be fetched. Token is expired. User is unauthorized ----\n"
+            "---- ***ON LOGIN SUBMIT*** Fetch ok, but user ID could not be found. Token is expired. User is unauthorized ----\n"
           );
         }
+      } else {
+        console.log(
+          "---- ***LOGIN SCREEN*** User could not be fetched. Token is expired. User is unauthorized ----\n"
+        );
       }
     } catch (e) {
-      alert(e);
+      throw e;
     }
   }
 
@@ -165,7 +152,7 @@ export default function LoginScreen({ route, navigation }) {
         if (response.ok) {
           response.json().then((data) => {
             storeKeys(data);
-            navigation.navigate("Covaid");
+            fetchUser(data.user.token);
           });
         } else {
           if (response.status === 403) {

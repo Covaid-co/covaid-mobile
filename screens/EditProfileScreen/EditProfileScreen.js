@@ -43,28 +43,38 @@ export default function LoginScreen({ route, navigation }) {
   ];
 
   useEffect(() => {
-    fetch_user_obj(route.params.userID);
-  }, [route.params.userID]);
+    if (route.params.user._id.length !== 0) {
+      setUser(route.params.user);
+      setConstants(route.params.user);
+      console.log(
+        "***EDIT PROFILE SCREEN*** User obtained successfully from profile screen"
+      );
+    } else {
+      console.log(
+        "***EDIT PROFILE SCREEN*** User NOT obtained successfully from profile screen"
+      );
+    }
+  }, []);
 
-  const fetch_user_obj = async (id) => {
-    const params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
+  // const fetch_user_obj = async (id) => {
+  //   const params = { id: id };
+  //   var url = generateURL(homeURL + "/api/users/user?", params);
 
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-            setConstants(data[0]);
-          });
-        } else {
-          // alert("Error obtaining user object");
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  };
+  //   fetch(url)
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         response.json().then((data) => {
+  //           setUser(data[0]);
+  //           setConstants(data[0]);
+  //         });
+  //       } else {
+  //         // alert("Error obtaining user object");
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       alert(e);
+  //     });
+  // };
 
   const setConstants = (data) => {
     const params = {};
@@ -88,6 +98,7 @@ export default function LoginScreen({ route, navigation }) {
         alert(e);
       });
   };
+
   const setCurrentUserObject = (userList, fullList, setFunction) => {
     for (var i = 0; i < fullList.length; i++) {
       const curr = fullList[i];
@@ -151,7 +162,7 @@ export default function LoginScreen({ route, navigation }) {
         } else {
           console.log("Offer not successful");
         }
-      })
+      }) 
       .catch((e) => {
         console.log("Edit Profile Screen Error");
       });

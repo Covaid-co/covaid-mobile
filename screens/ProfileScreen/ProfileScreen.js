@@ -28,7 +28,7 @@ export default function ProfileScreen({ route, navigation }) {
   const [user, setUser] = useState();
   const [zip, setZip] = useState();
   const [initialZip, setInitialZip] = useState("");
-  const [resources, setResources] = useState(undefined);
+  const [resources, setResources] = useState(null);
   const [hasCar, setHasCar] = useState();
   const [details, setDetails] = useState();
 
@@ -61,22 +61,41 @@ export default function ProfileScreen({ route, navigation }) {
     setPublish(!publish);
   };
 
-  async function func() {
+  async function handleAuth() {
     //prevent offer from showing resources of a previous location after a change
-    await setResources(null);
-    AsyncStorage.getItem(storage_keys.SAVE_ID_KEY).then((data) => {
-      setID(data);
-      fetch_user_obj(data);
-    });
-    AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-      setToken(data);
-    });
+    // await setResources(null);
+    try {
+      const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
+      setID(idHolder);
+      const tokenHolder = await AsyncStorage.getItem(
+        storage_keys.SAVE_TOKEN_KEY
+      );
+      setToken(tokenHolder);
+      if (idHolder && tokenHolder) {
+        await fetchUser(tokenHolder);
+      }
+    } catch (e) {
+      alert(e);
+    }
   }
 
   useEffect(() => {
+    const initialUser = route.params.user;
+    if (initialUser._id && initialUser._id.length > 0) {
+      setUser(initialUser);
+      setPublish(initialUser.availability);
+      setConstants(initialUser);
+      console.log(
+        "***Profile Screen*** User successfully retrieved from initialParams"
+      );
+    } else {
+      console.log("***Profile Screen*** User not retrieved from App/Login");
+    }
+
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
     const unsubscribe = navigation.addListener("focus", () => {
-      func();
+      setResources(null);
+      handleAuth();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -84,7 +103,7 @@ export default function ProfileScreen({ route, navigation }) {
       Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
       unsubscribe();
     };
-  }, [user]);
+  }, []);
 
   const _keyboardWillHide = () => {
     //hacky way of letting user know they need to press "done" to submit. If they close their keyboard, then the textinput will just go to original zipcode
@@ -97,7 +116,7 @@ export default function ProfileScreen({ route, navigation }) {
     const params = {
       availability: publish,
     };
-    fetch_a(route.params.token, "token", homeURL + "/api/users/update?", {
+    fetch_a(token, "token", homeURL + "/api/users/update?", {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
@@ -106,35 +125,44 @@ export default function ProfileScreen({ route, navigation }) {
         if (response.ok) {
           //Change the state to reflect offer update
           setTimeout(function () {
-            console.log("update successful");
-            fetch_user_obj(route.params.userID);
-          }, 750);
+            fetchUser(token);
+          }, 250);
         } else {
-          console.log("Update not successful");
+          console.log("***Profile Screen*** Update not successful");
         }
       })
       .catch((e) => {
-        //console.log("Error");
+        throw e;
       });
   };
 
-  const fetch_user_obj = async (id) => {
-    const params = { id: id };
-    var url = generateURL(homeURL + "/api/users/user?", params);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setUser(data[0]);
-            setPublish(data[0].availability);
-            setConstants(data[0]);
-          });
+  async function fetchUser(token) {
+    var url = homeURL + "/api/users/current";
+    try {
+      const res = await fetch_a(token, "token", url, {
+        method: "get",
+      });
+      if (res.ok) {
+        let userObj = await res.json();
+        if (userObj._id && userObj._id.length !== 0) {
+          setUser(userObj);
+          setPublish(userObj.availability);
+          setConstants(userObj);
+          console.log("***Profile Screen*** User updated on profile screen");
         } else {
+          console.log(
+            "----***Profile Screen*** User NOT updated on profile screen ----\n"
+          );
         }
-      })
-      .catch((e) => {});
-  };
+      } else {
+        console.log(
+          "----***Profile Screen***  User NOT updated on profile screen ----\n"
+        );
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
   const setConstants = (data) => {
     const params = {};
@@ -181,7 +209,7 @@ export default function ProfileScreen({ route, navigation }) {
             getResources();
           });
         } else {
-          console.log("Error: User info not obtained");
+          console.log("***Profile Screen*** Error: User loc info not obtained");
         }
       })
       .catch((e) => {
@@ -239,23 +267,23 @@ export default function ProfileScreen({ route, navigation }) {
         }
       });
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   }
 
-  const handleCarUpdate = async (someshit) => {
+  const handleCarUpdate = async () => {
     setHasCar(!hasCar);
     const params = {
       "offer.car": !hasCar,
     };
-    fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
+    fetch_a(token, "token", homeURL + "/api/users/update", {
       method: "put",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
     })
       .then((response) => {
         if (response.ok) {
-          fetch_user_obj(route.params.userID);
+          fetchUser(token);
         } else {
           Alert.alert(
             "Update not successful",
@@ -365,14 +393,14 @@ export default function ProfileScreen({ route, navigation }) {
           coordinates: [lng, lat],
         },
       };
-      fetch_a(route.params.token, "token", homeURL + "/api/users/update", {
+      fetch_a(token, "token", homeURL + "/api/users/update", {
         method: "put",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
         .then((response) => {
           if (response.ok) {
-            fetch_user_obj(route.params.userID);
+            fetchUser(token);
             navigation.navigate("Edit Offer", {
               token: token,
               resources: temp_resources,
@@ -431,7 +459,9 @@ export default function ProfileScreen({ route, navigation }) {
             <Text style={texts.association}>{user.association_name}</Text>
           )}
           <TouchableOpacity
-            onPress={() => navigation.navigate("Edit Profile", route.params)}
+            onPress={() =>
+              navigation.navigate("Edit Profile", { user: user, token: token })
+            }
           >
             <Text style={texts.button_label_blue}>Edit Profile</Text>
           </TouchableOpacity>
@@ -474,7 +504,7 @@ export default function ProfileScreen({ route, navigation }) {
           <View style={styles.line} />
           <TouchableOpacity
             style={styles.info}
-            onPress={() => handleCarUpdate(hasCar)}
+            onPress={() => handleCarUpdate()}
           >
             <Text style={texts.label_bold}> Drive Access: </Text>
             <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>

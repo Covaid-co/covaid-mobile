@@ -19,7 +19,7 @@ import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import jwtDecode from "jwt-decode";
 export default function RequestsScreen({ route, navigation }) {
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
   const [pendingRequests, setPendingRequests] = useState([]);
   const [activeRequests, setActiveRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
@@ -84,7 +84,7 @@ export default function RequestsScreen({ route, navigation }) {
           // token = await refreshToken();
           handleLogout();
         }
-        fetchUser(tokenHolder);
+        // fetchUser(tokenHolder);
         fetchRequests(
           volunteer_status.PENDING,
           setPendingRequests,
@@ -232,68 +232,29 @@ export default function RequestsScreen({ route, navigation }) {
       throw e;
     }
   };
-  const fetchUser = async (token) => {
-    var url = homeURL + "/api/users/current";
-    try {
-      const res = await fetch_a(token, "token", url, {
-        method: "get",
-      });
-      if (res.ok) {
-        let user = await res.json();
-        if (user._id && user._id.length !== 0) {
-          console.log(
-            "\nRequest Screen user fetched successfully. User Name: " +
-              user.first_name +
-              "\n"
-          );
-          setUser(user);
-          return true;
-        }
-        return false;
-      }
-      return false;
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  // const fetchUser = (token) => {
+  // const fetchUser = async (token) => {
   //   var url = homeURL + "/api/users/current";
   //   try {
-  //     fetch_a(token, "token", url, {
+  //     const res = await fetch_a(token, "token", url, {
   //       method: "get",
-  //     })
-  //       .then((response) => response.text())
-  //       .then((user) => {
-  //         setUser(user);
+  //     });
+  //     if (res.ok) {
+  //       let user = await res.json();
+  //       if (user._id && user._id.length !== 0) {
   //         console.log(
-  //           "Request Screen fetched user successfully. User name: " +
-  //             user.first_name
+  //           "\nRequest Screen user fetched successfully. User Name: " +
+  //             user.first_name +
+  //             "\n"
   //         );
-  //       })
-  //       .catch((e) => {
-  //         throw e;
-  //       });
+  //         setUser(user);
+  //         return true;
+  //       }
+  //       return false;
+  //     }
+  //     return false;
   //   } catch (e) {
   //     throw e;
   //   }
-  // };
-
-  // const fetchUser = async (id) => {
-  //   let params = { id: id };
-  //   var url = generateURL(homeURL + "/api/users/user?", params);
-
-  //   fetch(url)
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         response.json().then((data) => {
-  //           setUser(data[0]);
-  //         });
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       alert(e);
-  //     });
   // };
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
