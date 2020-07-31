@@ -24,7 +24,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   nonewnotifs: {
-    padding: 8,
+    paddingTop: 12,
+    paddingLeft: 8,
+    paddingRight: 10,
   },
   pleft: {
     paddingLeft: 23,
