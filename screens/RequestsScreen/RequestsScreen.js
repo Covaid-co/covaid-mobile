@@ -84,7 +84,7 @@ export default function RequestsScreen({ route, navigation }) {
           // token = await refreshToken();
           handleLogout();
         }
-        // fetchUser(tokenHolder);
+        fetchUser(tokenHolder);
         fetchRequests(
           volunteer_status.PENDING,
           setPendingRequests,
@@ -174,9 +174,10 @@ export default function RequestsScreen({ route, navigation }) {
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
 
-      // if (!user.pushToken || user.pushToken.length === 0) {
-      updateUserPushToken(token);
-      // }
+      if (!token || token.length === 0) {
+        console.log("\nupdating user push token...\n\n");
+        updateUserPushToken(token);
+      }
     } else {
       alert("Must use physical device for Push Notifications");
     }
@@ -237,7 +238,6 @@ export default function RequestsScreen({ route, navigation }) {
     try {
       fetch_a(token, "token", url, {
         method: "get",
-        headers: { "Content-Type": "application/json" },
       })
         .then((response) => response.text())
         .then((user) => {

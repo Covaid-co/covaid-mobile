@@ -10,6 +10,7 @@ import {
   Keyboard,
   Linking,
 } from "react-native";
+// import fetch_a from "../../util/fetch_auth";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { validateEmail } from "../../Helpers";
@@ -60,12 +61,33 @@ export default function LoginScreen({ route, navigation }) {
   async function storeKeys(data) {
     try {
       await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data.user._id);
-
       await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data.user.token);
     } catch (e) {
       alert(e);
     }
   }
+
+  // const fetchUser = (token) => {
+  //   var url = homeURL + "/api/users/current";
+  //   try {
+  //     fetch_a(token, "token", url, {
+  //       method: "get",
+  //     })
+  //       .then((user) => {
+  //         if (user._id) {
+  //           console.log("user: ", user);
+  //           return true;
+  //         }
+  //         return false;
+  //       })
+  //       .catch((e) => {
+  //         throw e;
+  //       });
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  //   return false;
+  // };
 
   async function checkPreviousLogin() {
     try {
@@ -74,7 +96,12 @@ export default function LoginScreen({ route, navigation }) {
         storage_keys.SAVE_TOKEN_KEY
       );
       if (idHolder && tokenHolder) {
+        // if (fetchUser(tokenHolder)) {
+        //   console.log("\nauthorized\n\n");
         navigation.navigate("Covaid");
+        // } else {
+        //   console.log("\nnot authorized\n\n");
+        // }
       }
     } catch (e) {
       alert(e);
