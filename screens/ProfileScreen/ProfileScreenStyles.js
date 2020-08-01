@@ -22,11 +22,12 @@ const styles = StyleSheet.create({
   },
   info: {
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 26,
     display: "flex",
     alignItems: "center",
     paddingLeft: 20,
     paddingRight: 20,
+    marginBottom: -4,
   },
   drive: {
     flexDirection: "row",
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
 const texts = StyleSheet.create({
   label_bold: {
     fontFamily: "Inter-bold",
-    fontSize: 17,
+    fontSize: 18,
     color: Colors.grey_font,
   },
   label: {
@@ -61,24 +62,27 @@ const texts = StyleSheet.create({
   },
   label_blue: {
     fontFamily: "Inter-bold",
-    fontSize: 17,
+    fontSize: 18,
     color: Colors.blue,
   },
   button_label_blue: {
-    fontSize: 15,
+    fontFamily: "Inter",
+    marginTop: 15,
+    fontSize: 14,
     color: Colors.blue,
   },
   name: {
-    fontFamily: "Inter-bold",
-    fontSize: 22,
+    fontFamily: "Montserrat-bold",
+    fontSize: 24,
+    letterSpacing: -0.04,
     color: Colors.grey_font,
-    marginBottom: "2%",
+    marginTop: 9,
   },
   association: {
-    fontFamily: "Inter",
-    fontSize: 17,
+    fontSize: 14,
+    marginTop: 2,
     color: Colors.light_grey_font,
-    marginBottom: "2%",
+    fontFamily: "Inter",
   },
 });
 

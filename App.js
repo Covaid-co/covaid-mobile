@@ -15,6 +15,7 @@ import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 import { homeURL, storage_keys } from "./constants";
 import fetch_a from "./util/fetch_auth";
+import Colors from "./public/Colors";
 
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js";
@@ -92,6 +93,11 @@ export default function App(props) {
             component={LoginScreen}
             options={{
               headerShown: false,
+              headerTitleStyle: {
+                fontSize: 17,
+                fontFamily: "Inter-bold",
+                color: Colors.grey_font,
+              },
             }}
           />
           <Stack.Screen
@@ -99,13 +105,57 @@ export default function App(props) {
             component={BottomTabNavigator}
             options={{
               gestureEnabled: false,
+              headerTitleStyle: {
+                fontSize: 17,
+                fontFamily: "Inter-bold",
+                color: Colors.grey_font,
+              },
             }}
           />
-          <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-          <Stack.Screen name="Edit Offer" component={EditOfferScreen} />
-          <Stack.Screen name="Edit Details" component={EditDetailsScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen name="RequestsScreen" component={RequestsScreen} />
+          <Stack.Screen
+            name="Edit Profile"
+            component={EditProfileScreen}
+            options={{
+              headerTitleStyle: {
+                fontSize: 17,
+                fontFamily: "Inter-bold",
+                color: Colors.grey_font,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Edit Offer"
+            component={EditOfferScreen}
+            options={{
+              headerTitleStyle: {
+                fontSize: 17,
+                fontFamily: "Inter-bold",
+                color: Colors.grey_font,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Edit Details"
+            component={EditDetailsScreen}
+            options={{
+              headerTitleStyle: {
+                fontSize: 17,
+                fontFamily: "Inter-bold",
+                color: Colors.grey_font,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              headerTitleStyle: {
+                fontSize: 17,
+                fontFamily: "Inter-bold",
+                color: Colors.grey_font,
+              },
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
