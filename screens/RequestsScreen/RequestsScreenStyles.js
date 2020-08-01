@@ -76,9 +76,10 @@ const styles = StyleSheet.create({
     marginRight: "-450%",
   }, */
   dropdown_style2: {
-    minWidth: "-10%",
     paddingLeft: "20%",
     paddingRight: "20%",
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    borderColor: Colors.white
   },
   dropdown_container: {
     marginBottom: "3%",

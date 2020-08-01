@@ -24,7 +24,7 @@ const INITIAL_ROUTE_NAME = "Requests";
 
 export default function BottomTabNavigator({ navigation, route }) {
   const [choice, setChoice] = useState(0); // changes here are reflected on requests screen
-
+  const options = ["Requires Action", "In Progress", "Completed"];
   navigation.setOptions({
     headerTitle: getHeaderTitle(route, setChoice, choice),
     headerRight: () => (
@@ -54,8 +54,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       <BottomTab.Screen
         name="Requests"
         component={RequestsScreen}
-        initialParams={{ choice: choice, wtf: "bitch" }}
-        //initialParams={route.params}
+        initialParams={(route.params, { choice: choice })}
         options={{
           title: "Requests",
           tabBarIcon: ({ focused }) => (
@@ -102,9 +101,9 @@ export default function BottomTabNavigator({ navigation, route }) {
               label=" "
               data={options2}
               dropdownPosition={-4}
-              style={styles.dropdown_style2}
+              containerStyle={styles.dropdown_style2}
               textColor="#4F4F4F"
-              value={"Requires Action"}
+              value={options[choice]}
               defaultValue={"Requires Action"}
               labelFontSize={16}
               fontSize={16}

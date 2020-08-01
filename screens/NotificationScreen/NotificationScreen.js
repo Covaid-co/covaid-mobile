@@ -219,15 +219,6 @@ export default function NotificationScreen({ route, navigation }) {
               onPress={() => {
                 setCurrentItem(item);
                 setPendingModal(true);
-                // navigation.navigate("RequestsScreen", {
-                //   navigation: route.params,
-                //   currentItem: item,
-                //   pendingRequests: pendingRequests,
-                //   currScreen: "Notification",
-                //   currentRequestType: volunteer_status.PENDING,
-                //   choice: volunteer_status.PENDING,
-                //   pendingModalVisible: true,
-                // });
               }}
             >
               {displayRequestInfo(item)}
@@ -237,10 +228,8 @@ export default function NotificationScreen({ route, navigation }) {
       ) : (
         <View style={styles.nonewnotifs}>
           <Text style={texts.nonewnotifs}>
-            When you receive new requests
-            {/* , messages from your organization, or
-            updates from Covaid */}
-            , you will see them here!
+            When you receive new requests, messages from your organization, or
+            updates from Covaid, you will see them here!
           </Text>
         </View>
       )}
