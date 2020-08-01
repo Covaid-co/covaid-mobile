@@ -91,7 +91,21 @@ export default function App(props) {
     <View style={styles.container}>
       {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
       <NavigationContainer linking={LinkingConfiguration} ref={navigationRef}>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            headerStyle: {
+              borderBottomColor: "rgba(206, 206, 206,0.95)",
+              borderBottomWidth: 0.25,
+              shadowColor: Colors.shadowColor,
+              shadowOffset: {
+                height: 1,
+              },
+              shadowOpacity: 0.05,
+              shadowRadius: 4,
+            },
+          }}
+        >
           <Stack.Screen
             name="Login"
             component={LoginScreen}
