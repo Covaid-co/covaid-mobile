@@ -135,7 +135,7 @@ export default function ActiveModal(props) {
     );
   } else {
     return (
-      <Modal animationType="slide" transparent={true}>
+      <Modal animationType="slide" transparent={true} >
         <View style={styles.modal_background}>
           <View style={styles.active_modal_view}>
             <TouchableOpacity onPress={handleClose}>
