@@ -136,7 +136,6 @@ export default function RequestsScreen({ route, navigation }) {
         });
       }
     );
-    console.log("REQUESTS UE");
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
       Notifications.removeNotificationSubscription(responseListener);

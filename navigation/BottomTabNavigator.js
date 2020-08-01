@@ -26,7 +26,7 @@ const INITIAL_ROUTE_NAME = "Requests";
 export default function BottomTabNavigator({ navigation, route }) {
   const [choice, setChoice] = useState(0); // changes here are reflected on requests screen
   const options = ["Requires Action", "In Progress", "Completed"];
-  const colors = [Colors.red, Colors.orange, Colors.green];
+
   navigation.setOptions({
     headerTitle: getHeaderTitle(route, setChoice, choice),
     headerRight: () => (

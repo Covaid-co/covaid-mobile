@@ -26,7 +26,11 @@ import SettingsScreen from "./screens/SettingsScreen/SettingsScreen.js";
 
 const navigationRef = React.createRef();
 const Stack = createStackNavigator();
-
+const headerAttributes = {
+  fontSize: 17,
+  fontFamily: "Inter-bold",
+  color: Colors.grey_font,
+};
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
 
@@ -93,11 +97,7 @@ export default function App(props) {
             component={LoginScreen}
             options={{
               headerShown: false,
-              headerTitleStyle: {
-                fontSize: 17,
-                fontFamily: "Inter-bold",
-                color: Colors.grey_font,
-              },
+              headerTitleStyle: headerAttributes,
             }}
           />
           <Stack.Screen
@@ -105,55 +105,35 @@ export default function App(props) {
             component={BottomTabNavigator}
             options={{
               gestureEnabled: false,
-              headerTitleStyle: {
-                fontSize: 17,
-                fontFamily: "Inter-bold",
-                color: Colors.grey_font,
-              },
+              headerTitleStyle: headerAttributes,
             }}
           />
           <Stack.Screen
             name="Edit Profile"
             component={EditProfileScreen}
             options={{
-              headerTitleStyle: {
-                fontSize: 17,
-                fontFamily: "Inter-bold",
-                color: Colors.grey_font,
-              },
+              headerTitleStyle: headerAttributes,
             }}
           />
           <Stack.Screen
             name="Edit Offer"
             component={EditOfferScreen}
             options={{
-              headerTitleStyle: {
-                fontSize: 17,
-                fontFamily: "Inter-bold",
-                color: Colors.grey_font,
-              },
+              headerTitleStyle: headerAttributes,
             }}
           />
           <Stack.Screen
             name="Edit Details"
             component={EditDetailsScreen}
             options={{
-              headerTitleStyle: {
-                fontSize: 17,
-                fontFamily: "Inter-bold",
-                color: Colors.grey_font,
-              },
+              headerTitleStyle: headerAttributes,
             }}
           />
           <Stack.Screen
             name="Settings"
             component={SettingsScreen}
             options={{
-              headerTitleStyle: {
-                fontSize: 17,
-                fontFamily: "Inter-bold",
-                color: Colors.grey_font,
-              },
+              headerTitleStyle: headerAttributes,
             }}
           />
         </Stack.Navigator>
