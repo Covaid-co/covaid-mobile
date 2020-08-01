@@ -79,6 +79,8 @@ const styles = StyleSheet.create({
     minWidth: "-10%",
     paddingLeft: "20%",
     paddingRight: "20%",
+    backgroundColor: Colors.white,
+    borderColor: Colors.white
   },
   dropdown_container: {
     marginBottom: "3%",
