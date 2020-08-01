@@ -52,8 +52,8 @@ export default function BottomTabNavigator({ navigation, route }) {
         activeTintColor: Colors.blue,
         inactiveTintColor: Colors.light_grey_font,
         style: {
-          height: "11.5%",
-          paddingTop: "3%",
+          height: "11.25%",
+          paddingTop: 8,
           borderTopWidth: 1,
           borderTopColor: Colors.grey,
         },
