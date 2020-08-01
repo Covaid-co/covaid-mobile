@@ -135,7 +135,7 @@ export default function ActiveModal(props) {
     );
   } else {
     return (
-      <Modal animationType="slide" transparent={true} >
+      <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
           <View style={styles.active_modal_view}>
             <TouchableOpacity onPress={handleClose}>
@@ -153,52 +153,52 @@ export default function ActiveModal(props) {
               </Text>
             </View>
 
-            <View style={styles.info_scroll_container}>
-              <ScrollView style={styles.info_container}>
-                <Text style={texts.info_header}>Information</Text>
-                <Text style={texts.request_details}>
-                  Email: {props.item.requester_contact_email}
-                </Text>
-                <Text style={texts.request_details}>
-                  Phone: {props.item.requester_contact_phone}
-                </Text>
-                <Text style={texts.request_details}>
-                  Languages: {props.item.languages}
-                </Text>
+            <View style={styles.info_container}>
+              {/* <ScrollView style={styles.info_container}> */}
+              <Text style={texts.info_header}>Information</Text>
+              <Text style={texts.request_details}>
+                Email: {props.item.requester_contact_email}
+              </Text>
+              <Text style={texts.request_details}>
+                Phone: {props.item.requester_contact_phone}
+              </Text>
+              <Text style={texts.request_details}>
+                Languages: {props.item.languages}
+              </Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>Needs:</Text>
-                {showResourceBadges(props.item.resources.resource_request)}
+              <Text></Text>
+              <Text style={texts.details_header}>Needs</Text>
+              {showResourceBadges(props.item.resources.resource_request)}
 
-                <Text></Text>
-                <Text style={texts.details_header}>Details</Text>
-                <Text style={texts.request_details}>{props.item.details}</Text>
+              <Text></Text>
+              <Text style={texts.details_header}>Details</Text>
+              <Text style={texts.request_details}>{props.item.details}</Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>
-                  Message from your mutual aid group
-                </Text>
-                <Text style={texts.request_details}>
-                  {props.item.admin_msg || "None"}
-                </Text>
+              <Text></Text>
+              <Text style={texts.details_header}>
+                Message from your mutual aid group
+              </Text>
+              <Text style={texts.request_details}>
+                {props.item.admin_msg || "None"}
+              </Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>Needed by</Text>
-                <Text style={texts.request_details}>
-                  {props.item.needed_by.split(" ")[1]} of{" "}
-                  {formatDate(
-                    new Date(props.item.needed_by.split(" ")[0]),
-                    "MMMMMMMMMM dd, yyyy",
-                    false
-                  )}
-                </Text>
+              <Text></Text>
+              <Text style={texts.details_header}>Needed by</Text>
+              <Text style={texts.request_details}>
+                {props.item.needed_by.split(" ")[1]} of{" "}
+                {formatDate(
+                  new Date(props.item.needed_by.split(" ")[0]),
+                  "MMMMMMMMMM dd, yyyy",
+                  false
+                )}
+              </Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>Reimbursement</Text>
-                <Text style={texts.request_details}>
-                  {translatePayment(props.item.payment)}
-                </Text>
-              </ScrollView>
+              <Text></Text>
+              <Text style={texts.details_header}>Reimbursement</Text>
+              <Text style={texts.request_details}>
+                {translatePayment(props.item.payment)}
+              </Text>
+              {/* </ScrollView> */}
             </View>
 
             <Text></Text>

@@ -182,13 +182,15 @@ export default function PendingModal(props) {
       <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
           <View style={styles.pending_modal_view}>
-            <TouchableOpacity onPress={handleClose}>
+            <TouchableOpacity
+              style={{ marginBottom: -16, marginRight: 8 }}
+              onPress={handleClose}
+            >
               <Icon
                 name="close"
-                size={25}
+                size={24}
                 color="#7F7F7F"
                 style={buttons.close}
-                onPress={handleClose}
               />
             </TouchableOpacity>
 
@@ -196,67 +198,67 @@ export default function PendingModal(props) {
               <Text style={texts.individual_req_header}>New Request</Text>
             </View>
 
-            <View style={styles.info_scroll_container}>
-              <ScrollView style={styles.info_container}>
-                <Text style={texts.info_header}>Information</Text>
-                <Text style={texts.request_details}>
-                  Email: {props.item.requester_contact_email}
-                </Text>
-                <Text style={texts.request_details}>
-                  Phone: {props.item.requester_contact_phone}
-                </Text>
-                <Text style={texts.request_details}>
-                  Languages: {props.item.languages}
-                </Text>
+            <View style={styles.info_container}>
+              {/* <ScrollView style={styles.info_container}> */}
+              <Text style={texts.info_header}>Information</Text>
+              <Text style={texts.request_details}>
+                Email: {props.item.requester_contact_email}
+              </Text>
+              <Text style={texts.request_details}>
+                Phone: {props.item.requester_contact_phone}
+              </Text>
+              <Text style={texts.request_details}>
+                Languages: {props.item.languages}
+              </Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>Needs:</Text>
-                {showResourceBadges(props.item.resources.resource_request)}
+              <Text></Text>
+              <Text style={texts.details_header}>Needs</Text>
+              {showResourceBadges(props.item.resources.resource_request)}
 
-                <Text></Text>
-                <Text style={texts.details_header}>Details</Text>
-                <Text style={texts.request_details}>{props.item.details}</Text>
+              <Text></Text>
+              <Text style={texts.details_header}>Details</Text>
+              <Text style={texts.request_details}>{props.item.details}</Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>
-                  Message from your mutual aid group
-                </Text>
-                <Text style={texts.request_details}>
-                  {props.item.admin_msg || "None"}
-                </Text>
+              <Text></Text>
+              <Text style={texts.details_header}>
+                Message from your mutual aid group
+              </Text>
+              <Text style={texts.request_details}>
+                {props.item.admin_msg || "None"}
+              </Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>Needed by</Text>
-                <Text style={texts.request_details}>
-                  {props.item.needed_by.split(" ")[1]} of{" "}
-                  {formatDate(
-                    new Date(props.item.needed_by.split(" ")[0]),
-                    "MMMMMMMMMM dd, yyyy",
-                    false
-                  )}
-                </Text>
+              <Text></Text>
+              <Text style={texts.details_header}>Needed by</Text>
+              <Text style={texts.request_details}>
+                {props.item.needed_by.split(" ")[1]} of{" "}
+                {formatDate(
+                  new Date(props.item.needed_by.split(" ")[0]),
+                  "MMMMMMMMMM dd, yyyy",
+                  false
+                )}
+              </Text>
 
-                <Text></Text>
-                <Text style={texts.details_header}>Reimbursement</Text>
-                <Text style={texts.request_details}>
-                  {translatePayment(props.item.payment)}
-                </Text>
-              </ScrollView>
+              <Text></Text>
+              <Text style={texts.details_header}>Reimbursement</Text>
+              <Text style={texts.request_details}>
+                {translatePayment(props.item.payment)}
+              </Text>
+              {/* </ScrollView> */}
             </View>
-
-            <Text></Text>
-            <TouchableOpacity
-              style={buttons.accept}
-              onPress={() => acceptConfirm()}
-            >
-              <Text style={texts.button_label_white}>Accept</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={buttons.reject}
-              onPress={() => rejectConfirm()}
-            >
-              <Text style={texts.button_label_red}>Decline</Text>
-            </TouchableOpacity>
+            <View style={{ width: "100%", marginTop: 32 }}>
+              <TouchableOpacity
+                style={buttons.accept}
+                onPress={() => acceptConfirm()}
+              >
+                <Text style={texts.button_label_white}>Accept</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={buttons.reject}
+                onPress={() => rejectConfirm()}
+              >
+                <Text style={texts.button_label_red}>Decline</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

@@ -23,7 +23,9 @@ export default function RequestsScreen({ route, navigation }) {
   const [activeRequests, setActiveRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
   const [currentRequestList, setCurrentRequestList] = useState();
-  const [currentRequestType, setCurrentRequestType] = useState();
+  const [currentRequestType, setCurrentRequestType] = useState(
+    route.params.choice
+  );
   const [currentItem, setCurrentItem] = useState();
 
   const requestTypeList = [
@@ -100,7 +102,7 @@ export default function RequestsScreen({ route, navigation }) {
   useEffect(() => {
     setPendingModalVisible(route.params.pendingModalVisible);
     setCurrentItem(route.params.currentItem);
-    setCurrentRequestList(route.params.currentRequestType);
+    // setCurrentRequestList(route.params.currentRequestType);
     const unsubscribe = navigation.addListener("focus", () => handleAuth());
     navigation.setOptions = {
       title: "Chat",
@@ -430,7 +432,8 @@ export default function RequestsScreen({ route, navigation }) {
                 new Date(item.needed_by.split(" ")[0]),
                 "MMM d",
                 true
-              )}{" "}
+              )}
+              {"   "}
               {displayRequestIcon(reqType)}
             </Text>
           </View>

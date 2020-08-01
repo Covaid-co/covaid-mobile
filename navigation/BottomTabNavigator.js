@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   AsyncStorage,
   Text,
+  Image,
 } from "react-native";
 
 import { styles, texts } from "../screens/RequestsScreen/RequestsScreenStyles";
@@ -115,9 +116,10 @@ export default function BottomTabNavigator({ navigation, route }) {
     switch (routeName) {
       case "Requests":
         return () => (
-          <View>
+          <View style={{ flex: 1 }}>
             {Platform.OS === "ios" ? (
               <TouchableOpacity
+                style={{ flex: 1 }}
                 onPress={() =>
                   ActionSheetIOS.showActionSheetWithOptions(
                     {
@@ -138,11 +140,13 @@ export default function BottomTabNavigator({ navigation, route }) {
                   )
                 }
               >
-                <Text>
+                <View style={{ flex: 1, flexDirection: "row" }}>
                   <Text
                     style={{
                       fontSize: 17,
                       color: Colors.grey_font,
+                      marginTop: "auto",
+                      marginBottom: "auto",
                       // color: colors[choice],
                       fontWeight: "600",
                       fontFamily: "Inter-bold",
@@ -150,15 +154,33 @@ export default function BottomTabNavigator({ navigation, route }) {
                   >
                     {options[choice]}
                   </Text>
+                  {/* <Text
+                    style={{
+                      fontSize: 28,
+                      color: Colors.grey_font,
+                      fontFamily: "Inter-bold",
+                      marginTop: "auto",
+                      lineHeight: 19,
+                      marginBottom: "auto",
+                    }}
+                  >
+                    {" "}
+                    ▾▼▿▽
+                  </Text> */}
+
                   <Text
                     style={{
-                      fontSize: 15,
+                      marginTop: "auto",
+                      marginBottom: "auto",
+                      fontFamily: "Baloo Chettan 2 Medium",
+                      fontSize: 19,
+                      paddingBottom: 2.5,
                       color: Colors.grey_font,
                     }}
                   >
                     {"  "}▼
                   </Text>
-                </Text>
+                </View>
               </TouchableOpacity>
             ) : (
               <Dropdown

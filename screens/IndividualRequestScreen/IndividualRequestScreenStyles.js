@@ -77,12 +77,10 @@ const styles = StyleSheet.create({
   },
   pending_modal_view: {
     backgroundColor: Colors.white,
-    minWidth: "100%",
-    maxWidth: "100%",
-    maxHeight: "90%",
-    padding: "10%",
-    paddingBottom: "15%",
-    paddingTop: "0%",
+    paddingBottom: "10%",
+    paddingLeft: 18,
+    paddingRight: 20,
+    paddingTop: 12,
     alignItems: "center",
     shadowColor: Colors.shadowColor,
     shadowOffset: {
@@ -91,12 +89,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+
     position: "absolute",
     bottom: "0%",
-    textAlign: "left",
     borderTopColor: Colors.red,
-    borderWidth: 3,
+    borderTopWidth: 2.5,
   },
   active_modal_view: {
     backgroundColor: Colors.white,
@@ -143,10 +140,10 @@ const styles = StyleSheet.create({
   },
   header_container: {
     minWidth: "100%",
-    borderRadius: 5,
     borderWidth: 0.7,
     borderColor: "rgba(0, 0, 0, 0)",
     borderBottomColor: Colors.grey,
+    paddingBottom: 4,
     textAlign: "left",
   },
   info_container: {
@@ -154,6 +151,7 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     maxHeight: "100%",
     textAlign: "left",
+    marginLeft: 4,
   },
   info_scroll_container: {
     minWidth: "100%",
@@ -200,7 +198,9 @@ const styles = StyleSheet.create({
   resource_badge: {
     backgroundColor: Colors.blue,
     borderRadius: 20,
-    margin: "1%",
+    margin: 2,
+    marginTop: 4,
+    // margin: "1%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -214,12 +214,13 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
+    marginLeft: -2,
+    marginTop: 2,
   },
 });
 
 const buttons = StyleSheet.create({
   accept: {
-    width: 300,
     height: 50,
     backgroundColor: Colors.blue,
     borderColor: Colors.blue,
@@ -228,8 +229,7 @@ const buttons = StyleSheet.create({
     alignItems: "center",
   },
   reject: {
-    marginTop: "3%",
-    width: 300,
+    marginTop: 6,
     height: 50,
     borderColor: Colors.red,
     borderRadius: 8,
@@ -259,6 +259,7 @@ const buttons = StyleSheet.create({
     alignItems: "center",
   },
   close: {
+    height: "auto",
     left: "50%",
     bottom: "-50%",
   },
@@ -268,24 +269,28 @@ const texts = StyleSheet.create({
   individual_req_header: {
     fontFamily: "Montserrat-bold",
     color: Colors.gray1,
-    fontSize: 24,
-    marginBottom: "2%",
+    fontSize: 25,
+    marginBottom: 12,
   },
   info_header: {
     fontFamily: "Inter-bold",
-    color: Colors.black,
+    color: Colors.grey_font,
     fontSize: 16,
-    marginTop: "3%",
+    marginTop: 16,
+    marginBottom: 4,
   },
   details_header: {
     fontFamily: "Inter-bold",
     color: Colors.grey_font,
     fontSize: 16,
+    marginTop: 10,
+    marginBottom: 2,
   },
   request_details: {
     fontFamily: "Inter",
     color: Colors.light_grey_font,
     fontSize: 16,
+    lineHeight: 21,
   },
   completion_date: {
     fontFamily: "Inter",
@@ -316,8 +321,10 @@ const texts = StyleSheet.create({
   resource_text: {
     fontFamily: "Inter-bold",
     color: Colors.white,
-    paddingBottom: "2%",
-    margin: "2%",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     fontSize: 13,
   },
 });
