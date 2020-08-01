@@ -101,7 +101,7 @@ export default function BottomTabNavigator({ navigation, route }) {
               label=" "
               data={options2}
               dropdownPosition={-4}
-              style={styles.dropdown_style2}
+              containerStyle={styles.dropdown_style2}
               textColor="#4F4F4F"
               value={options[choice]}
               defaultValue={"Requires Action"}

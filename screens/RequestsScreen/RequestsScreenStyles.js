@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     minWidth: "-10%",
     paddingLeft: "20%",
     paddingRight: "20%",
-    backgroundColor: Colors.white,
+    backgroundColor: 'rgba(0, 0, 0, 0)',
     borderColor: Colors.white
   },
   dropdown_container: {
