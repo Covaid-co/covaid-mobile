@@ -136,6 +136,7 @@ export default function RequestsScreen({ route, navigation }) {
         });
       }
     );
+
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
       Notifications.removeNotificationSubscription(responseListener);
