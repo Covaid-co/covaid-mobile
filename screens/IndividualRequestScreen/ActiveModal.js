@@ -138,13 +138,15 @@ export default function ActiveModal(props) {
       <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
           <View style={styles.active_modal_view}>
-            <TouchableOpacity onPress={handleClose}>
+            <TouchableOpacity
+              style={{ marginBottom: -16, marginRight: 8 }}
+              onPress={handleClose}
+            >
               <Icon
                 name="close"
-                size={25}
+                size={24}
                 color="#7F7F7F"
                 style={buttons.close}
-                onPress={handleClose}
               />
             </TouchableOpacity>
             <View style={styles.header_container}>
@@ -200,21 +202,20 @@ export default function ActiveModal(props) {
               </Text>
               {/* </ScrollView> */}
             </View>
-
-            <Text></Text>
-            <TouchableOpacity
-              style={buttons.accept}
-              onPress={() => setConfirmModalVisible(true)}
-            >
-              <Text style={texts.button_label_white}>Mark Complete ✓</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={buttons.reject}
-              onPress={() => cancelConfirm()}
-            >
-              <Text style={texts.button_label_red}>Unmatch Request</Text>
-            </TouchableOpacity>
-
+            <View style={{ width: "100%", marginTop: 32 }}>
+              <TouchableOpacity
+                style={buttons.accept}
+                onPress={() => setConfirmModalVisible(true)}
+              >
+                <Text style={texts.button_label_white}>Mark Complete ✓</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={buttons.reject}
+                onPress={() => cancelConfirm()}
+              >
+                <Text style={texts.button_label_red}>Unmatch Request</Text>
+              </TouchableOpacity>
+            </View>
             {confirmModalVisible && (
               <ConfirmModal
                 modalVisible={setConfirmModalVisible}

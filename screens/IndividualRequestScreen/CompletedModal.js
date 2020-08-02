@@ -21,26 +21,27 @@ export default function CompletedModal(props) {
     <Modal animationType="slide" transparent={true}>
       <View style={styles.modal_background}>
         <View style={styles.completed_modal_view}>
-          <TouchableOpacity onPress={handleClose}>
+          <TouchableOpacity
+            style={{ marginBottom: -16, marginRight: 8 }}
+            onPress={handleClose}
+          >
             <Icon
               name="close"
-              size={25}
+              size={24}
               color="#7F7F7F"
               style={buttons.close}
-              onPress={handleClose}
             />
           </TouchableOpacity>
 
           <View style={styles.header_container}>
             <Text style={texts.individual_req_header}>
-              {props.item.requester_name}{" "}
+              {props.item.requester_name}
             </Text>
           </View>
 
           <View style={styles.info_container}>
             {/* <ScrollView style={styles.info_container}> */}
-            <Text></Text>
-            <Text style={texts.details_header}>Needs</Text>
+            <Text style={texts.info_header}>Needs</Text>
             {showResourceBadges(props.item.resources.resource_request)}
 
             <Text></Text>
@@ -74,7 +75,6 @@ export default function CompletedModal(props) {
             {/* </ScrollView> */}
           </View>
           <View style={styles.complete_date_container}>
-            <Text></Text>
             <Text style={texts.completion_date}>Request completed on</Text>
             <Text style={texts.completion_date}>
               {formatDate(

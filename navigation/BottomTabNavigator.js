@@ -55,7 +55,8 @@ export default function BottomTabNavigator({ navigation, route }) {
           height: "11.25%",
           paddingTop: 8,
           borderTopWidth: 1,
-          borderTopColor: Colors.grey,
+          // borderTopColor: Colors.grey,
+          borderTopColor: "rgba(206, 206, 206,0.75)",
         },
       }}
     >
