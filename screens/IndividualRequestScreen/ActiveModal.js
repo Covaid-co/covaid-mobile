@@ -119,16 +119,25 @@ export default function ActiveModal(props) {
           <View style={styles.rejected_modal_view}>
             <View style={styles.header_container}>
               <Text style={texts.individual_req_header}>
-                Request Cancelled{" "}
-                <Icon name="close" size={35} color="#7F7F7F" />
+                Request has been unmatched.
               </Text>
             </View>
-            <Text></Text>
-            <Text></Text>
-            <Text></Text>
-            <TouchableOpacity style={buttons.back} onPress={handleClose}>
-              <Text style={texts.button_label_blue}>Back to Tasks</Text>
-            </TouchableOpacity>
+            <View style={styles.info_container}>
+              <Text
+                style={{
+                  ...texts.request_details,
+                  marginTop: 16,
+                  marginBottom: 12,
+                }}
+              >
+                No worries, we’ll get someone connected to this individual as
+                soon as possible!
+              </Text>
+              <Text></Text>
+              <TouchableOpacity style={buttons.back} onPress={handleClose}>
+                <Text style={texts.back_to_tasks}>Back</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

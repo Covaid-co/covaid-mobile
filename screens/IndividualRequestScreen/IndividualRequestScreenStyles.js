@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     paddingBottom: "10%",
     paddingLeft: 18,
     paddingRight: 20,
-    paddingTop: 12,
-    alignItems: "center",
+    paddingTop: 16,
     shadowColor: Colors.shadowColor,
     shadowOffset: {
       width: 0,
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     position: "absolute",
     bottom: "0%",
-    borderTopColor: Colors.light_grey_font,
+    borderTopColor: Colors.red,
     borderTopWidth: 2.5,
   },
   accepted_modal_view: {
