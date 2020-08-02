@@ -138,22 +138,42 @@ export default function PendingModal(props) {
       <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
           <View style={styles.accepted_modal_view}>
-            <View style={styles.header_container}>
-              <Text style={texts.individual_req_header}>
-                Request Accepted <Icon name="check" size={35} color="#2670FF" />
-              </Text>
+            <View
+              style={{
+                ...styles.header_container,
+                paddingTop: 16,
+                paddingBottom: 0,
+                flex: 1,
+                flexDirection: "row",
+              }}
+            >
+              <Text style={texts.individual_req_header}>Request Accepted</Text>
+              <View onPress={handleClose}>
+                <Icon
+                  name="check"
+                  size={44}
+                  color="#2670FF"
+                  style={buttons.close2}
+                />
+              </View>
             </View>
-            <Text style={texts.request_details}>
-              Thank you for your help! We appreciate your willingness to give
-              back.
-            </Text>
-            <Text></Text>
 
-            <TouchableOpacity style={buttons.back} onPress={handleClose}>
-              <Text style={texts.button_label_blue}>Back to Tasks</Text>
-            </TouchableOpacity>
-            <Text></Text>
-            <Text></Text>
+            <View style={styles.info_container}>
+              <Text
+                style={{
+                  ...texts.request_details,
+                  marginTop: 16,
+                  marginBottom: 12,
+                }}
+              >
+                Thank you for your help! We appreciate your willingness to give
+                back.
+              </Text>
+              <Text></Text>
+              <TouchableOpacity style={buttons.back} onPress={handleClose}>
+                <Text style={texts.back_to_tasks}>Back to Tasks</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
