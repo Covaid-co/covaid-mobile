@@ -9,6 +9,7 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
+import Colors from "../../public/Colors";
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, formatDate, translatePayment } from "../../Helpers";
@@ -93,21 +94,42 @@ export default function ActiveModal(props) {
     return (
       <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
-          <View style={styles.done_req_modal_view}>
-            <View style={styles.header_container}>
-              <Text style={texts.individual_req_header}>
-                Request Complete!{" "}
-                <Icon name="check" size={35} color="#3ABD24" />
-              </Text>
+          <View style={styles.completed_modal_view}>
+            <View
+              style={{
+                ...styles.header_container,
+                paddingTop: 14,
+                flex: 1,
+                flexDirection: "row",
+              }}
+            >
+              <Text style={texts.individual_req_header}>Request Complete!</Text>
+              <View style={{ marginTop: -14 }}>
+                <Icon
+                  name="check"
+                  size={52}
+                  color={Colors.green}
+                  style={buttons.green_check}
+                />
+              </View>
             </View>
-            <Text style={texts.request_details}>
-              Thank you for completing the request! We appreciate your help.
-            </Text>
-            <Text></Text>
-            <Text></Text>
-            <TouchableOpacity style={buttons.back} onPress={handleClose}>
-              <Text style={texts.button_label_blue}>Back to Tasks</Text>
-            </TouchableOpacity>
+
+            <View style={styles.info_container}>
+              <Text
+                style={{
+                  ...texts.request_details,
+                  marginTop: 20,
+                  marginBottom: 16,
+                }}
+              >
+                Thank you for your help! We appreciate your willingness to give
+                back.
+              </Text>
+              <Text></Text>
+              <TouchableOpacity style={buttons.back} onPress={handleClose}>
+                <Text style={texts.back_to_tasks}>Back to Tasks</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -126,8 +148,8 @@ export default function ActiveModal(props) {
               <Text
                 style={{
                   ...texts.request_details,
-                  marginTop: 16,
-                  marginBottom: 12,
+                  marginTop: 20,
+                  marginBottom: 16,
                 }}
               >
                 No worries, we’ll get someone connected to this individual as
@@ -135,7 +157,7 @@ export default function ActiveModal(props) {
               </Text>
               <Text></Text>
               <TouchableOpacity style={buttons.back} onPress={handleClose}>
-                <Text style={texts.back_to_tasks}>Back</Text>
+                <Text style={texts.back_to_tasks}>Back to Tasks</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -164,8 +186,8 @@ export default function ActiveModal(props) {
               </Text>
             </View>
 
-            <View style={styles.info_container}>
-              {/* <ScrollView style={styles.info_container}> */}
+            {/* <View style={styles.info_container}> */}
+            <ScrollView style={styles.info_container}>
               <Text style={texts.info_header}>Information</Text>
               <Text style={texts.request_details}>
                 Email: {props.item.requester_contact_email}
@@ -209,8 +231,8 @@ export default function ActiveModal(props) {
               <Text style={texts.request_details}>
                 {translatePayment(props.item.payment)}
               </Text>
-              {/* </ScrollView> */}
-            </View>
+            </ScrollView>
+            {/* </View> */}
             <View style={{ width: "100%", marginTop: 32 }}>
               <TouchableOpacity
                 style={buttons.accept}
@@ -228,10 +250,9 @@ export default function ActiveModal(props) {
             {confirmModalVisible && (
               <ConfirmModal
                 modalVisible={setConfirmModalVisible}
+                activeList={props.activeList}
                 item={props.item}
                 setDone={setDone}
-                activeList={props.activeList}
-                completeList={props.completeList}
               />
             )}
           </View>

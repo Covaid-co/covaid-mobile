@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
     // borderTopColor: Colors.grey,
     // borderTopWidth: 0.75,
   },
+  loading: {
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   dot: {
     backgroundColor: Colors.deadlineRed,
     borderRadius: 5,

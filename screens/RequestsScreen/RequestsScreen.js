@@ -76,6 +76,7 @@ export default function RequestsScreen({ route, navigation }) {
         storage_keys.SAVE_TOKEN_KEY
       );
       if (tokenHolder) {
+        console.log("HANDLING AUTH WITH TOKENHOLDER");
         setToken(tokenHolder);
         fetchRequests(
           volunteer_status.PENDING,
@@ -102,7 +103,6 @@ export default function RequestsScreen({ route, navigation }) {
   useEffect(() => {
     setPendingModalVisible(route.params.pendingModalVisible);
     setCurrentItem(route.params.currentItem);
-    // setCurrentRequestList(route.params.currentRequestType);
     const unsubscribe = navigation.addListener("focus", () => handleAuth());
     navigation.setOptions = {
       title: "Chat",
@@ -251,6 +251,7 @@ export default function RequestsScreen({ route, navigation }) {
   // };
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
+    console.log("IN GENERATEREQLIST: stATUs = ", reqStatus);
     let tempList = [];
     for (var i = 0; i < requestData.length; i++) {
       var element = {
@@ -276,9 +277,9 @@ export default function RequestsScreen({ route, navigation }) {
       tempList.push(element);
     }
 
-    if (tempList[0] && tempList[0].status === currentRequestType) {
+    if (requestData.length !== 0 && reqStatus === currentRequestType) {
       setCurrentRequestList(tempList);
-      setCurrentRequestType(tempList[0].status);
+      setCurrentRequestType(reqStatus);
     }
     requestStateChanger(tempList);
     return tempList;
@@ -294,9 +295,7 @@ export default function RequestsScreen({ route, navigation }) {
       .then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            setTimeout(function () {
-              generateRequestList(data, requestStateChanger, reqStatus);
-            }, 750);
+            generateRequestList(data, requestStateChanger, reqStatus);
           });
         } else {
           console.log("Error");
@@ -317,7 +316,7 @@ export default function RequestsScreen({ route, navigation }) {
     return <Text>Loading...</Text>;
   }
   function displayAllRequests(reqList) {
-    if (reqList && reqList.length == 0) {
+    if (reqList && reqList.length === 0) {
       return (
         <>
           <View style={styles.container}>
@@ -359,41 +358,53 @@ export default function RequestsScreen({ route, navigation }) {
                 item={currentItem}
               />
             )}
-            <FlatList
-              data={currentRequestList || pendingRequests}
-              contentContainerStyle={styles.center}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={getContainerType(currentRequestType)}
-                  onPress={() => {
-                    setCurrentItem(item);
-                    if (
-                      currentRequestType == volunteer_status.PENDING ||
-                      currentRequestType == null
-                    ) {
-                      setPendingModalVisible(true);
-                      setActiveModalVisible(false);
-                      setCompletedModalVisible(false);
-                    } else if (
-                      currentRequestType == volunteer_status.IN_PROGRESS
-                    ) {
-                      setPendingModalVisible(false);
-                      setActiveModalVisible(true);
-                      setCompletedModalVisible(false);
-                    } else if (
-                      currentRequestType == volunteer_status.COMPLETE
-                    ) {
-                      setPendingModalVisible(false);
-                      setActiveModalVisible(false);
-                      setCompletedModalVisible(true);
-                    }
-                  }}
-                >
-                  {displayRequestInfo(currentRequestType, item)}
-                </TouchableOpacity>
-              )}
-            />
+            {currentRequestList ? (
+              <FlatList
+                data={currentRequestList || reqList || pendingRequests}
+                contentContainerStyle={styles.center}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={getContainerType(currentRequestType)}
+                    onPress={() => {
+                      setCurrentItem(item);
+                      if (
+                        currentRequestType == volunteer_status.PENDING ||
+                        currentRequestType == null
+                      ) {
+                        setPendingModalVisible(true);
+                        setActiveModalVisible(false);
+                        setCompletedModalVisible(false);
+                      } else if (
+                        currentRequestType == volunteer_status.IN_PROGRESS
+                      ) {
+                        setPendingModalVisible(false);
+                        setActiveModalVisible(true);
+                        setCompletedModalVisible(false);
+                      } else if (
+                        currentRequestType == volunteer_status.COMPLETE
+                      ) {
+                        setPendingModalVisible(false);
+                        setActiveModalVisible(false);
+                        setCompletedModalVisible(true);
+                      }
+                    }}
+                  >
+                    {displayRequestInfo(currentRequestType, item)}
+                  </TouchableOpacity>
+                )}
+              />
+            ) : (
+              <View style={styles.container}>
+                <View style={styles.center}>
+                  <View style={styles.no_request}>
+                    <Text style={texts.no_request_text}>
+                      {getEmptyMessage(currentRequestType)}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
           </View>
         </>
       );

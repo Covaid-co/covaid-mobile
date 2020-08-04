@@ -68,7 +68,9 @@ export default function PendingModal(props) {
           if (response.ok) {
             //alert("Accepted request.")
             removeFromArray(props.item, props.pendingList);
-            props.activeList.push(props.item);
+            if (props.activeList) {
+              props.activeList.push(props.item);
+            }
           } else {
             alert("Unable to accept, please email us at covaidco@gmail.com.");
           }
@@ -120,6 +122,7 @@ export default function PendingModal(props) {
         .then((response) => {
           if (response.ok) {
             // TODO: Move it from pending to active on RequestsScreen
+            console.log("removing from array");
             removeFromArray(props.item, props.pendingList);
             //alert("Rejected request.")
           } else {
@@ -141,19 +144,18 @@ export default function PendingModal(props) {
             <View
               style={{
                 ...styles.header_container,
-                paddingTop: 16,
-                paddingBottom: 0,
+                paddingTop: 14,
                 flex: 1,
                 flexDirection: "row",
               }}
             >
               <Text style={texts.individual_req_header}>Request Accepted</Text>
-              <View onPress={handleClose}>
+              <View style={{ marginTop: -14 }}>
                 <Icon
                   name="check"
-                  size={44}
+                  size={52}
                   color="#2670FF"
-                  style={buttons.close2}
+                  style={buttons.blue_check}
                 />
               </View>
             </View>
@@ -162,8 +164,8 @@ export default function PendingModal(props) {
               <Text
                 style={{
                   ...texts.request_details,
-                  marginTop: 16,
-                  marginBottom: 12,
+                  marginTop: 20,
+                  marginBottom: 16,
                 }}
               >
                 Thank you for your help! We appreciate your willingness to give
@@ -171,7 +173,9 @@ export default function PendingModal(props) {
               </Text>
               <Text></Text>
               <TouchableOpacity style={buttons.back} onPress={handleClose}>
-                <Text style={texts.back_to_tasks}>Back to Tasks</Text>
+                <Text style={texts.back_to_tasks}>
+                  Back to {props.fromNotif === true ? "Notifications" : "Tasks"}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -186,13 +190,24 @@ export default function PendingModal(props) {
             <View style={styles.header_container}>
               <Text style={texts.individual_req_header}>Request Rejected</Text>
             </View>
-            <Text></Text>
-            <Text></Text>
-            <TouchableOpacity style={buttons.back} onPress={handleClose}>
-              <Text style={texts.button_label_blue}>Back to Tasks</Text>
-            </TouchableOpacity>
-            <Text></Text>
-            <Text></Text>
+            <View style={styles.info_container}>
+              <Text
+                style={{
+                  ...texts.request_details,
+                  marginTop: 20,
+                  marginBottom: 16,
+                }}
+              >
+                No worries, we’ll get someone connected to this individual as
+                soon as possible!
+              </Text>
+              <Text></Text>
+              <TouchableOpacity style={buttons.back} onPress={handleClose}>
+                <Text style={texts.back_to_tasks}>
+                  Back to {props.fromNotif === true ? "Notifications" : "Tasks"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -218,8 +233,7 @@ export default function PendingModal(props) {
               <Text style={texts.individual_req_header}>New Request</Text>
             </View>
 
-            <View style={styles.info_container}>
-              {/* <ScrollView style={styles.info_container}> */}
+            <ScrollView style={styles.info_container}>
               <Text style={texts.info_header}>Information</Text>
               <Text style={texts.request_details}>
                 Email: {props.item.requester_contact_email}
@@ -263,8 +277,7 @@ export default function PendingModal(props) {
               <Text style={texts.request_details}>
                 {translatePayment(props.item.payment)}
               </Text>
-              {/* </ScrollView> */}
-            </View>
+            </ScrollView>
             <View style={{ width: "100%", marginTop: 32 }}>
               <TouchableOpacity
                 style={buttons.accept}
