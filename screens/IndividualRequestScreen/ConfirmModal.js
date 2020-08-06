@@ -112,17 +112,23 @@ export default function ConfirmModal(props) {
             paddingBottom: keyboardHeight,
           }}
         >
-          <TouchableOpacity
-            style={{ marginBottom: -16, marginRight: 8 }}
-            onPress={handleClose}
-          >
-            <Icon
-              name="close"
-              size={24}
-              color="#7F7F7F"
-              style={buttons.close}
-            />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{ alignItems: 'right' }}
+              onPress={() => {handleClose()}}
+            >
+              <View
+                style={{ minHeight: 50, minWidth: 50, marginRight: 10, marginTop: -20}}
+              >
+                <Icon
+                  name="close"
+                  size={32}
+                  color="#7F7F7F"
+                  style={buttons.close}
+                  onPress={() => {handleClose()}}
+                />
+              </View>
+              
+            </TouchableOpacity>
           <View style={styles.header_container}>
             <Text style={texts.individual_req_header}>Confirmation</Text>
           </View>

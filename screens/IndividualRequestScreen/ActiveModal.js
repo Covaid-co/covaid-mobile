@@ -170,15 +170,21 @@ export default function ActiveModal(props) {
         <View style={styles.modal_background}>
           <View style={styles.active_modal_view}>
             <TouchableOpacity
-              style={{ marginBottom: -16, marginRight: 8 }}
-              onPress={handleClose}
+              style={{ alignItems: 'right' }}
+              onPress={() => {handleClose()}}
             >
-              <Icon
-                name="close"
-                size={24}
-                color="#7F7F7F"
-                style={buttons.close}
-              />
+              <View
+                style={{ minHeight: 50, minWidth: 50, marginRight: 10, marginTop: -20}}
+              >
+                <Icon
+                  name="close"
+                  size={32}
+                  color="#7F7F7F"
+                  style={buttons.close}
+                  onPress={() => {handleClose()}}
+                />
+              </View>
+              
             </TouchableOpacity>
             <View style={styles.header_container}>
               <Text style={texts.individual_req_header}>
