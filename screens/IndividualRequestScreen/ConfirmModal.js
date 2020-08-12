@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  AsyncStorage,
-  Modal,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Modal } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";

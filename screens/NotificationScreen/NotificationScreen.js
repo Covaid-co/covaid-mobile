@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  TouchableHighlight,
-  View,
-  AsyncStorage,
-  FlatList,
-} from "react-native";
+import { Text, TouchableHighlight, View, FlatList } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import { styles, texts } from "./NotificationStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import PendingModal from "../IndividualRequestScreen/PendingModal";

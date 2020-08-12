@@ -5,10 +5,10 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
-  AsyncStorage,
   Alert,
   ScrollView,
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, formatDate, translatePayment } from "../../Helpers";

@@ -6,7 +6,6 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  AsyncStorage,
   Text,
 } from "react-native";
 

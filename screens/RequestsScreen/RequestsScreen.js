@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  AsyncStorage,
-} from "react-native";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import { styles, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import { generateURL, formatDate } from "../../Helpers";

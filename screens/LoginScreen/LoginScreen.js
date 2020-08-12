@@ -5,11 +5,11 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  AsyncStorage,
   Animated,
   Keyboard,
   Linking,
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import fetch_a from "../../util/fetch_auth";
 import { styles, buttons, texts } from "./LoginScreenStyles";
 import { homeURL, storage_keys } from "../../constants";

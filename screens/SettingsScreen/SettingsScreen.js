@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  AsyncStorage,
-} from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import Colors from "../../public/Colors";
 
 import { styles, buttons, texts } from "./SettingsScreenStyles";

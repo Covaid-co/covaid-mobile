@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   View,
-  AsyncStorage,
   Image,
   Alert,
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import * as Permissions from "expo-permissions";
 import fetch_a from "../../util/fetch_auth";
 import { homeURL, storage_keys } from "../../constants";

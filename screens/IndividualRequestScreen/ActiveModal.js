@@ -5,10 +5,10 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
-  AsyncStorage,
   Alert,
   ScrollView,
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import { styles, buttons, texts } from "./IndividualRequestScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL, formatDate, translatePayment } from "../../Helpers";
@@ -135,7 +135,7 @@ export default function ActiveModal(props) {
     );
   } else {
     return (
-      <Modal animationType="slide" transparent={true} >
+      <Modal animationType="slide" transparent={true}>
         <View style={styles.modal_background}>
           <View style={styles.active_modal_view}>
             <TouchableOpacity onPress={handleClose}>

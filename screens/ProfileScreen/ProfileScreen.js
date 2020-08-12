@@ -6,12 +6,12 @@ import {
   ScrollView,
   Switch,
   ActivityIndicator,
-  AsyncStorage,
   Image,
   TextInput,
   Alert,
   Keyboard,
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import Colors from "../../public/Colors";
 
 import { styles, texts } from "./ProfileScreenStyles";

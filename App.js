@@ -7,8 +7,9 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  AsyncStorage,
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
+
 import TabBarIcon from "./components/TabBarIcon.js";
 import useCachedResources from "./hooks/useCachedResources";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
