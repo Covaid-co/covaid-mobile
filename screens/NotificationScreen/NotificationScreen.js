@@ -12,6 +12,7 @@ import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import PendingModal from "../IndividualRequestScreen/PendingModal";
 import { generateURL } from "../../Helpers";
 import fetch_a from "../../util/fetch_auth";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
