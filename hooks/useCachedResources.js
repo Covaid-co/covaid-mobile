@@ -22,6 +22,7 @@ export default function useCachedResources() {
           Inter: require("../assets/fonts/Inter/Inter-Regular.ttf"),
           "Inter-bold": require("../assets/fonts/Inter/Inter-Bold.ttf"),
           "Inter-semibold": require("../assets/fonts/Inter/Inter-SemiBold.ttf"),
+          "Inter-medium": require("../assets/fonts/Inter/Inter-Medium.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

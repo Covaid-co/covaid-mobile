@@ -76,16 +76,14 @@ const styles = StyleSheet.create({
     marginRight: "-450%",
   }, */
   dropdown_style2: {
-    paddingLeft: "20%",
-    paddingRight: "20%",
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    borderColor: Colors.white
-  },
-  dropdown_container: {
-    marginBottom: "3%",
-    alignItems: "center",
-    minWidth: "100%",
-    maxWidth: "100%",
+    // alignItems: "center",
+    // borderWidth: 0,
+    fontSize: 17,
+    fontWeight: "600",
+    backgroundColor: "rgba(0, 0, 0, 0)",
+    borderRadius: 8,
+    height: 64,
+    marginBottom: 18,
   },
   /*dropdown_old_style: {
     minWidth: '90%',

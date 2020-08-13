@@ -8,6 +8,15 @@ const styles = StyleSheet.create({
     paddingLeft: 19,
     paddingRight: 24,
     paddingTop: 21,
+    borderBottomColor: "rgba(206, 206, 206,0.7)",
+    borderBottomWidth: 0.25,
+    // borderTopColor: Colors.grey,
+    // borderTopWidth: 0.75,
+  },
+  loading: {
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   dot: {
     backgroundColor: Colors.deadlineRed,

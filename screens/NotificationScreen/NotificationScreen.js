@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableHighlight, View, FlatList } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
+import {
+  Text,
+  TouchableHighlight,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { styles, texts } from "./NotificationStyles";
+import Colors from "../../public/Colors";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import PendingModal from "../IndividualRequestScreen/PendingModal";
 import { generateURL } from "../../Helpers";
@@ -123,6 +129,7 @@ export default function NotificationScreen({ route, navigation }) {
         timestamp: request.time_posted,
       });
     });
+    console.log("setting pendings");
     setPendingRequests(pending.reverse());
     setLoading(false);
   }
@@ -197,11 +204,14 @@ export default function NotificationScreen({ route, navigation }) {
           modalVisible={setPendingModal}
           item={currentItem}
           pendingList={pendingRequests}
+          fromNotif={true}
         />
       )}
       {loading ? (
-        <></>
-      ) : pendingRequests[0] ? (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color={Colors.blue} />
+        </View>
+      ) : pendingRequests.length > 0 ? (
         <FlatList
           keyExtractor={(item, index) => {
             return index.toString();

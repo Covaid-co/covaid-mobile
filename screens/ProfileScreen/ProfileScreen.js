@@ -454,10 +454,12 @@ export default function ProfileScreen({ route, navigation }) {
           <Text style={texts.name}>
             {user.first_name + " " + user.last_name}
           </Text>
+          <Text style={texts.association}>
+            {user.association_name && user.association_name.length > 0
+              ? user.association_name
+              : "Covaid Volunteer"}
+          </Text>
 
-          {user.association_name.length > 0 && (
-            <Text style={texts.association}>{user.association_name}</Text>
-          )}
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("Edit Profile", { user: user, token: token })
@@ -481,7 +483,13 @@ export default function ProfileScreen({ route, navigation }) {
             ios_backgroundColor={Colors.light_grey_font}
             onValueChange={toggleSwitch}
             value={publish}
-            style={{ marginLeft: "auto" }}
+            style={{
+              marginTop: 6,
+              marginLeft: "auto",
+              // height: "100%",
+              marginRight: -8,
+              transform: [{ scaleX: 0.8 }, { scaleY: 0.775 }],
+            }}
           />
         </View>
         <View
