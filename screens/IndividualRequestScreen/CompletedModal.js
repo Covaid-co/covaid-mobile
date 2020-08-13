@@ -21,60 +21,70 @@ export default function CompletedModal(props) {
     <Modal animationType="slide" transparent={true}>
       <View style={styles.modal_background}>
         <View style={styles.completed_modal_view}>
-          <TouchableOpacity onPress={handleClose}>
-            <Icon
-              name="close"
-              size={25}
-              color="#7F7F7F"
-              style={buttons.close}
-              onPress={handleClose}
-            />
-          </TouchableOpacity>
-
-          <View style={styles.header_container}>
-            <Text style={texts.individual_req_header}>
-              {props.item.requester_name}{" "}
+          <View
+            style={{
+              ...styles.header_container,
+              flex: 1,
+              flexDirection: "row",
+              paddingTop: 8,
+              paddingBottom: 8,
+            }}
+          >
+            <Text style={{ ...texts.individual_req_header, flex: 1 }}>
+              {props.item.requester_name}
             </Text>
+            <TouchableOpacity
+              style={{ alignItems: "right" }}
+              onPress={() => {
+                handleClose();
+              }}
+            >
+              <Icon
+                name="close"
+                size={32}
+                color="#7F7F7F"
+                style={buttons.close}
+                onPress={() => {
+                  handleClose();
+                }}
+              />
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.info_container}>
-            <ScrollView style={styles.info_container}>
-              <Text></Text>
-              <Text style={texts.details_header}>Needs:</Text>
-              {showResourceBadges(props.item.resources.resource_request)}
+          <ScrollView style={styles.info_container}>
+            <Text style={texts.info_header}>Needs</Text>
+            {showResourceBadges(props.item.resources.resource_request)}
 
-              <Text></Text>
-              <Text style={texts.details_header}>Details</Text>
-              <Text style={texts.request_details}>{props.item.details}</Text>
-
-              <Text></Text>
-              <Text style={texts.details_header}>
-                Message from your mutual aid group
-              </Text>
-              <Text style={texts.request_details}>
-                {props.item.admin_msg || "None"}
-              </Text>
-
-              <Text></Text>
-              <Text style={texts.details_header}>Needed by</Text>
-              <Text style={texts.request_details}>
-                {props.item.needed_by.split(" ")[1]} of{" "}
-                {formatDate(
-                  new Date(props.item.needed_by.split(" ")[0]),
-                  "MMMMMMMMMM dd, yyyy",
-                  false
-                )}
-              </Text>
-
-              <Text></Text>
-              <Text style={texts.details_header}>Reimbursement</Text>
-              <Text style={texts.request_details}>
-                {translatePayment(props.item.payment)}
-              </Text>
-            </ScrollView>
-          </View>
-          <View style={styles.complete_date_container}>
             <Text></Text>
+            <Text style={texts.details_header}>Details</Text>
+            <Text style={texts.request_details}>{props.item.details}</Text>
+
+            <Text></Text>
+            <Text style={texts.details_header}>
+              Message from your mutual aid group
+            </Text>
+            <Text style={texts.request_details}>
+              {props.item.admin_msg || "None"}
+            </Text>
+
+            <Text></Text>
+            <Text style={texts.details_header}>Needed by</Text>
+            <Text style={texts.request_details}>
+              {props.item.needed_by.split(" ")[1]} of{" "}
+              {formatDate(
+                new Date(props.item.needed_by.split(" ")[0]),
+                "MMMMMMMMMM dd, yyyy",
+                false
+              )}
+            </Text>
+
+            <Text></Text>
+            <Text style={texts.details_header}>Reimbursement</Text>
+            <Text style={texts.request_details}>
+              {translatePayment(props.item.payment)}
+            </Text>
+          </ScrollView>
+          <View style={styles.complete_date_container}>
             <Text style={texts.completion_date}>Request completed on</Text>
             <Text style={texts.completion_date}>
               {formatDate(

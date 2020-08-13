@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
+  Animated,
   TextInput,
+  FlatList,
+  Keyboard,
   AsyncStorage,
   Modal,
 } from "react-native";
@@ -19,6 +22,39 @@ import Icon from "react-native-vector-icons/SimpleLineIcons";
  */
 export default function ConfirmModal(props) {
   const [message, setMessage] = useState("");
+  const [isFocused, setFocus] = useState(false);
+  const [keyboardHeight] = useState(new Animated.Value(46));
+  const heightFactor = 1.2;
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardWillShow", _keyboardWillShow);
+    Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
+    console.log("called. keyboardHeight: ", keyboardHeight);
+    return () => {
+      Keyboard.removeListener("keyboardWillShow", _keyboardWillShow);
+      Keyboard.removeListener("keyboardWillHide", _keyboardWillHide);
+    };
+  }, []);
+
+  const _keyboardWillShow = (event) => {
+    console.log("ENDHEIGHT: ", event.endCoordinates.height);
+    setFocus(true);
+    Animated.timing(keyboardHeight, {
+      duration: event.duration * 0.9,
+      toValue: event.endCoordinates.height * heightFactor,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const _keyboardWillHide = (event) => {
+    console.log("STARTHEIGHT: ", event.endCoordinates.height);
+    setFocus(false);
+    Animated.timing(keyboardHeight, {
+      duration: event.duration * 0.9,
+      toValue: 46,
+      useNativeDriver: false,
+    }).start();
+  };
 
   function handleConfirm() {
     completeRequest();
@@ -70,44 +106,73 @@ export default function ConfirmModal(props) {
   return (
     <Modal animationType="slide" transparent={true}>
       <View style={styles.modal_background}>
-        <View style={styles.confirm_modal_view}>
-          <TouchableOpacity onPress={handleClose}>
-            <Icon
-              name="close"
-              size={25}
-              color="#7F7F7F"
-              style={buttons.close}
-              onPress={handleClose}
-            />
-          </TouchableOpacity>
-          <View style={styles.header_container}>
-            <Text style={texts.individual_req_header}>Confirmation</Text>
-          </View>
-          <Text></Text>
-          <Text style={texts.confirm_text}>
-            How did you complete this request?
-          </Text>
-          <Text></Text>
-
-          <TextInput
-            style={styles.input}
-            multiline="true"
-            placeholder="Ex: I delivered groceries to this person's front door! (min. 10 characters)"
-            placeholderTextColor="#7F7F7F"
-            color="#000000"
-            onChangeText={(text) => setMessage(text)}
-            defaultValue={message}
-          />
-          <Text></Text>
+        <Animated.View
+          style={{
+            ...styles.confirm_modal_view,
+            paddingBottom: keyboardHeight,
+          }}
+        >
           <View
-            style={{ display: message.length < 10, style: styles.container }}
+            style={{
+              ...styles.header_container,
+              flex: 1,
+              flexDirection: "row",
+              paddingTop: 8,
+              paddingBottom: 8,
+            }}
           >
-            <TouchableOpacity onPress={handleConfirm} style={buttons.confirm}>
-              <Text></Text>
-              <Text style={texts.button_label_white}>Confirm {"\n"}</Text>
+            <Text style={{ ...texts.individual_req_header, flex: 1 }}>
+              Confirmation
+            </Text>
+            <TouchableOpacity
+              style={{ alignItems: "right" }}
+              onPress={() => {
+                handleClose();
+              }}
+            >
+              <Icon
+                name="close"
+                size={32}
+                color="#7F7F7F"
+                style={buttons.close}
+                onPress={() => {
+                  handleClose();
+                }}
+              />
             </TouchableOpacity>
           </View>
-        </View>
+          <View style={{ ...styles.info_container }}>
+            <Text style={texts.confirm_text}>
+              How did you complete this request?
+            </Text>
+            <TextInput
+              style={styles.input}
+              multiline={true}
+              placeholder="Ex: I delivered groceries to this person's front door! (min. 10 characters)"
+              placeholderTextColor="#CECECE"
+              color="#7F7F7F"
+              onChangeText={(text) => setMessage(text)}
+              defaultValue={message}
+            />
+          </View>
+
+          <View
+            style={{
+              width: "100%",
+              marginTop: 40,
+            }}
+          >
+            <TouchableOpacity
+              onPress={handleConfirm}
+              disabled={message.length < 10}
+              style={
+                message.length < 10 ? buttons.disabledConfirm : buttons.confirm
+              }
+            >
+              <Text style={texts.button_label_white}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
       </View>
     </Modal>
   );

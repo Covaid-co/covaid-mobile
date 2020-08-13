@@ -15,6 +15,7 @@ import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 import { homeURL, storage_keys } from "./constants";
 import fetch_a from "./util/fetch_auth";
+import Colors from "./public/Colors";
 
 import LoginScreen from "./screens/LoginScreen/LoginScreen.js";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen.js";
@@ -25,7 +26,11 @@ import SettingsScreen from "./screens/SettingsScreen/SettingsScreen.js";
 
 const navigationRef = React.createRef();
 const Stack = createStackNavigator();
-
+const headerAttributes = {
+  fontSize: 17,
+  fontFamily: "Inter-bold",
+  color: Colors.grey_font,
+};
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
 
@@ -86,12 +91,27 @@ export default function App(props) {
     <View style={styles.container}>
       {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
       <NavigationContainer linking={LinkingConfiguration} ref={navigationRef}>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            headerStyle: {
+              borderBottomColor: "rgba(206, 206, 206,0.95)",
+              borderBottomWidth: 0.25,
+              shadowColor: Colors.shadowColor,
+              shadowOffset: {
+                height: 1,
+              },
+              shadowOpacity: 0.05,
+              shadowRadius: 4,
+            },
+          }}
+        >
           <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{
               headerShown: false,
+              headerTitleStyle: headerAttributes,
             }}
           />
           <Stack.Screen
@@ -99,13 +119,37 @@ export default function App(props) {
             component={BottomTabNavigator}
             options={{
               gestureEnabled: false,
+              headerTitleStyle: headerAttributes,
             }}
           />
-          <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-          <Stack.Screen name="Edit Offer" component={EditOfferScreen} />
-          <Stack.Screen name="Edit Details" component={EditDetailsScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen name="RequestsScreen" component={RequestsScreen} />
+          <Stack.Screen
+            name="Edit Profile"
+            component={EditProfileScreen}
+            options={{
+              headerTitleStyle: headerAttributes,
+            }}
+          />
+          <Stack.Screen
+            name="Edit Offer"
+            component={EditOfferScreen}
+            options={{
+              headerTitleStyle: headerAttributes,
+            }}
+          />
+          <Stack.Screen
+            name="Edit Details"
+            component={EditDetailsScreen}
+            options={{
+              headerTitleStyle: headerAttributes,
+            }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              headerTitleStyle: headerAttributes,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
