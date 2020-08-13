@@ -8,8 +8,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.8)",
-
-    // position: "absolute",
   },
   completed_modal_view: {
     backgroundColor: Colors.white,
@@ -69,8 +67,8 @@ const styles = StyleSheet.create({
   pending_modal_view: {
     backgroundColor: Colors.white,
     paddingBottom: 46,
-    paddingLeft: 14,
-    paddingRight: 18,
+    paddingLeft: 18,
+    paddingRight: 20,
     paddingTop: 12,
     alignItems: "center",
     shadowColor: Colors.shadowColor,
@@ -249,11 +247,7 @@ const buttons = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  close: {
-    // height: "auto",
-    // left: "50%",
-    // bottom: "-50%",
-  },
+  close: {},
   blue_check: {
     left: 82,
     bottom: 34,
@@ -325,7 +319,7 @@ const texts = StyleSheet.create({
     fontFamily: "Inter-medium",
     fontSize: 16,
     color: Colors.grey_font,
-    marginBottom: 12,
+    marginBottom: 20,
     lineHeight: 21,
   },
   resource_text: {

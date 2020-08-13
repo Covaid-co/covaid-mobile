@@ -19,8 +19,8 @@ export default function CompletedModal(props) {
 
   return (
     <Modal animationType="slide" transparent={true}>
-      <View style={{ ...styles.modal_background }}>
-        <View style={{ ...styles.completed_modal_view }}>
+      <View style={styles.modal_background}>
+        <View style={styles.completed_modal_view}>
           <View
             style={{
               ...styles.header_container,
