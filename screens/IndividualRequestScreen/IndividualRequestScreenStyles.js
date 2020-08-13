@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import Colors from "../../public/Colors";
+const screenHeight = Dimensions.get("screen").height;
 
 const styles = StyleSheet.create({
   modal_background: {
@@ -7,6 +8,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.8)",
+
+    // position: "absolute",
   },
   completed_modal_view: {
     backgroundColor: Colors.white,
@@ -66,8 +69,8 @@ const styles = StyleSheet.create({
   pending_modal_view: {
     backgroundColor: Colors.white,
     paddingBottom: 46,
-    paddingLeft: 18,
-    paddingRight: 20,
+    paddingLeft: 14,
+    paddingRight: 18,
     paddingTop: 12,
     alignItems: "center",
     shadowColor: Colors.shadowColor,
@@ -77,7 +80,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     position: "absolute",
     bottom: "0%",
     borderTopColor: Colors.red,
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
   info_container: {
     minWidth: "100%",
     maxWidth: "100%",
-    maxHeight: 500,
+    maxHeight: screenHeight * 0.6,
     textAlign: "left",
     marginLeft: 4,
   },
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
   input: {
     borderBottomColor: Colors.grey,
     borderBottomWidth: 0.7,
-    fontSize: 16,
+    fontSize: 15,
     opacity: 0.9,
     fontFamily: "Inter-medium",
     paddingBottom: 8,
@@ -248,9 +250,9 @@ const buttons = StyleSheet.create({
     alignItems: "center",
   },
   close: {
-    height: "auto",
-    left: "50%",
-    bottom: "-50%",
+    // height: "auto",
+    // left: "50%",
+    // bottom: "-50%",
   },
   blue_check: {
     left: 82,

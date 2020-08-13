@@ -112,25 +112,34 @@ export default function ConfirmModal(props) {
             paddingBottom: keyboardHeight,
           }}
         >
+          <View
+            style={{
+              ...styles.header_container,
+              flex: 1,
+              flexDirection: "row",
+              paddingTop: 8,
+              paddingBottom: 8,
+            }}
+          >
+            <Text style={{ ...texts.individual_req_header, flex: 1 }}>
+              Confirmation
+            </Text>
             <TouchableOpacity
-              style={{ alignItems: 'right' }}
-              onPress={() => {handleClose()}}
+              style={{ alignItems: "right" }}
+              onPress={() => {
+                handleClose();
+              }}
             >
-              <View
-                style={{ minHeight: 50, minWidth: 50, marginRight: 10, marginTop: -20}}
-              >
-                <Icon
-                  name="close"
-                  size={32}
-                  color="#7F7F7F"
-                  style={buttons.close}
-                  onPress={() => {handleClose()}}
-                />
-              </View>
-              
+              <Icon
+                name="close"
+                size={32}
+                color="#7F7F7F"
+                style={buttons.close}
+                onPress={() => {
+                  handleClose();
+                }}
+              />
             </TouchableOpacity>
-          <View style={styles.header_container}>
-            <Text style={texts.individual_req_header}>Confirmation</Text>
           </View>
           <View style={{ ...styles.info_container }}>
             <Text style={texts.confirm_text}>

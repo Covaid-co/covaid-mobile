@@ -19,34 +19,39 @@ export default function CompletedModal(props) {
 
   return (
     <Modal animationType="slide" transparent={true}>
-      <View style={styles.modal_background}>
-        <View style={styles.completed_modal_view}>
-          <TouchableOpacity
-            style={{ alignItems: 'right' }}
-            onPress={() => {handleClose()}}
+      <View style={{ ...styles.modal_background }}>
+        <View style={{ ...styles.completed_modal_view }}>
+          <View
+            style={{
+              ...styles.header_container,
+              flex: 1,
+              flexDirection: "row",
+              paddingTop: 8,
+              paddingBottom: 8,
+            }}
           >
-            <View
-              style={{ minHeight: 50, minWidth: 50, marginRight: 10, marginTop: -20}}
+            <Text style={{ ...texts.individual_req_header, flex: 1 }}>
+              {props.item.requester_name}
+            </Text>
+            <TouchableOpacity
+              style={{ alignItems: "right" }}
+              onPress={() => {
+                handleClose();
+              }}
             >
               <Icon
                 name="close"
                 size={32}
                 color="#7F7F7F"
                 style={buttons.close}
-                onPress={() => {handleClose()}}
+                onPress={() => {
+                  handleClose();
+                }}
               />
-            </View>
-            
-          </TouchableOpacity>
-
-          <View style={styles.header_container}>
-            <Text style={texts.individual_req_header}>
-              {props.item.requester_name}
-            </Text>
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.info_container}>
-            {/* <ScrollView style={styles.info_container}> */}
+          <ScrollView style={styles.info_container}>
             <Text style={texts.info_header}>Needs</Text>
             {showResourceBadges(props.item.resources.resource_request)}
 
@@ -78,8 +83,7 @@ export default function CompletedModal(props) {
             <Text style={texts.request_details}>
               {translatePayment(props.item.payment)}
             </Text>
-            {/* </ScrollView> */}
-          </View>
+          </ScrollView>
           <View style={styles.complete_date_container}>
             <Text style={texts.completion_date}>Request completed on</Text>
             <Text style={texts.completion_date}>
