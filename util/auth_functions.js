@@ -239,6 +239,10 @@ const fetchPendingRequests = async function (navigation, route) {
       }
     } else {
       console.log("Request Fetch Error");
+      if (navigation) {
+        console.log("navigation exists");
+        handleRefresh(navigation, route);
+      }
     }
   } catch (err) {
     console.log("Fetching pending requests error: ", err);
@@ -303,6 +307,32 @@ const fetchCompletedRequests = async (navigation, route) => {
     console.log("Fetching completed requests error: ", err);
   }
 };
+
+const updateUser = async (navigation, route, params) => {
+  try {
+    const token = await fetchToken();
+    fetch_a(token, "token", homeURL + "/api/users/update", {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("User updated! Accepted changes: ", params);
+        } else {
+          console.log("User NOT updated! Rejected changes", params);
+          if (navigation) {
+            handleRefresh(navigation, route);
+          }
+        }
+      })
+      .catch((e) => {
+        console.log("Error");
+      });
+  } catch (err) {
+    console.log("Updating user error: ", err);
+  }
+};
 export {
   handleRefresh,
   handleLogout,
@@ -315,4 +345,5 @@ export {
   fetchPendingRequests,
   fetchActiveRequests,
   fetchCompletedRequests,
+  updateUser,
 };

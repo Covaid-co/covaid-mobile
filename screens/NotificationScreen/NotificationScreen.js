@@ -27,7 +27,7 @@ export default function NotificationScreen({ route, navigation }) {
 
   const handleStart = async () => {
     try {
-      const pendings = await fetchPendingRequests();
+      const pendings = await fetchPendingRequests(navigation, route);
       if (pendings) {
         filterRequests(pendings);
       }

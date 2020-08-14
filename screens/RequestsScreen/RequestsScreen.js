@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
 import { styles, texts } from "./RequestsScreenStyles";
-import { homeURL, volunteer_status, storage_keys } from "../../constants";
+import { volunteer_status } from "../../constants";
 import { formatDate } from "../../Helpers";
 import {
   fetchPendingRequests,
   fetchActiveRequests,
   fetchCompletedRequests,
   fetchToken,
+  updateUser,
 } from "../../util/auth_functions";
-import fetch_a from "../../util/fetch_auth";
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import PendingModal from "../IndividualRequestScreen/PendingModal";
 import ActiveModal from "../IndividualRequestScreen/ActiveModal";
@@ -130,20 +129,14 @@ export default function RequestsScreen({ route, navigation }) {
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notification) => {
         setNotification(notification);
-        // For now, fetch all requests again
-        AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-          fetchAndGenerateAllRequests();
-        });
+        fetchAndGenerateAllRequests();
       }
     );
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
       (response) => {
-        // For now, fetch all requests again
-        AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-          fetchAndGenerateAllRequests();
-        });
+        fetchAndGenerateAllRequests();
       }
     );
 
@@ -208,27 +201,11 @@ export default function RequestsScreen({ route, navigation }) {
 
   const updateUserPushToken = async (pushToken) => {
     try {
-      const tokenHolder = await AsyncStorage.getItem(
-        storage_keys.SAVE_TOKEN_KEY
-      );
+      const tokenHolder = await fetchToken();
       const params = {
         pushToken: pushToken,
       };
-      fetch_a(tokenHolder, "token", homeURL + "/api/users/update", {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params),
-      })
-        .then((response) => {
-          if (response.ok) {
-            console.log("Token set!");
-          } else {
-            console.log("Token not set");
-          }
-        })
-        .catch((e) => {
-          console.log("Error");
-        });
+      await updateUser(params);
     } catch (e) {
       throw e;
     }
