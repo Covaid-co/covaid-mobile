@@ -8,19 +8,15 @@ import {
 } from "react-native";
 import { styles, texts } from "./NotificationStyles";
 import Colors from "../../public/Colors";
-import { homeURL, volunteer_status, storage_keys } from "../../constants";
 import PendingModal from "../IndividualRequestScreen/PendingModal";
-import { generateURL } from "../../Helpers";
-import fetch_a from "../../util/fetch_auth";
-import AsyncStorage from "@react-native-community/async-storage";
+import { fetchPendingRequests } from "../../util/auth_functions";
+import { getDate, timeSince } from "../../util/date";
 
 export default function NotificationScreen({ route, navigation }) {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [isPendingModal, setPendingModal] = useState(false);
   const [currentItem, setCurrentItem] = useState();
   const [loading, setLoading] = useState(true);
-  // const [user, setUser] = useState({});
-  // const [userLoc, setUserLoc] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -29,86 +25,19 @@ export default function NotificationScreen({ route, navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  // const handleStart1 = async () => {
-  //   try {
-  //     const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-  //     if (idHolder) {
-  //       console.log("IDHOLDERNOTIF: " + JSON.stringify(idHolder));
-  //       fetchUser(idHolder);
-  //     }
-  //   } catch (e) {
-  //     alert(e);
-  //   }
-  // };
-
   const handleStart = async () => {
     try {
-      const tokenHolder = await AsyncStorage.getItem(
-        storage_keys.SAVE_TOKEN_KEY
-      );
-      fetchRequests(tokenHolder);
+      const pendings = await fetchPendingRequests();
+      if (pendings) {
+        filterRequests(pendings);
+      }
     } catch (e) {
       alert(e);
     }
   };
 
-  // const fetchUser = async (id) => {
-  //   const params = { id: id };
-  //   var url = generateURL(homeURL + "/api/users/user?", params);
-
-  //   fetch(url)
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         response.json().then((data) => {
-  //           console.log(
-  //             "THIS IS WHAT IT SHOULD BE SET TO : " + data[0].latlong
-  //           );
-  //           setUserLoc(data[0].latlong);
-  //           console.log("USERLOC: " + data[0].latlong);
-  //         });
-  //       } else {
-  //         // alert("Error obtaining user object");
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       alert(e);
-  //     });
-  // };
-  function timeSince(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
-
-    var interval = Math.floor(seconds / 31536000);
-
-    if (interval > 1) {
-      return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-      return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-      return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-      return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval >= 1) {
-      return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-  }
-
   async function filterRequests(requests) {
     const pending = [];
-    // const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-    // if (idHolder) {
-    //   console.log("IDHOLDERNOTIF: " + JSON.stringify(idHolder));
-    //   fetchUser(idHolder);
-    //   console.log("USERLOC: " + userLoc);
-    // }
     requests.map((request) => {
       pending.push({
         deadline:
@@ -134,37 +63,6 @@ export default function NotificationScreen({ route, navigation }) {
     setPendingRequests(pending.reverse());
     setLoading(false);
   }
-
-  function fetchRequests(token) {
-    const params = { status: volunteer_status.PENDING };
-    var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
-
-    fetch_a(token, "token", url, {
-      method: "get",
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            filterRequests(data);
-          });
-        } else {
-          console.log("Notification Request Fetch Error");
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  const getDate = (date) => {
-    var d = new Date(date);
-    const arr = d.toDateString().split(" ");
-    let s = "";
-    s += arr[1];
-    s += " ";
-    s += arr[2];
-    return s;
-  };
 
   function displayRequestInfo(item) {
     return (

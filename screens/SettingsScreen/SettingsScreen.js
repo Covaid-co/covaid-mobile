@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import Colors from "../../public/Colors";
-
+import { handleLogout } from "../../util/auth_functions";
 import { styles, buttons, texts } from "./SettingsScreenStyles";
 
 export default function ProfileScreen({ route, navigation }) {
-  function handleLogout() {
-    AsyncStorage.clear();
-    navigation.navigate("Login", route.params);
-  }
-
   function alertLogout() {
     Alert.alert(
       "Log Out",
       "Are you sure you want to logout of Covaid Volunteers?",
-      [{ text: "Cancel" }, { text: "Logout", onPress: () => handleLogout() }],
+      [
+        { text: "Cancel" },
+        {
+          text: "Logout",
+          onPress: async () => {
+            handleLogout(navigation, route);
+          },
+        },
+      ],
       {
         cancelable: false,
       }

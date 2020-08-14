@@ -3,7 +3,13 @@ import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { styles, texts } from "./RequestsScreenStyles";
 import { homeURL, volunteer_status, storage_keys } from "../../constants";
-import { generateURL, formatDate } from "../../Helpers";
+import { formatDate } from "../../Helpers";
+import {
+  fetchPendingRequests,
+  fetchActiveRequests,
+  fetchCompletedRequests,
+  fetchToken,
+} from "../../util/auth_functions";
 import fetch_a from "../../util/fetch_auth";
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import PendingModal from "../IndividualRequestScreen/PendingModal";
@@ -13,7 +19,6 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 export default function RequestsScreen({ route, navigation }) {
-  // const [user, setUser] = useState();
   const [pendingRequests, setPendingRequests] = useState([]);
   const [activeRequests, setActiveRequests] = useState([]);
   const [completedRequests, setCompletedRequests] = useState([]);
@@ -59,37 +64,46 @@ export default function RequestsScreen({ route, navigation }) {
       value: "Completed",
     },
   ];
-  // function handleLogout() {
-  //   AsyncStorage.clear();
-  //   navigation.navigate("Login", route.params);
-  // }
-  async function handleAuth() {
+
+  async function fetchAndGenerateAllRequests() {
     try {
-      // const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-      // console.log("potential user token id: " + idHolder);
-      const tokenHolder = await AsyncStorage.getItem(
-        storage_keys.SAVE_TOKEN_KEY
-      );
-      if (tokenHolder) {
-        console.log("HANDLING AUTH WITH TOKENHOLDER");
-        setToken(tokenHolder);
-        fetchRequests(
-          volunteer_status.PENDING,
+      const pendings = await fetchPendingRequests(navigation, route);
+      if (pendings) {
+        generateRequestList(
+          pendings,
           setPendingRequests,
-          tokenHolder
+          volunteer_status.PENDING
         );
-        fetchRequests(
-          volunteer_status.IN_PROGRESS,
+      }
+      const actives = await fetchActiveRequests(navigation, route);
+      if (actives) {
+        generateRequestList(
+          actives,
           setActiveRequests,
-          tokenHolder
+          volunteer_status.IN_PROGRESS
         );
-        fetchRequests(
-          volunteer_status.COMPLETE,
+      }
+      const completeds = await fetchCompletedRequests(navigation, route);
+      if (completeds && completeds.length && completeds.length > 0) {
+        generateRequestList(
+          completeds,
           setCompletedRequests,
-          tokenHolder
+          volunteer_status.COMPLETE
         );
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async function saveTokenLocally() {
+    try {
+      const token = await fetchToken();
+      if (token) {
+        console.log("HANDLING AUTH WITH TOKENHOLDER");
+        setToken(token);
       } else {
-        console.log("***REQUEST SCREEN*** BAD token");
+        console.log("no token exists...log out?");
       }
     } catch (err) {
       throw err;
@@ -97,8 +111,11 @@ export default function RequestsScreen({ route, navigation }) {
   }
   useEffect(() => {
     setPendingModalVisible(route.params.pendingModalVisible);
+    saveTokenLocally();
     setCurrentItem(route.params.currentItem);
-    const unsubscribe = navigation.addListener("focus", () => handleAuth());
+    const unsubscribe = navigation.addListener("focus", () =>
+      fetchAndGenerateAllRequests()
+    );
     navigation.setOptions = {
       title: "Chat",
       headerStyle: { backgroundColor: "red" },
@@ -115,9 +132,7 @@ export default function RequestsScreen({ route, navigation }) {
         setNotification(notification);
         // For now, fetch all requests again
         AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-          fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
-          fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-          fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+          fetchAndGenerateAllRequests();
         });
       }
     );
@@ -127,9 +142,7 @@ export default function RequestsScreen({ route, navigation }) {
       (response) => {
         // For now, fetch all requests again
         AsyncStorage.getItem(storage_keys.SAVE_TOKEN_KEY).then((data) => {
-          fetchRequests(volunteer_status.PENDING, setPendingRequests, data);
-          fetchRequests(volunteer_status.IN_PROGRESS, setActiveRequests, data);
-          fetchRequests(volunteer_status.COMPLETE, setCompletedRequests, data);
+          fetchAndGenerateAllRequests();
         });
       }
     );
@@ -220,33 +233,8 @@ export default function RequestsScreen({ route, navigation }) {
       throw e;
     }
   };
-  // const fetchUser = async (token) => {
-  //   var url = homeURL + "/api/users/current";
-  //   try {
-  //     const res = await fetch_a(token, "token", url, {
-  //       method: "get",
-  //     });
-  //     if (res.ok) {
-  //       let user = await res.json();
-  //       if (user._id && user._id.length !== 0) {
-  //         console.log(
-  //           "\nRequest Screen user fetched successfully. User Name: " +
-  //             user.first_name +
-  //             "\n"
-  //         );
-  //         setUser(user);
-  //         return true;
-  //       }
-  //       return false;
-  //     }
-  //     return false;
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // };
 
   function generateRequestList(requestData, requestStateChanger, reqStatus) {
-    console.log("IN GENERATEREQLIST: stATUs = ", reqStatus);
     let tempList = [];
     for (var i = 0; i < requestData.length; i++) {
       var element = {
@@ -278,27 +266,6 @@ export default function RequestsScreen({ route, navigation }) {
     }
     requestStateChanger(tempList);
     return tempList;
-  }
-
-  function fetchRequests(reqStatus, requestStateChanger, token) {
-    let params = { status: reqStatus };
-    var url = generateURL(homeURL + "/api/request/volunteerRequests?", params);
-
-    fetch_a(token, "token", url, {
-      method: "get",
-    })
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            generateRequestList(data, requestStateChanger, reqStatus);
-          });
-        } else {
-          console.log("Error");
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   }
 
   if (pendingRequests) {

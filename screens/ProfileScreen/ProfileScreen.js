@@ -11,9 +11,13 @@ import {
   Alert,
   Keyboard,
 } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
 import Colors from "../../public/Colors";
-
+import {
+  fetchAllTokens,
+  fetchUser,
+  storeZip,
+  fetchZip,
+} from "../../util/auth_functions";
 import { styles, texts } from "./ProfileScreenStyles";
 import { homeURL, storage_keys } from "../../constants";
 import { generateURL } from "../../Helpers";
@@ -23,7 +27,6 @@ import ProfileHeader from "../../components/ProfileHeader/ProfileHeader.js";
 
 export default function ProfileScreen({ route, navigation }) {
   const [token, setToken] = useState();
-  const [id, setID] = useState();
   const [publish, setPublish] = useState(false);
   const [user, setUser] = useState();
   const [zip, setZip] = useState();
@@ -61,29 +64,35 @@ export default function ProfileScreen({ route, navigation }) {
     setPublish(!publish);
   };
 
-  async function handleAuth() {
-    //prevent offer from showing resources of a previous location after a change
-    // await setResources(null);
+  async function recalibrateUser() {
     try {
-      const idHolder = await AsyncStorage.getItem(storage_keys.SAVE_ID_KEY);
-      setID(idHolder);
-      const tokenHolder = await AsyncStorage.getItem(
-        storage_keys.SAVE_TOKEN_KEY
-      );
-      setToken(tokenHolder);
-      if (idHolder && tokenHolder) {
-        await fetchUser(tokenHolder);
+      const res = await fetchUser(navigation, route);
+      if (res) {
+        setUser(res);
+        setPublish(res.availability);
+        setConstants(res);
+      } else {
+        console.log(
+          "----***Profile Screen*** User NOT updated on profile screen ----\n"
+        );
       }
-    } catch (e) {
-      alert(e);
+    } catch (err) {
+      throw err;
     }
   }
-
+  async function asyncSetToken() {
+    const stored = await fetchAllTokens();
+    if (!stored.token) {
+      alert("FETCHALLTOKENS NOT WORKING");
+    }
+    setToken(stored.token);
+  }
   useEffect(() => {
     const initialUser = route.params.user;
     if (initialUser._id && initialUser._id.length > 0) {
       setUser(initialUser);
       setPublish(initialUser.availability);
+      asyncSetToken();
       setConstants(initialUser);
       console.log(
         "***Profile Screen*** User successfully retrieved from initialParams"
@@ -95,7 +104,7 @@ export default function ProfileScreen({ route, navigation }) {
     Keyboard.addListener("keyboardWillHide", _keyboardWillHide);
     const unsubscribe = navigation.addListener("focus", () => {
       setResources(null);
-      handleAuth();
+      recalibrateUser();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -105,11 +114,10 @@ export default function ProfileScreen({ route, navigation }) {
     };
   }, []);
 
-  const _keyboardWillHide = () => {
+  const _keyboardWillHide = async () => {
     //hacky way of letting user know they need to press "done" to submit. If they close their keyboard, then the textinput will just go to original zipcode
-    AsyncStorage.getItem(storage_keys.SAVE_ZIP).then((data) => {
-      setZip(data);
-    });
+    const data = await fetchZip();
+    setZip(data);
   };
 
   const handleUpdate = async (publish) => {
@@ -125,7 +133,7 @@ export default function ProfileScreen({ route, navigation }) {
         if (response.ok) {
           //Change the state to reflect offer update
           setTimeout(function () {
-            fetchUser(token);
+            recalibrateUser();
           }, 250);
         } else {
           console.log("***Profile Screen*** Update not successful");
@@ -135,34 +143,6 @@ export default function ProfileScreen({ route, navigation }) {
         throw e;
       });
   };
-
-  async function fetchUser(token) {
-    var url = homeURL + "/api/users/current";
-    try {
-      const res = await fetch_a(token, "token", url, {
-        method: "get",
-      });
-      if (res.ok) {
-        let userObj = await res.json();
-        if (userObj._id && userObj._id.length !== 0) {
-          setUser(userObj);
-          setPublish(userObj.availability);
-          setConstants(userObj);
-          console.log("***Profile Screen*** User updated on profile screen");
-        } else {
-          console.log(
-            "----***Profile Screen*** User NOT updated on profile screen ----\n"
-          );
-        }
-      } else {
-        console.log(
-          "----***Profile Screen***  User NOT updated on profile screen ----\n"
-        );
-      }
-    } catch (e) {
-      throw e;
-    }
-  }
 
   const setConstants = (data) => {
     const params = {};
@@ -249,13 +229,7 @@ export default function ProfileScreen({ route, navigation }) {
                   "postal_code"
                 ) > -1
               ) {
-                async function storeZip() {
-                  await AsyncStorage.setItem(
-                    storage_keys.SAVE_ZIP,
-                    response.results[i].address_components[j].long_name
-                  );
-                }
-                storeZip();
+                storeZip(response.results[i].address_components[j].long_name);
                 setInitialZip(
                   response.results[i].address_components[j].long_name
                 );
@@ -276,6 +250,7 @@ export default function ProfileScreen({ route, navigation }) {
     const params = {
       "offer.car": !hasCar,
     };
+
     fetch_a(token, "token", homeURL + "/api/users/update", {
       method: "put",
       headers: { "Content-Type": "application/json" },
@@ -283,7 +258,7 @@ export default function ProfileScreen({ route, navigation }) {
     })
       .then((response) => {
         if (response.ok) {
-          fetchUser(token);
+          recalibrateUser();
         } else {
           Alert.alert(
             "Update not successful",
@@ -400,7 +375,7 @@ export default function ProfileScreen({ route, navigation }) {
       })
         .then((response) => {
           if (response.ok) {
-            fetchUser(token);
+            recalibrateUser();
             navigation.navigate("Edit Offer", {
               token: token,
               resources: temp_resources,

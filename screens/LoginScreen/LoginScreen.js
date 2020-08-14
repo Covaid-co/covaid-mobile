@@ -47,6 +47,10 @@ export default function LoginScreen({ route, navigation }) {
     try {
       await AsyncStorage.setItem(storage_keys.SAVE_ID_KEY, data.user._id);
       await AsyncStorage.setItem(storage_keys.SAVE_TOKEN_KEY, data.user.token);
+      await AsyncStorage.setItem(
+        storage_keys.SAVE_REFRESH_KEY,
+        data.user.refresh
+      );
     } catch (e) {
       alert(e);
     }
@@ -68,7 +72,7 @@ export default function LoginScreen({ route, navigation }) {
   }, []);
 
   async function fetchUser(token) {
-    var url = homeURL + "/api/users/current";
+    var url = homeURL + "/api/users/currentMobile";
     try {
       const res = await fetch_a(token, "token", url, {
         method: "get",
@@ -143,7 +147,7 @@ export default function LoginScreen({ route, navigation }) {
       },
     };
 
-    fetch(homeURL + "/api/users/login/", {
+    fetch(homeURL + "/api/users/loginMobile/", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
