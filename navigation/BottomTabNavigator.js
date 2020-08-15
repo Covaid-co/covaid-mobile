@@ -192,7 +192,7 @@ export default function BottomTabNavigator({ navigation, route }) {
                 value={options[choice]}
                 defaultValue={"Requires Action"}
                 labelFontSize={16}
-                fontSize="20"
+                fontSize={20}
                 textColor={Colors.grey_font}
                 onChangeText={(label, value) => {
                   setChoice(value);

@@ -23,8 +23,9 @@
       "favicon": "./assets/images/favicon.png"
     },
    	"android": {
-      "package": "com.Covaid.covaid-mobile",
-      "versionCode": 1
+      "package": "com.covaid.covaid-mobile",
+      "versionCode": 1,
+      "softwareKeyboardLayoutMode" : "pan"
     }
   }
 }
