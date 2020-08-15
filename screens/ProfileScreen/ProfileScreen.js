@@ -7,6 +7,7 @@ import {
   Switch,
   ActivityIndicator,
   AsyncStorage,
+  Animated,
   Image,
   TextInput,
   Alert,
@@ -22,6 +23,7 @@ import Geocode from "react-geocode";
 import ProfileHeader from "../../components/ProfileHeader/ProfileHeader.js";
 
 export default function ProfileScreen({ route, navigation }) {
+
   const [token, setToken] = useState();
   const [id, setID] = useState();
   const [publish, setPublish] = useState(false);
@@ -448,6 +450,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   if (user && initialZip) {
     return (
+
       <ScrollView style={styles.container}>
         <View style={styles.center}>
           <ProfileHeader user={user} />
@@ -510,15 +513,6 @@ export default function ProfileScreen({ route, navigation }) {
             <Text style={texts.label}>{user.offer.tasks.join(", ")}</Text>
           </TouchableOpacity>
           <View style={styles.line} />
-          <TouchableOpacity
-            style={styles.info}
-            onPress={() => handleCarUpdate()}
-          >
-            <Text style={texts.label_bold}> Drive Access: </Text>
-            <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
-          </TouchableOpacity>
-          <View style={styles.line} />
-
           <View style={styles.info}>
             <Text style={texts.label_bold}> Zip Code </Text>
             <TextInput
@@ -531,7 +525,14 @@ export default function ProfileScreen({ route, navigation }) {
               returnKeyType="done"
             />
           </View>
-
+          <View style={styles.line} />
+          <TouchableOpacity
+            style={styles.info}
+            onPress={() => handleCarUpdate()}
+          >
+            <Text style={texts.label_bold}> Drive Access: </Text>
+            <Text style={texts.label}>{hasCar ? "Yes" : "No"}</Text>
+          </TouchableOpacity>
           <View style={styles.line} />
           <TouchableOpacity
             style={styles.info}

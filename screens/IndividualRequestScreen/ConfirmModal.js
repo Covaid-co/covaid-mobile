@@ -125,7 +125,7 @@ export default function ConfirmModal(props) {
               Confirmation
             </Text>
             <TouchableOpacity
-              style={{ alignItems: "right" }}
+              style={{ alignItems: "flex-start" }}
               onPress={() => {
                 handleClose();
               }}

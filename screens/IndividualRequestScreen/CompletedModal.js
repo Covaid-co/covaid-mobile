@@ -34,7 +34,7 @@ export default function CompletedModal(props) {
               {props.item.requester_name}
             </Text>
             <TouchableOpacity
-              style={{ alignItems: "right" }}
+              style={{ alignItems: "flex-start" }}
               onPress={() => {
                 handleClose();
               }}

@@ -3,7 +3,7 @@ import Colors from "../../public/Colors";
 
 const styles = StyleSheet.create({
   content_container: {
-    flex: 0.62,
+     //flex: 0.62,
   },
   footer: {
     flex: 0.1,
@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     marginTop: "30%",
   },
   screen: {
+    paddingTop: "30%",
     flex: 1,
     paddingBottom: 0,
   },
