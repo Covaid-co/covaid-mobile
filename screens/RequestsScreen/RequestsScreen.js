@@ -435,7 +435,7 @@ export default function RequestsScreen({ route, navigation }) {
     if (reqType == volunteer_status.PENDING) {
       return (
         <>
-          <View style={{ flexDirection: "col" }}>
+          <View style={{ flexDirection: "column" }}>
             <Text style={texts.request_name_text}>New Request</Text>
             <Text style={texts.request_date_text}>
               Due{" "}
@@ -457,7 +457,7 @@ export default function RequestsScreen({ route, navigation }) {
     } else {
       return (
         <>
-          <View style={{ flexDirection: "col" }}>
+          <View style={{ flexDirection: "column" }}>
             <Text style={texts.request_name_text}>{item.requester_name}</Text>
             <Text style={texts.request_date_text}>
               Due{" "}

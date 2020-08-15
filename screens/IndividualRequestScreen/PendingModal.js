@@ -230,7 +230,7 @@ export default function PendingModal(props) {
                 New Request
               </Text>
               <TouchableOpacity
-                style={{ alignItems: "right" }}
+                style={{ alignItems: "flex-start" }}
                 onPress={() => {
                   handleClose();
                 }}

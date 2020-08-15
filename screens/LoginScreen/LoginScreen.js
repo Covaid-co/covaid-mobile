@@ -198,7 +198,10 @@ export default function LoginScreen({ route, navigation }) {
     <Animated.View
       style={{ flex: 1, opacity: fadeAnim, backgroundColor: Colors.white }}
     >
-      <Animated.View style={[styles.screen, { paddingBottom: keyboardHeight }]}>
+      <Animated.View 
+      style={[styles.screen, 
+      { paddingBottom: keyboardHeight }]}
+      >
         <View style={{ flex: 0.33 }} />
         <View style={styles.content_container}>
           <Text style={texts.header}>covaid</Text>
@@ -262,7 +265,7 @@ export default function LoginScreen({ route, navigation }) {
           )}
         </View>
       </Animated.View>
-      <View style={styles.footer}>
+      <View style={[styles.footer]}>
         <Text style={texts.footer_text}>
           Don’t have an account? To register as a new volunteer, please visit{" "}
           <Text
