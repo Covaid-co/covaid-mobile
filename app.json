@@ -23,7 +23,7 @@
       "favicon": "./assets/images/favicon.png"
     },
    	"android": {
-      "package": "com.Covaid.CovaidMobile",
+      "package": "com.covaid.covaidmobile",
       "versionCode": 1,
       "softwareKeyboardLayoutMode" : "pan"
     }
