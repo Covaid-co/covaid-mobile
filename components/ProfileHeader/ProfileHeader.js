@@ -105,12 +105,12 @@ export default function ProfileHeader(props) {
           />
         )}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             console.log("bring up edit options!!!");
             handleUpdatePicture();
           }}
-        >
+        > */}
           <Image
             source={{ uri: imageUrl }}
             id="profile-pic"
@@ -121,11 +121,8 @@ export default function ProfileHeader(props) {
               resizeMode: "stretch",
               margin: 5,
             }}
-            onClick={() => {
-              handleUpdatePicture();
-            }}
           />
-        </TouchableOpacity>
+        {/* </TouchableOpacity> */}
       </View>
     </>
   );

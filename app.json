@@ -3,7 +3,7 @@
     "name": "Covaid-Volunteer",
     "slug": "covaid-mobile",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -24,7 +24,7 @@
     },
    	"android": {
       "package": "com.covaid.covaidmobile",
-      "versionCode": 1,
+      "versionCode": 3,
       "softwareKeyboardLayoutMode" : "pan"
     }
   }
