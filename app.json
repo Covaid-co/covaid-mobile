@@ -25,7 +25,8 @@
    	"android": {
       "package": "com.covaid.covaidmobile",
       "versionCode": 3,
-      "softwareKeyboardLayoutMode" : "pan"
+      "softwareKeyboardLayoutMode" : "pan",
+      "useNextNotificationsApi": true
     }
   }
 }
